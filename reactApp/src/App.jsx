@@ -1,12 +1,16 @@
+import "./styles/App.css";
 import React, {useEffect} from 'react';
-import Login from './Login';
+import Login from './components/Login';
+import GeneralLayout from "./layouts/GeneralLayout"
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+
 
 const App = () => {
   return (
     <div>
       <BrowserRouter>
-        <Login/>
+        <GeneralLayout />
       </BrowserRouter>
     </div>
   )
