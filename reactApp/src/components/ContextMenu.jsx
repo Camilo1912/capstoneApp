@@ -25,7 +25,7 @@ const ContextMenu = () => {
                     <ListItemIcon>
                         <InboxIcon />
                     </ListItemIcon>
-                    <ListItemText primary="Inbox" />
+                    <ListItemText primary="Opcion 1" />
                 </ListItemButton>
 
                 <ListItemButton
@@ -35,7 +35,7 @@ const ContextMenu = () => {
                     <ListItemIcon>
                         <DraftsIcon />
                     </ListItemIcon>
-                    <ListItemText primary="Drafts" />
+                    <ListItemText primary="Opcion 2" />
                 </ListItemButton>
             </List>
         </div>

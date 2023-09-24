@@ -11,8 +11,13 @@
   
 .sidebar {
   grid-area: sidebar;
+  padding: 10px 0px;
 }
+
 .body {
   grid-area: body;
+  /* background-color: rgba(255, 0, 0, 0.137); */
+  margin: 10px 10px 0px 10px;
+  overflow: scroll;
 }
   

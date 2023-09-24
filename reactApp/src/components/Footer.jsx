@@ -14,7 +14,7 @@ const Footer = () => {
             <BottomNavigation
                 showLabels
             >
-                <BottomNavigationAction label="NewspaperIcon" icon={<NewspaperIcon />} />
+                <BottomNavigationAction label="Noticias" icon={<NewspaperIcon />} />
                 <BottomNavigationAction label="Proyectos" icon={<HandymanOutlinedIcon />} />
                 <BottomNavigationAction label="Encuestas" icon={<BallotOutlinedIcon />} />
                 <BottomNavigationAction label="Calendario" icon={<CalendarMonthOutlinedIcon />} />

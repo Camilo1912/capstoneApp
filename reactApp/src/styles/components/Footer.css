@@ -1,4 +1,6 @@
 .footer-wrapper {
     padding: 0px;
     box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.33);
+    border-radius: 15px 15px 0px 0px;
+    padding: 0px 15px;
 }

@@ -26,7 +26,7 @@ const Header = () => {
 
     return (
         <div className="header-wrapper">
-            <h1>Titulo de la pagina principal</h1>
+            <h1>Comunidad vecinal</h1>
             <div className="header-iconset">
                 <Avatar alt="Remy Sharp" src="https://source.unsplash.com/random/1920x1080/?person" />
                 <IconButton onClick={handleClickOpen}>
@@ -38,24 +38,24 @@ const Header = () => {
             </div>
 
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Subscribe</DialogTitle>
+                <DialogTitle>Ajustes de usuario</DialogTitle>
                 <DialogContent>
                 <DialogContentText>
-                    Ajustes de usuario
+                    Correo de contacto
                 </DialogContentText>
                 <TextField
                     autoFocus
                     margin="dense"
                     id="name"
-                    label="Email Address"
+                    label="ejemplo@mail.com"
                     type="email"
                     fullWidth
                     variant="standard"
                 />
                 </DialogContent>
                 <DialogActions>
-                <Button onClick={handleClose}>Cancel</Button>
-                <Button onClick={handleClose}>Subscribe</Button>
+                <Button onClick={handleClose}>Cancelar</Button>
+                <Button onClick={handleClose}>Aplicar</Button>
                 </DialogActions>
             </Dialog>
         </div>
