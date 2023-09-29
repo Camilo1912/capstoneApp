@@ -14,12 +14,12 @@
 .header-wrapper::before {
     content: "";
     top: 0;
-    right: 0;
+    left: 25%;
     width: 50%;
-    height: 84px;
+    height: 82px;
     position: absolute;
-    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(255,255,255,1) 0%, rgba(0,212,255,0) 100%),
-                url("https://source.unsplash.com/random/1920x1080/?comunity");
+    /* background: linear-gradient(90deg,rgba(255,255,255,1) 0%, rgba(0,212,255,0) 50%, rgba(255,255,255,1) 100%),
+                url("https://source.unsplash.com/random/1920x1080/?community"); */
     background-size: cover;
     background-repeat: no-repeat;
     z-index: -10
@@ -32,9 +32,15 @@
 }
 
 .header-iconset {
-    background-color: rgba(203, 240, 248, 0.7);
+    /* background-color: rgba(203, 240, 248, 0.7); */
     border-radius: 100px;
     padding: 0.3rem;
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(203, 240, 248);
+    /* border: 1px solid rgba(203, 240, 248); */
+    gap: 10px;
+}
+
+.profile-button-set {
+    background-color: rgba(203, 240, 248, 1);
+    border-radius: 100px;
 }

@@ -10,11 +10,52 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import IconButton from '@mui/material/IconButton';
 
+const strengthLevels = ['debil','media', 'fuerte', 'muy fuerte', 'demasiado corta'];
+const MIN_PASSWORD_LENGTH = 8;
+
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [strength, setStrength] = useState(null);
 
+    const getStrength = (password) => {
+        if (password.trim() === '') {
+            setStrength(null);
+        } else if (password.length < MIN_PASSWORD_LENGTH) {
+            setStrength(null);
+        } else {
+
+            let strengthIndicator = -1,
+            upper = false,
+            lower = false,
+            numbers = false,
+            symbols = false;
+
+            const symbolRegex = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/;
+            
+            for (let index = 0; index < password.length; index++) {
+                const char = password.charCodeAt(index);
+                if (!upper && char >= 65 && char <= 90) {
+                    upper = true; 
+                    strengthIndicator++;
+                }
+                if (!numbers && char >= 48 && char <= 57) {
+                    numbers = true;
+                strengthIndicator++;
+                } 
+                if (!lower && char >= 97 && char <= 122) {
+                    lower = true;
+                    strengthIndicator++;
+                }
+                if (!symbols && symbolRegex.test(password.charAt(index))) {
+                    symbols = true;
+                    strengthIndicator++;
+                }
+            }
+            setStrength(strengthLevels[strengthIndicator]);
+        }
+    };
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -27,16 +68,17 @@ const Login = () => {
     };
 
     const handlePasswordChange = (e) => {
-        setPassword(e.target.value);
+        const newPassword = e.target.value;
+        setPassword(newPassword);
+        getStrength(newPassword);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(password);
         
-
         setUsername('');
         setPassword('');
+
         // try {
         //     const response = await axios.post('URL_POR_DEFINIR', {username, password});
         //     console.log(response.data);
@@ -46,7 +88,7 @@ const Login = () => {
     };
 
     return (
-        <div>
+        <>
             <div className='login-card'>
                 <h1>Inicio de sesión</h1>
                 <form action="" className='login-form'>
@@ -80,6 +122,15 @@ const Login = () => {
                     }
                 />
 
+                <div className={`bars ${ (strength == 'muy fuerte') ? 'stronger' : strength}`}>
+                    <div></div>
+                </div>
+                <div className='password-strength'>
+                    { (password != '') ?  <>Contraseña { strength ? strength : 'demaisado corta'} </> : 'Mínimo 8 caracteres'}
+                    
+                </div>
+
+
                 <Button 
                     type='submit'
                     variant="contained"
@@ -87,18 +138,16 @@ const Login = () => {
                     onClick={handleSubmit}
                     endIcon={<LoginIcon />}
                 >
-                    Login
+                    Iniciar Sesión
                 </Button>
                 
-                <div>
-                    <span>
-                        ¿No tienes cuenta de usuario?
-                        <Link to='Register'> Create an Account</Link>
-                    </span>
+                <div className='no-account-container'>
+                    ¿No tienes cuenta de usuario?
+                    {/* <Link to='Register'> Create an Account</Link> */}
                 </div>
                 </form>
             </div>
-        </div>
+        </>
     )
 }
 

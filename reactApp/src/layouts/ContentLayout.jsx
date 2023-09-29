@@ -6,7 +6,7 @@ const ContentLayout = () => {
             <div className="sidebar">
                 <ContextMenu />
             </div>
-            <div className="body">layout body</div>
+            <div className="body">...</div>
         </div>
     );
 };

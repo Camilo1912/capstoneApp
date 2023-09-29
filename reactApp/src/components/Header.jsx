@@ -28,13 +28,16 @@ const Header = () => {
         <div className="header-wrapper">
             <h1>Comunidad vecinal</h1>
             <div className="header-iconset">
-                <Avatar alt="Remy Sharp" src="https://source.unsplash.com/random/1920x1080/?person" />
-                <IconButton onClick={handleClickOpen}>
-                    <SettingsOutlinedIcon fontSize='medium' color='primary' />
-                </IconButton>
-                <IconButton>
-                    <LogoutOutlinedIcon fontSize='medium' color='primary' />
-                </IconButton>
+                <Avatar alt="Remy Sharp" src="https://source.unsplash.com/random/64x64/?profile" />
+                
+                <div className='profile-button-set'>
+                    <IconButton onClick={handleClickOpen}>
+                        <SettingsOutlinedIcon fontSize='medium' color='primary' />
+                    </IconButton>
+                    <IconButton>
+                        <LogoutOutlinedIcon fontSize='medium' color='primary' />
+                    </IconButton>
+                </div>
             </div>
 
             <Dialog open={open} onClose={handleClose}>

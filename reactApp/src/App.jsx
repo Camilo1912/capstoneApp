@@ -1,19 +1,17 @@
 import "./styles/App.css";
-import React, {useEffect} from 'react';
-import Login from './components/Login';
-import GeneralLayout from "./layouts/GeneralLayout"
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
+import React from 'react';
+import PublicLayout from "./layouts/PublicLayout";
+import GeneralLayout from "./layouts/GeneralLayout";
+import { BrowserRouter, Routes, Route, createBrowserRouter, RouterProvider } from 'react-router-dom';
+import UserContextProvider from "./contexts/UserContext";
 
 
 const App = () => {
   return (
-    <div>
-      <BrowserRouter>
-        <GeneralLayout />
-      </BrowserRouter>
-    </div>
-  )
+    <UserContextProvider>
+      <PublicLayout />
+    </UserContextProvider>
+  );
 }
 
 export default App

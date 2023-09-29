@@ -18,3 +18,12 @@ export function getUsername() {
     return user_info_obj.user.username;
 }
 
+export function getValidToken() {
+    const valid_token = localStorage.getItem("access_token");
+    return JSON.parse(valid_token);    
+}
+
+export function getRefreshToken() {
+    const refresh_token = localStorage.getItem("refresh_token");
+    return JSON.parse(refresh_token);
+}
