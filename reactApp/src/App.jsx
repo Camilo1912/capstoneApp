@@ -1,9 +1,10 @@
 import "./styles/App.scss";
 import React from 'react';
 import PublicLayout from "./layouts/PublicLayout";
-import GeneralLayout from "./layouts/GeneralLayout";
-import { BrowserRouter, Routes, Route, createBrowserRouter, RouterProvider } from 'react-router-dom';
+import PrivateLayout from "./layouts/PrivateLayout";
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import UserContextProvider from "./contexts/UserContext";
+import PrivateRoutes from "./routes/PrivateRoutes";
 
 
 const App = () => {
@@ -11,8 +12,13 @@ const App = () => {
     <UserContextProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<PublicLayout />}></Route>
-          <Route path="/home" element={<GeneralLayout />}></Route>
+          <Route path="/" element={<PublicLayout />} />
+          <Route path="/register" element={<PublicLayout />} />
+          <Route element={<PrivateRoutes />}>
+            <Route path="/home" element={<PrivateLayout />} />
+          </Route>
+
+          <Route path="*" element={<p>No hay nada aquí: error 404</p>} />
         </Routes>
       </BrowserRouter>
     </UserContextProvider>
