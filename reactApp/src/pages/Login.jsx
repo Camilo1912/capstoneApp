@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link , useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import LoginIcon from '@mui/icons-material/Login';
 import { InputAdornment  } from '@mui/material';
@@ -14,6 +14,8 @@ const strengthLevels = ['debil','media', 'fuerte', 'muy fuerte', 'demasiado cort
 const MIN_PASSWORD_LENGTH = 8;
 
 const Login = () => {
+    const navigate = useNavigate(); //remover 
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -79,6 +81,7 @@ const Login = () => {
         setUsername('');
         setPassword('');
 
+        navigate('/home');
         // try {
         //     const response = await axios.post('URL_POR_DEFINIR', {username, password});
         //     console.log(response.data);

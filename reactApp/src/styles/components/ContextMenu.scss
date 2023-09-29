@@ -1,0 +1,26 @@
+@import "../variables/index.scss";
+
+.context-menu-wrapper {
+    height: 100%;
+    background-color: $background-color-ligth-n1;
+    border-radius: 0px 20px 20px 0px;
+    padding: 1rem;
+    color: $text-color-normal-light;
+}
+
+.context-menu-wrapper > h2 {
+    background-color: $accent-color-light-n1;
+    border-radius: 100px;
+    padding: 0.5rem 1rem;
+}
+
+@media (prefers-color-scheme: dark) {
+    .context-menu-wrapper {
+        background-color: $background-color-dark-n1;
+        color: $text-color-normal-dark;
+    }
+
+    .context-menu-wrapper > h2 {
+        background-color: $accent-color-dark-n1;
+    }
+}
