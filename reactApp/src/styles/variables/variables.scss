@@ -1,14 +1,40 @@
+
+// BACKGROUND COLORS
+$background-color-dark-n0: #121212;
+
 $background-color-light: rgb(255, 255, 255);
 $background-color-dark: rgb(32, 33, 36);
 
-$background-color-ligth-n1: rgb(248, 250, 253);
+$background-color-light-n1: rgb(248, 250, 253);
 $background-color-dark-n1: rgb(40, 41, 42);
 
 $background-color-light-blur: rgba(255, 255, 255, 0.8);
 $background-color-dark-blur: rgba(34, 34, 34, 0.8);
 
+// GRADIENTS 
+
+$gradient-background-color-light: linear-gradient(90deg,rgba(255,255,255,1) 0%, rgba(0,212,255,0) 100%);
+$gradient-background-color-dark: linear-gradient(90deg,$background-color-dark-n0 0%, rgba(0,212,255,0) 100%);
+
+// ACCENT COLORS
+
 $accent-color-light-n1: #e9f0fd;
 $accent-color-dark-n1: rgb(61, 64, 67);
 
+$accent-color-light-n2: rgba(203, 240, 248, 1);
+
+// TEXT COLORS
+
 $text-color-normal-light: #222222;
 $text-color-normal-dark: rgb(220,220,220);
+
+
+// BORDERS
+
+$border-top-light: 1px solid rgb(255, 255, 255);
+$border-top-dark: 1px solid #444444;
+
+
+// SHADOWS
+
+$shadow-default: 0px 3px 7px rgba(0, 0, 0, .3);

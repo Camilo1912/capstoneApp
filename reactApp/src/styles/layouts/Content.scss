@@ -1,0 +1,18 @@
+
+.content-layout {
+  display: flex;
+  gap: 15px;
+}
+
+.sidebar {
+  // grid-area: sidebar;
+  // height: calc(100dvh - 9rem)
+  width: 300px;
+}
+
+.main-content {
+  // grid-area: main-content;
+  max-height: calc(100dvh - 9rem);
+  width: 100%;
+}
+  

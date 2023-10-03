@@ -7,14 +7,14 @@ import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined
 import NaturePeopleOutlinedIcon from '@mui/icons-material/NaturePeopleOutlined';
 import ScheduleSendOutlinedIcon from '@mui/icons-material/ScheduleSendOutlined';
 
-const Footer = () => {
+const Navbar = () => {
 
     return (
-        <div className="footer-wrapper">
+        <div className="navbar-wrapper">
             <BottomNavigation
                 showLabels
             >
-                <BottomNavigationAction label="Noticias" icon={<NewspaperIcon />} />
+                <BottomNavigationAction label="Anuncios" icon={<NewspaperIcon />} />
                 <BottomNavigationAction label="Proyectos" icon={<HandymanOutlinedIcon />} />
                 <BottomNavigationAction label="Encuestas" icon={<BallotOutlinedIcon />} />
                 <BottomNavigationAction label="Calendario" icon={<CalendarMonthOutlinedIcon />} />
@@ -25,4 +25,4 @@ const Footer = () => {
     );
 };
 
-export default Footer;
+export default Navbar;

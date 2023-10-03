@@ -17,7 +17,7 @@ const App = () => {
           <Route element={<PrivateRoutes />}>
             <Route path="/home" element={<PrivateLayout />} />
           </Route>
-
+          {/* <Route path="/home" element={<PrivateLayout />}/> */}
           <Route path="*" element={<p>No hay nada aquí: error 404</p>} />
         </Routes>
       </BrowserRouter>

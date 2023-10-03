@@ -71,7 +71,7 @@ const Register = () => {
   };
 
   return (
-    <>
+    <div className='registration-card'>
       <form action="" className='registration-form'>
       <OutlinedInput
         id="filled-username-input"
@@ -96,7 +96,7 @@ const Register = () => {
               onMouseDown={handleMouseDownPassword}
               edge="end"
             >
-              {showPassword ? <VisibilityOff /> : <Visibility />}
+              {showPassword ? <Visibility /> : <VisibilityOff />}
             </IconButton>
           </InputAdornment>
         }
@@ -108,7 +108,7 @@ const Register = () => {
       <div className='password-strength'>
         { (password != '') ?  <>Contraseña { strength ? strength : 'demaisado corta'} </> : 'Mínimo 8 caracteres'}  
       </div>
-    </>
+    </div>
   )
 }
 

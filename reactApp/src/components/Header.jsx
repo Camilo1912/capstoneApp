@@ -1,6 +1,6 @@
 import IconButton from '@mui/material/IconButton';
-import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
-import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import SettingsIcon from '@mui/icons-material/Settings';
+import LogoutIcon from '@mui/icons-material/Logout';
 import Avatar from '@mui/material/Avatar';
 
 import { useState } from 'react';
@@ -11,8 +11,10 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
+    const navigate = useNavigate();
 
     const [open, setOpen] = useState(false);
 
@@ -24,18 +26,21 @@ const Header = () => {
         setOpen(false);
     };
 
+    const handleClickLogout = () => {
+        navigate('/');
+    };
+
     return (
         <div className="header-wrapper">
             <h1>Comunidad vecinal</h1>
             <div className="header-iconset">
-                <Avatar alt="Remy Sharp" src="https://source.unsplash.com/random/64x64/?profile" />
-                
+                <Avatar className='profile-avatar' alt="Remy Sharp" src="https://source.unsplash.com/random/64x64/?profile" />
                 <div className='profile-button-set'>
-                    <IconButton onClick={handleClickOpen}>
-                        <SettingsOutlinedIcon fontSize='medium' color='primary' />
+                    <IconButton onClick={handleClickOpen} style={{ color: '#333333'}}>
+                        <SettingsIcon fontSize='medium' />
                     </IconButton>
-                    <IconButton>
-                        <LogoutOutlinedIcon fontSize='medium' color='primary' />
+                    <IconButton onClick={handleClickLogout} style={{ color: '#333333'}}>
+                        <LogoutIcon fontSize='medium' />
                     </IconButton>
                 </div>
             </div>

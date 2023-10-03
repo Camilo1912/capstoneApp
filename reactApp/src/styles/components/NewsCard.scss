@@ -1,0 +1,39 @@
+@import "../variables/index.scss";
+
+.card-grid {
+    display: grid;
+
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    align-items: top;
+
+    overflow: auto;
+    border-radius: 15px;
+}
+
+.news-card {
+    background-color: rgb(243, 243, 243);
+    border-top: $border-top-light;
+    border-radius: 15px;
+    padding: 5px;
+    margin: 5px;
+
+    img {
+        width: 100%;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    .card-content {
+        padding: 10px;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .news-card {
+        background-color: $background-color-dark;
+        border-top: $border-top-dark;
+        color: $text-color-normal-dark;
+    }
+}
+

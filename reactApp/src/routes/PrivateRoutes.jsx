@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { isAuthenticated } from "../utils/LocalStorage";
-import PrivateLayout from "../layouts/PublicLayout";
+import PrivateLayout from "../layouts/PrivateLayout";
 
 const PrivateRoutes = ({ redirectPath = "/", children }) => {
     if (!isAuthenticated()) {

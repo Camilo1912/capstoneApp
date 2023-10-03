@@ -93,7 +93,7 @@ const Login = () => {
                 
                 <div className='no-account-container'>
                     ¿No tienes cuenta de usuario?
-                    <Link to='/register'> Create an Account</Link>
+                    <Link to='/register'> Registrarse</Link>
                 </div>
                 </form>
             </div>
