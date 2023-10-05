@@ -6,13 +6,16 @@ const NewsCard = ({ cardData }) => {
         {cardData.map((card, index) => (
             <div key={index} className='news-card'>
                 <img
-                    src={card.imageUrl}  // Assuming you have an "imageUrl" property in your card data
+                    src={card.imageUrl}
                     alt={`Image for ${card.cardTitle}`}
                 />
                 <div className='card-content'>
 
                   <h2>{card.cardTitle}</h2>
-                  <p>{card.cardContent}</p>
+                  <div>
+                    <p className="news-card-content-text">{card.cardContent}</p>
+                    <p className='date-value'>{card.cardDate}</p>
+                  </div>
                 </div>
             </div>
         ))}

@@ -1,115 +1,90 @@
-import React from 'react';
+import Box from '@mui/material/Box';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+import StepContent from '@mui/material/StepContent';
+import Button from '@mui/material/Button';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+
+import registrationSteps from '../utils/data';
 import { useState } from 'react';
-
-import { InputAdornment  } from '@mui/material';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import IconButton from '@mui/material/IconButton';
-
-const strengthLevels = ['debil','media', 'fuerte', 'muy fuerte', 'demasiado corta'];
-const MIN_PASSWORD_LENGTH = 8;
+import RegisterPersonalFields from '../components/RegisterPersonalFields';
+import RegisterResidentialFields from '../components/RegisterResidentialFields';
+import RegisterCredentialFields from '../components/RegisterCredentialFields';
+import RegistrationContextProvider from '../contexts/RegitrationContext';
 
 const Register = () => {
-  const [username, setUsername] = useState('');
-  const [strength, setStrength] = useState(null);
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
+  const [activeStep, setActiveStep] = useState(0);
 
-  const getStrength = (password) => {
-    if (password.trim() === '') {
-        setStrength(null);
-    } else if (password.length < MIN_PASSWORD_LENGTH) {
-        setStrength(null);
-    } else {
-
-        let strengthIndicator = -1,
-        upper = false,
-        lower = false,
-        numbers = false,
-        symbols = false;
-
-        const symbolRegex = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/;
-        
-        for (let index = 0; index < password.length; index++) {
-            const char = password.charCodeAt(index);
-            if (!upper && char >= 65 && char <= 90) {
-                upper = true; 
-                strengthIndicator++;
-            }
-            if (!numbers && char >= 48 && char <= 57) {
-                numbers = true;
-            strengthIndicator++;
-            } 
-            if (!lower && char >= 97 && char <= 122) {
-                lower = true;
-                strengthIndicator++;
-            }
-            if (!symbols && symbolRegex.test(password.charAt(index))) {
-                symbols = true;
-                strengthIndicator++;
-            }
-        }
-        setStrength(strengthLevels[strengthIndicator]);
-    }
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleUsernameChange = (e) => {
-    setUsername(e.target.value);
-  };
-
-  const handlePasswordChange = (e) => {
-    const newPassword = e.target.value;
-    setPassword(newPassword);
-    getStrength(newPassword);
+  const handleReset = () => {
+    setActiveStep(0);
   };
 
   return (
+    <RegistrationContextProvider>
+
     <div className='registration-card'>
-      <form action="" className='registration-form'>
-      <OutlinedInput
-        id="filled-username-input"
-        placeholder='Email'
-        type="email"
-        autoComplete="current-email"
-        variant="outlined"
-        value={username}
-        onChange={handleUsernameChange}
-      />
-      <OutlinedInput
-        id="outlined-adornment-password"
-        type={showPassword ? 'text' : 'password'}
-        placeholder='Contraseña'
-        onChange={handlePasswordChange}
-        value={password}
-        endAdornment={
-          <InputAdornment position="end">
-            <IconButton
-              aria-label="toggle password visibility"
-              onClick={handleClickShowPassword}
-              onMouseDown={handleMouseDownPassword}
-              edge="end"
+      <Stepper activeStep={activeStep} orientation="vertical">
+        {registrationSteps.map((step, index) => (
+          <Step key={step.label}>
+
+            <StepLabel
+              optional={
+                index === 2 ? (
+                  <Typography variant="caption">Ultimo paso</Typography>
+                ) : null
+              }
             >
-              {showPassword ? <Visibility /> : <VisibilityOff />}
-            </IconButton>
-          </InputAdornment>
-        }
-      />
-      </form>
-      <div className={`bars ${ (strength == 'muy fuerte') ? 'stronger' : strength}`}>
-        <div></div>
-      </div>
-      <div className='password-strength'>
-        { (password != '') ?  <>Contraseña { strength ? strength : 'demaisado corta'} </> : 'Mínimo 8 caracteres'}  
-      </div>
+              {step.label}
+            </StepLabel>
+
+            <StepContent>
+
+              <div>
+                { activeStep == 0 ? <RegisterPersonalFields /> : (activeStep == 1) ? <RegisterResidentialFields /> : <RegisterCredentialFields />}
+
+                <Button
+                    disabled={index === 0}
+                    onClick={handleBack}
+                    sx={{ mt: 1, mr: 1 }}
+                >
+                  Atras
+                </Button>
+
+                <Button
+                  variant="contained"
+                  onClick={handleNext}
+                  sx={{ mt: 1, mr: 1 }}
+                >
+                  {index === registrationSteps.length - 1 ? 'Registrarse' : 'Siguiente'}
+                </Button>
+              </div>
+
+            </StepContent>
+
+          </Step>
+        ))}
+      </Stepper>
+      {activeStep === registrationSteps.length && (
+        <Paper square elevation={0} sx={{ p: 3 }}>
+          <Typography>All steps completed - you&apos;re finished</Typography>
+          <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
+            Reset
+          </Button>
+        </Paper>
+      )}
     </div>
-  )
+    </RegistrationContextProvider>
+  );
 }
 
-export default Register
+export default Register;

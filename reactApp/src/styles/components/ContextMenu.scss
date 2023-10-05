@@ -1,10 +1,8 @@
 @import "../variables/index.scss";
 
 .context-menu-wrapper {
-    background-color: $background-color-light-n1;
-    border-radius: 15px;
+    background-color: $background-color-light;
     padding: 1rem;
-    margin: 15px 0px 0px 15px;
     color: $text-color-normal-light;
 }
 
@@ -17,9 +15,8 @@
 
 @media (prefers-color-scheme: dark) {
     .context-menu-wrapper {
-        background-color: $background-color-dark-n1;
+        background-color: $background-color-dark-n0;
         color: $text-color-normal-dark;
-        border-top: $border-top-dark;
     }
 
     .context-menu-wrapper > h2 {

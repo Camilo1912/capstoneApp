@@ -6,13 +6,19 @@ import BallotOutlinedIcon from '@mui/icons-material/BallotOutlined';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import NaturePeopleOutlinedIcon from '@mui/icons-material/NaturePeopleOutlined';
 import ScheduleSendOutlinedIcon from '@mui/icons-material/ScheduleSendOutlined';
+import { useState } from 'react';
 
 const Navbar = () => {
+    const [value, setValue] = useState(0);
 
     return (
         <div className="navbar-wrapper">
             <BottomNavigation
                 showLabels
+                value={value}
+                onChange={(event, newValue) => {
+                    setValue(newValue);
+                }}
             >
                 <BottomNavigationAction label="Anuncios" icon={<NewspaperIcon />} />
                 <BottomNavigationAction label="Proyectos" icon={<HandymanOutlinedIcon />} />

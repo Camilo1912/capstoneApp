@@ -7,7 +7,7 @@ const News = () => {
 
     return (
         <div className='news-main-layout'>
-            <h1>Anuncios</h1>
+            <h1>Anuncios y noticias</h1>
             <NewsCard cardData={cardPlaceholderData}/>
         </div>
     );
