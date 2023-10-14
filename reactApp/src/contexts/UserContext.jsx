@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 import { getUser } from "../utils/LocalStorage";
 
 export const UserContext = createContext();
@@ -8,8 +8,13 @@ const UserContextProvider = (props) => {
     const [userMenuContent, setUserMenuContent] = useState([]);
     const [userActiveContent, setUserActiveContent] = useState("1");
 
+    useEffect(() => {
+        localStorage.setItem('userInfo', JSON.stringify(userInfo));
+    }, [userInfo]);
+
     const handleUserInfo = (user_info) => {
         setUserInfo(user_info);
+        localStorage.setItem('userInfo',JSON.stringify(user_info));
     };
 
     const handleMenuContent = (menuOptions) => {

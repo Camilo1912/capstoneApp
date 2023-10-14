@@ -47,6 +47,12 @@
     border-radius: 100px;
 }
 
+.user-edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 @media (prefers-color-scheme: dark) {
     .header-wrapper {
         color: $text-color-normal-dark;

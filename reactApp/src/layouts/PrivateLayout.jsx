@@ -1,13 +1,14 @@
-import ContentLayout from "./ContentLayout";
+import ContentLayout from "../pages/NeighborHome";
 import Header from "../components/Header";
 import Navbar from "../components/Navbar";
+import { Outlet } from "react-router-dom";
 
 const PrivateLayout = () => {
     return (
         <div className="general-layout">
             <Header />
             <Navbar />
-            <ContentLayout />
+            <Outlet />
             {/* <div className="header">
                 <Header />
             </div>

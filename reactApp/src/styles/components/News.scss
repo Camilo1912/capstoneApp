@@ -4,6 +4,7 @@
     flex-direction: column;
     height: calc(100dvh - 10rem);
     background-color: $background-color-light-n1;
+    border: 1px solid #dee8f8;
     padding: 20px;
     border-radius: 30px;
     margin-right: 20px;
@@ -12,12 +13,12 @@
 
     h1 {
         // margin-left: 1rem;
-        font-size: 1.5rem;
+        font-size: 1.3rem;
         background-color: #d2eef7;
         width: fit-content;
         padding: .2rem 1rem;
         border-radius: 15px;
-        margin-bottom: 5px;
+        // margin-bottom: 5px;
     }
 }
 

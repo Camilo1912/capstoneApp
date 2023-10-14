@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState, useContext } from 'react';
+import { login } from '../requests/Auth';
 import { Link , useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import LoginIcon from '@mui/icons-material/Login';
 import { InputAdornment  } from '@mui/material';
+import { UserContext } from '../contexts/UserContext';
+import { UserRols } from '../utils/UserRols';
+
 
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Visibility from '@mui/icons-material/Visibility';
@@ -16,6 +19,8 @@ const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+
+    const { handleUserInfo } = useContext(UserContext); //quitar luego
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -37,13 +42,29 @@ const Login = () => {
         setUsername('');
         setPassword('');
 
-        navigate('/home');
-        // try {
-        //     const response = await axios.post('URL_POR_DEFINIR', {username, password});
-        //     console.log(response.data);
-        // } catch (error) {
-        //     console.error(error);
-        // }
+        const response = ({
+            'username': username,
+            'rol': 'NEIGHBOR',
+            'profilePhoto': 'https://source.unsplash.com/random/64x64/?profile',
+            'comuna': 'Pedro Aguirre Cerda',
+            'address': 'Av. Club Hípico 3565',
+            'firstname': 'camilo',
+            'secondname': 'hernán',
+            'lastname1': 'marilaf',
+            'lastname2': 'miranda',
+            'birthDate': '13-12-1995',
+            'community_id': 123,
+            'community_name': 'magallanes',
+            'community_code' : 'F02',
+            'rut': '19.112.234-8'
+        });
+
+        handleUserInfo(response);
+        navigate(UserRols(response.rol));
+
+        // const response = await login(username, password);
+
+        
     };
 
     return (

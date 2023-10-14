@@ -1,7 +1,8 @@
 export function isAuthenticated() {
     localStorage.setItem("access_token", "fjklsjflafjsdlkjlsfk"); //quitar cuando esté la API
+    
     const accessApiToken = localStorage.getItem("access_token");
-    console.log(accessApiToken);
+
     return accessApiToken !== null;
 }
 
