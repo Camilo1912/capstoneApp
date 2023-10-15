@@ -11,20 +11,23 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
-import { Form, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { userRolsTypes } from '../utils/data';
 
 import { UserContext } from '../contexts/UserContext';
 import { FormLabel } from '@mui/material';
+import { useSelectedComponent } from '../contexts/SelectedComponentContext';
 
 const Header = () => {
     const navigate = useNavigate();
     const { userInfo, handleUserInfo } = useContext(UserContext);
+    const { setSelectedComponent } = useSelectedComponent()
 
     const [open, setOpen] = useState(false);
 
     const [editMode, setEditMode] = useState(false);
-    const [newAddress, setNewAddress] = useState(userInfo.address);
-    const [newEmail, setNewEmail] = useState(userInfo.username);
+    const [newEmail, setNewEmail] = useState(userInfo.email);
+    const [newPhoneNumber, setNewPhoneNumber] = useState(userInfo.phone_number);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -37,6 +40,8 @@ const Header = () => {
 
     const handleClickLogout = () => {
         handleUserInfo({});
+        setSelectedComponent({'nav': 0, 'menu': 0});
+
         navigate('/');
     };
 
@@ -45,26 +50,22 @@ const Header = () => {
     };
 
     const handleSaveClick = () => {
-        // Aquí deberías realizar la lógica para guardar la nueva dirección
-        // Puedes llamar a un endpoint de API o realizar la actualización localmente
-        // handleSave(newAddress);
-
-        // Para este ejemplo, simplemente actualizaremos el estado localmente
+   
         handleUserInfo({
             ...userInfo,
-            address: newAddress,
-            username: newEmail,
+            email: newEmail,
+            phone_number: newPhoneNumber,
         });
 
-        // Cerramos el diálogo
         setEditMode(false);
     };
+
 
     return (
         <div className="header-wrapper">
             <div style={{ textTransform: 'capitalize' }}>
-                <h1>Comunidad vecinal {userInfo.community_name}</h1>
-                <h2>{userInfo.firstname} {userInfo.lastname1} ({userInfo.rol})</h2>
+                <h1>Comunidad vecinal {userInfo.neighborhood_id}</h1>
+                <h2>{userInfo.first_name} {userInfo.second_name} ({userRolsTypes[userInfo.role_id]})</h2>
             </div>
             <div className="header-iconset">
                 <Avatar className='profile-avatar' alt="Vecino" src={userInfo.profilePhoto} />
@@ -81,19 +82,18 @@ const Header = () => {
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Ajustes de usuario</DialogTitle>
                 <DialogContent>
-                    <DialogContentText>
-                        A continuación se muestran tus datos de usuario
-                    </DialogContentText>
+                    A continuación se muestran tus datos de usuario
+    
                     <div className='user-edit-form'>
 
                         <FormLabel>Nombre completo</FormLabel>
-                        <p style={{ textTransform: 'capitalize' }}>{userInfo.firstname} {userInfo.secondname} {userInfo.lastname1} {userInfo.lastname2}</p>
+                        <p style={{ textTransform: 'capitalize' }}>{userInfo.first_name} {userInfo.second_name} {userInfo.last_name} {userInfo.last_name_2}</p>
                         
                         <FormLabel>RUT</FormLabel>
                         <p>{userInfo.rut}</p>
                         
                         <FormLabel>Fecha de nacimiento</FormLabel>
-                        <p>{userInfo.birthDate}</p>
+                        <p>{userInfo.birth_date}</p>
                         
                         <FormLabel>Correo electrónico</FormLabel>
                         {editMode ? (
@@ -104,20 +104,25 @@ const Header = () => {
                             onChange={(e) => setNewEmail(e.target.value)}
                             />
                             ) : (
-                                <p>{userInfo.username}</p>
+                                <p>{userInfo.email}</p>
                                 )}
                         
                         <FormLabel>Dirección de residencia</FormLabel>
+                        <p>{userInfo.street_address} {userInfo.number_address}</p>
+
+                        <FormLabel>Telefono</FormLabel>
+
                         {editMode ? (
                             <TextField
-                            label="Nueva dirección"
+                            label="Nuevo telefono de contacto"
                             variant="outlined"
-                            value={newAddress}
-                            onChange={(e) => setNewAddress(e.target.value)}
+                            value={newPhoneNumber}
+                            onChange={(e) => setNewPhoneNumber(e.target.value)}
                             />
                             ) : (
-                                <p>{userInfo.address}</p>
+                                <p>{userInfo.phone_number}</p>
                                 )}
+
 
                     </div>
                 </DialogContent>

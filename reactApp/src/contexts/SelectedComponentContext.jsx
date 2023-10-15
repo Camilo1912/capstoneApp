@@ -3,10 +3,12 @@ import { createContext, useContext, useState } from 'react';
 const SelectedComponentContext = createContext();
 
 export const SelectedComponentProvider = ({ children }) => {
-  const [selectedComponent, setSelectedComponent] = useState(null);
+  const [selectedComponent, setSelectedComponent] = useState({"nav": 0,"menu": 0});
 
   return (
-    <SelectedComponentContext.Provider value={{ selectedComponent, setSelectedComponent }}>
+    <SelectedComponentContext.Provider value={{ 
+      selectedComponent, setSelectedComponent,
+      }}>
       {children}
     </SelectedComponentContext.Provider>
   );

@@ -20,7 +20,7 @@ const Navbar = () => {
                 value={value}
                 onChange={(event, newValue) => {
                     setValue(newValue);
-                    setSelectedComponent(newValue)
+                    setSelectedComponent({nav: newValue, menu: 0});
                 }}
             >
                 <BottomNavigationAction label="Anuncios" value={0} icon={<NewspaperIcon />} />

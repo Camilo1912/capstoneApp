@@ -3,13 +3,15 @@ import { useState } from 'react';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import DraftsIcon from '@mui/icons-material/Drafts';
+import { useSelectedComponent } from '../contexts/SelectedComponentContext';
 
 const ContextMenu = ({ data }) => {
     const [selectedIndex, setSelectedIndex] = useState(0);
+    const { setSelectedComponent, selectedComponent } = useSelectedComponent();
 
     const handleListItemClick = (event, index) => {
         setSelectedIndex(index);
+        setSelectedComponent({...selectedComponent, menu: index});
     };
 
     return (

@@ -17,4 +17,21 @@ const cardPlaceholderData = [
     { cardTitle: 'Card 2', cardContent: 'Content of card 2', cardDate: '13/12/2023', imageUrl: 'https://source.unsplash.com/random/200x200/?project' }
 ];
 
+const userDataPlaceholder = ({
+    'username': 'user@mail.com',
+    'rol': 'NEIGHBOR',
+    'profilePhoto': 'https://source.unsplash.com/random/64x64/?profile',
+    'comuna': 'Pedro Aguirre Cerda',
+    'address': 'Av. Club Hípico 3565',
+    'firstname': 'camilo',
+    'secondname': 'hernán',
+    'lastname1': 'marilaf',
+    'lastname2': 'miranda',
+    'birthDate': '13-12-1995',
+    'community_id': 123,
+    'community_name': 'magallanes',
+    'community_code' : 'F02',
+    'rut': '19.112.234-8'
+});
+
 export default cardPlaceholderData;

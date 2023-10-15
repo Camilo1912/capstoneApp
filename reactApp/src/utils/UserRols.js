@@ -1,7 +1,7 @@
 export function UserRols(rol) {
     if (rol === 'ADMIN') {
         return '/admin_home';
-    } else if (rol === 'PRESIDENT') {
+    } else if (rol === 2) {
         return '/president_home';
     } else if (rol === 'SECRETARY') {
         return '/secretary_home';

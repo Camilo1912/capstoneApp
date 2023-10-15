@@ -9,12 +9,12 @@ const UserContextProvider = (props) => {
     const [userActiveContent, setUserActiveContent] = useState("1");
 
     useEffect(() => {
-        localStorage.setItem('userInfo', JSON.stringify(userInfo));
+        localStorage.setItem('user_info', JSON.stringify(userInfo));
     }, [userInfo]);
 
     const handleUserInfo = (user_info) => {
         setUserInfo(user_info);
-        localStorage.setItem('userInfo',JSON.stringify(user_info));
+        // localStorage.setItem('userInfo',JSON.stringify(user_info));
     };
 
     const handleMenuContent = (menuOptions) => {

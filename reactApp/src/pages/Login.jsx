@@ -19,8 +19,9 @@ const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [feedbackMessage, setFeedbackMessage] = useState('');
 
-    const { handleUserInfo } = useContext(UserContext); //quitar luego
+    const { handleUserInfo } = useContext(UserContext);
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -30,41 +31,32 @@ const Login = () => {
 
     const handleUsernameChange = (e) => {
         setUsername(e.target.value);
+        setFeedbackMessage('');
     };
 
     const handlePasswordChange = (e) => {
         setPassword(e.target.value);
+        setFeedbackMessage('');
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
-        setUsername('');
-        setPassword('');
 
-        const response = ({
-            'username': username,
-            'rol': 'NEIGHBOR',
-            'profilePhoto': 'https://source.unsplash.com/random/64x64/?profile',
-            'comuna': 'Pedro Aguirre Cerda',
-            'address': 'Av. Club Hípico 3565',
-            'firstname': 'camilo',
-            'secondname': 'hernán',
-            'lastname1': 'marilaf',
-            'lastname2': 'miranda',
-            'birthDate': '13-12-1995',
-            'community_id': 123,
-            'community_name': 'magallanes',
-            'community_code' : 'F02',
-            'rut': '19.112.234-8'
-        });
-
-        handleUserInfo(response);
-        navigate(UserRols(response.rol));
-
-        // const response = await login(username, password);
-
-        
+        if (username == '' || password == '') {
+            setFeedbackMessage('Faltan datos por ingresar');
+        } else {
+            setFeedbackMessage('');
+            try {
+                const response = await login(username, password);
+                console.log(response.error);
+                handleUserInfo(response);
+                navigate(UserRols(response['role_id']));
+            } catch (error) {
+                setFeedbackMessage(error.response.data.error);
+            }
+            setUsername('');
+            setPassword('');
+        }
     };
 
     return (
@@ -101,6 +93,8 @@ const Login = () => {
                         </InputAdornment>
                     }
                 />
+                <p style={{ color: 'red' }}>{feedbackMessage}</p>
+                
 
                 <Button 
                     type='submit'

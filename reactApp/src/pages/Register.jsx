@@ -7,11 +7,11 @@ import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 
-import registrationSteps from '../utils/data';
+import { registrationSteps } from '../utils/data';
 import { useState } from 'react';
-import RegisterPersonalFields from '../components/RegisterPersonalFields';
-import RegisterResidentialFields from '../components/RegisterResidentialFields';
-import RegisterCredentialFields from '../components/RegisterCredentialFields';
+import RegisterPersonalFields from './register/RegisterPersonalFields';
+import RegisterResidentialFields from './register/RegisterResidentialFields';
+import RegisterCredentialFields from './register/RegisterCredentialFields';
 import RegistrationContextProvider from '../contexts/RegitrationContext';
 
 const Register = () => {

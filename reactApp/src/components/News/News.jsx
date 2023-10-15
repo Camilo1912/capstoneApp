@@ -1,7 +1,7 @@
 import React from 'react'
 import NewsCard from './NewsCard';
 
-import cardPlaceholderData from "../utils/PlaceholderData";
+import cardPlaceholderData from "../../utils/PlaceholderData";
 
 const News = () => {
 

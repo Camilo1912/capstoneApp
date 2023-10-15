@@ -1,10 +1,10 @@
 import ContextMenu from "../components/ContextMenu";
-import News from "../components/News";
-import PollsContainer from "../components/PollsContainer";
-import ProjectsContainer from "../components/ProjectsContainer";
+import News from "../components/News/News";
+import PollsContainer from "../components/Polls/PollsContainer";
+import ProjectsContainer from "../components/ProjectsComp/ProjectsContainer";
 import CalendarContainer from "../components/CalendarContainer";
 import { useSelectedComponent } from '../contexts/SelectedComponentContext';
-import ActivitiesContainer from "../components/ActivitiesContainer";
+import ActivitiesContainer from "../components/Activities/ActivitiesContainer";
 import SolicitudContainer from "../components/SolicitudContainer";
 
 const NeighborHome = () => {
@@ -39,7 +39,7 @@ const NeighborHome = () => {
     let contentComponent;
     let contextualMenuOptionsForComponent;
 
-    switch (selectedComponent) {
+    switch (selectedComponent['nav']) {
         case 0:
             contentComponent = <News />;
             contextualMenuOptionsForComponent = contextualMenuOptions["Anuncios"];
