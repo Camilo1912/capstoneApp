@@ -19,11 +19,17 @@ export const login = async (user, pass) => {
 
 //falta crear la url de logout
 export const logout = async (username) => {
-  const response = await axiosClient.post("logout/", {
-    email: username,
-  });
+  let responseMsg = '';
+  try {
+    const response = await axiosClient.post("logout/", {
+      email: username,
+    });
+    responseMsg = response.data["message"];
+  } catch (error) {
+    console.error("Error al cerrar sesión: ", error.response);
+  }
   localStorage.clear();
-  return response.data["message"];
+  return responseMsg;
 };
 
 export const refreshToken = async (refresh) => {

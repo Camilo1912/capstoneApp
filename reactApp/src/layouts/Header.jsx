@@ -17,6 +17,8 @@ import { userRolsTypes } from '../utils/data';
 import { UserContext } from '../contexts/UserContext';
 import { FormLabel } from '@mui/material';
 import { useSelectedComponent } from '../contexts/SelectedComponentContext';
+import { getUsername } from '../utils/LocalStorage';
+import { logout } from '../requests/Auth';
 
 const Header = () => {
     const navigate = useNavigate();
@@ -38,8 +40,9 @@ const Header = () => {
         setOpen(false);
     };
 
-    const handleClickLogout = () => {
+    const handleClickLogout = async () => {
         handleUserInfo({});
+        const response = await logout(getUsername());
         setSelectedComponent({'nav': 0, 'menu': 0});
 
         navigate('/');
