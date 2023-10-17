@@ -7,9 +7,16 @@ import { useContext } from "react";
 const PrivateRoute = ({allowedRoles=[], redirectPath = "/", children }) => {
     const { userInfo } = useContext(UserContext);
 
-    if (!isAuthenticated() || !allowedRoles.includes(userInfo.role_id)) {
+    if (!isAuthenticated() || !userInfo) {
         return <Navigate to={redirectPath} replace />;
     }
+        
+    const userRole = userInfo.role && userInfo.role.role_id;
+    
+    if (!allowedRoles.includes(userRole)) {
+        return <Navigate to={redirectPath} replace />;
+    }
+
     return children ? (
         children
     ) : (

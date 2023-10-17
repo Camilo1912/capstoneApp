@@ -2,27 +2,40 @@ import { axiosClient } from "./AxiosClient";
 import { getRefreshToken } from "../utils/LocalStorage";
 
 export const login = async (user, pass) => {
-  const response = await axiosClient.post("login/", {
-    neighbor: {
-      email: user,
-      password: pass,
+  try {
+    const response = await axiosClient.post("login/", {
+      neighbor: {
+        email: user,
+        password: pass,
+      }
+    });
+
+    if ("token" in response.data) {
+      localStorage.setItem("access_token", JSON.stringify(response.data.token));
+      // localStorage.setItem("refresh_token", JSON.stringify(response.data["refresh"]));
+      localStorage.setItem("user_info", JSON.stringify(response.data["neighbor"]));
+    } else { 
+      console.error('Token not found in response data'); 
     }
-  });
 
-  console.log(response);
+    return response.data["neighbor"];
+    
+  } catch (error) {
+    console.error("An error occurred during login:", error);
 
-  localStorage.setItem("access_token", JSON.stringify(response.data["token"]));
-  // localStorage.setItem("refresh_token", JSON.stringify(response.data["refresh"]));
-  localStorage.setItem("user_info", JSON.stringify(response.data["neighbor"]));
-  return response.data["neighbor"];
+    if (error.response && error.response.status === 500) {
+      console.error("Internal Server Error (500) occurred during login.");
+    }
+    throw error;
+  }
 };
 
 //falta crear la url de logout
-export const logout = async (username) => {
+export const logout = async (user_id) => {
   let responseMsg = '';
   try {
     const response = await axiosClient.post("logout/", {
-      email: username,
+      id: user_id,
     });
     responseMsg = response.data["message"];
   } catch (error) {

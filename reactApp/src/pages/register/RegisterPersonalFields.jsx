@@ -3,44 +3,69 @@ import { useState } from 'react';
 import OutlinedInput from '@mui/material/OutlinedInput';
 
 const RegisterPersonalFields = () => {
-  const [username, setUsername] = useState('');
-  const [lastnames, setLastnames] = useState('');
+  const [registerFormData, setRegisterFormData] = useState({
+    firstname: '',
+    middlename: '',
+    lastname1: '',
+    lastname2: '',
+    rut: ''
+  });
 
-
-  const handleUsernameChange = (e) => {
-    setUsername(e.target.value);
-  };
-
-  const handleLastnamesChange = (e) => {
-    setLastnames(e.target.value);
+  const handleRegisterFormChange = (e) => {
+    const { name, value } = e.target;
+    setRegisterFormData(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
   };
 
   return (
     <div>
       <form action="" className='registration-form'>
       <OutlinedInput
-        id="filled-username-input"
-        placeholder='Nombre'
+        id="filled-fisrtname-input"
+        name='firstname'
+        placeholder='Primer nombre'
         type="string"
         variant="outlined"
-        value={username}
-        onChange={handleUsernameChange}
+        value={registerFormData.firstname}
+        onChange={handleRegisterFormChange}
       />
       <OutlinedInput
-        id="filled-lastnames-input"
-        placeholder='Apellidos'
+        id="filled-middlename-input"
+        name='middlename'
+        placeholder='Segundo nombre'
         type="string"
         variant="outlined"
-        value={lastnames}
-        onChange={handleLastnamesChange}
+        value={registerFormData.middlename}
+        onChange={handleRegisterFormChange}
+      />
+      <OutlinedInput
+        id="filled-lastname1-input"
+        name='lastname1'
+        placeholder='Apellido Paterno'
+        type="string"
+        variant="outlined"
+        value={registerFormData.lastname1}
+        onChange={handleRegisterFormChange}
+      />
+      <OutlinedInput
+        id="filled-lastname2-input"
+        name='lastname2'
+        placeholder='Apellido Materno'
+        type="string"
+        variant="outlined"
+        value={registerFormData.lastname2}
+        onChange={handleRegisterFormChange}
       />
       <OutlinedInput
         id="filled-rut-input"
+        name='rut'
         placeholder='RUT'
         type="string"
         variant="outlined"
-        value={lastnames}
-        onChange={handleLastnamesChange}
+        value={registerFormData.rut}
+        onChange={handleRegisterFormChange}
       />
       </form>
       

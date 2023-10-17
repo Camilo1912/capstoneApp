@@ -24,9 +24,8 @@ const RegisterResidentialFields = () => {
     if (selectedRegion) {
       const getCommunes = async () => {
         try {
-          const response = await get_communes_by_region(selectedRegion.id);
+          const response = await get_communes_by_region(selectedRegion);
           setCommunes(response);
-          console.log(response);
         } catch (error) {
           console.error("Error al obtener las comunas: ", error);
         }
@@ -49,7 +48,7 @@ const RegisterResidentialFields = () => {
         onChange={handleSelectedRegion}>
         <option value="">-- Seleccione región --</option>
         {regions.map((region) => (
-          <option key={region.id} value={region.region_name}>
+          <option key={region.id} value={region.id}>
             {region.region_name}
           </option>
         ))}

@@ -11,7 +11,7 @@ export const get_communes = async () => {
 };
 
 export const get_communes_by_region = async (region_id) => {
-    const response = await axiosClient.get(`communes/${region_id}`);
+    const response = await axiosClient.get(`regions/${region_id}/communes`);
     return response.data;
 };
 
