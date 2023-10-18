@@ -8,14 +8,16 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 
 import { registrationSteps } from '../../utils/data';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import RegisterPersonalFields from './RegisterPersonalFields';
 import RegisterResidentialFields from './RegisterResidentialFields';
 import RegisterCredentialFields from './RegisterCredentialFields';
-import RegistrationContextProvider from '../../contexts/RegitrationContext';
+import { RegistrationContext } from '../../contexts/RegitrationContext';
 
 const Register = () => {
+  const { registrationForm, handleRegistrationForm } = useContext(RegistrationContext);
   const [activeStep, setActiveStep] = useState(0);
+  const [isNextButtonDisabled, setIsNextButtonDisabled] = useState(true);
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -29,8 +31,17 @@ const Register = () => {
     setActiveStep(0);
   };
 
+  useEffect(() => {
+    console.log(registrationForm.fistname);
+    if (registrationForm.fistname !== '' && activeStep === 0) {
+      setIsNextButtonDisabled(true);
+    }
+    setIsNextButtonDisabled(false);
+  }, [registrationForm]);
+
+  
+
   return (
-    <RegistrationContextProvider>
 
     <div className='registration-card'>
       <Stepper activeStep={activeStep} orientation="vertical">
@@ -51,20 +62,23 @@ const Register = () => {
 
               <div>
                 { activeStep == 0 ? <RegisterPersonalFields /> : (activeStep == 1) ? <RegisterResidentialFields /> : <RegisterCredentialFields />}
+                <div className='register-steps-buttons-container'>
 
-                <Button
-                    disabled={index === 0}
-                    onClick={handleBack}
+                  <Button
+                      disabled={index === 0}
+                      onClick={handleBack}
+                      sx={{ mt: 1, mr: 1 }}
+                      > Atras
+                  </Button>
+
+                  <Button
+                    variant="contained"
+                    disabled={isNextButtonDisabled}
+                    onClick={handleNext}
                     sx={{ mt: 1, mr: 1 }}
-                > Atras
-                </Button>
-
-                <Button
-                  variant="contained"
-                  onClick={handleNext}
-                  sx={{ mt: 1, mr: 1 }}
-                > {index === registrationSteps.length - 1 ? 'Registrarse' : 'Siguiente'}
-                </Button>
+                    > {index === registrationSteps.length - 1 ? 'Registrarse' : 'Siguiente'}
+                  </Button>
+                </div>
               </div>
 
             </StepContent>
@@ -81,7 +95,6 @@ const Register = () => {
         </Paper>
       )}
     </div>
-    </RegistrationContextProvider>
   );
 }
 

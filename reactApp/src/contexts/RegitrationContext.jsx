@@ -3,23 +3,23 @@ import { createContext, useState } from "react";
 
 export const RegistrationContext = createContext();
 
-const registrationUserData = [
-    {
-        username: '',
-        lastnames: '',
+const RegistrationContextProvider = (props) => {
+    const [registrationForm, setRegistrationForm] = useState({
+        firstname: '',
+        middlename: '',
+        lastname1: '',
+        lastname2: '',
         birthDate: '',
         rut: '',
-        address: '',
+        street: '',
+        number: '',
+        regionId: '',
+        communeId: '',
+        neighborhoodId: '',
         email: '',
         password: '',
-        repeatPassword: '',
         verificationDocUrl: ''
-    }
-]
-
-
-const RegistrationContextProvider = (props) => {
-    const [registrationForm, setRegistrationForm] = useState([]);
+    });
 
     const handleRegistrationForm = (value) => {
         setRegistrationForm(value);

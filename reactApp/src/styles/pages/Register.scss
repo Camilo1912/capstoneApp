@@ -11,6 +11,38 @@
     width: 600px;
 }
 
+.registration-form {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    >label {
+        margin-top: 10px;
+    }
+}
+
+input, select {
+    border-radius: .8rem;
+    border: none;
+    border: 1px solid rgba($color: #000000, $alpha: .3);
+    height: 2.5rem;
+    padding-left: 10px;
+    font-size: 1.2rem;
+    background: none;
+    background: rgba($color: #ffffff, $alpha: .69);
+}
+
+select {
+    font-size: .8rem;
+}
+
+.register-steps-buttons-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 2rem;
+}
+
 .register-combobox-container {
     display: flex;
     flex-direction: row;
@@ -73,5 +105,10 @@
     .neighborhood-info-card-title-container{
 
         background-color: $background-color-dark;
+    }
+
+    input,select {
+        border: 1px solid rgba($color: #ffffff, $alpha: .2);
+        background: rgba($color: #000000, $alpha: .3);
     }
 }

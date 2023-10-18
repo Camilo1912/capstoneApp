@@ -1,72 +1,67 @@
 import React from 'react';
-import { useState } from 'react';
-import OutlinedInput from '@mui/material/OutlinedInput';
+import { useState, useContext  } from 'react';
+import { RegistrationContext } from '../../contexts/RegitrationContext';
 
 const RegisterPersonalFields = () => {
-  const [registerFormData, setRegisterFormData] = useState({
-    firstname: '',
-    middlename: '',
-    lastname1: '',
-    lastname2: '',
-    rut: ''
-  });
+  const {registrationForm, handleRegistrationForm } = useContext(RegistrationContext);
 
-  const handleRegisterFormChange = (e) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setRegisterFormData(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
+    handleRegistrationForm({
+      ...registrationForm,
+      [name]: value,
+    });
   };
 
   return (
     <div>
       <form action="" className='registration-form'>
-      <OutlinedInput
-        id="filled-fisrtname-input"
-        name='firstname'
-        placeholder='Primer nombre'
-        type="string"
-        variant="outlined"
-        value={registerFormData.firstname}
-        onChange={handleRegisterFormChange}
-      />
-      <OutlinedInput
-        id="filled-middlename-input"
-        name='middlename'
-        placeholder='Segundo nombre'
-        type="string"
-        variant="outlined"
-        value={registerFormData.middlename}
-        onChange={handleRegisterFormChange}
-      />
-      <OutlinedInput
-        id="filled-lastname1-input"
-        name='lastname1'
-        placeholder='Apellido Paterno'
-        type="string"
-        variant="outlined"
-        value={registerFormData.lastname1}
-        onChange={handleRegisterFormChange}
-      />
-      <OutlinedInput
-        id="filled-lastname2-input"
-        name='lastname2'
-        placeholder='Apellido Materno'
-        type="string"
-        variant="outlined"
-        value={registerFormData.lastname2}
-        onChange={handleRegisterFormChange}
-      />
-      <OutlinedInput
-        id="filled-rut-input"
-        name='rut'
-        placeholder='RUT'
-        type="string"
-        variant="outlined"
-        value={registerFormData.rut}
-        onChange={handleRegisterFormChange}
-      />
+        <strong>Necesitamos los siguientes datos personales para poder verificarte ante la junta de vecinos.</strong>
+        <label htmlFor="">Primer nombre * </label>
+        <input
+          id="filled-fisrtname-input"
+          name="firstname"
+          placeholder="Primer nombre"
+          type="text"  // En lugar de "string"
+          value={registrationForm.firstname || ''}
+          onChange={handleInputChange}
+        />
+        <label htmlFor="">Segundo Nombre (Opcional)</label>
+        <input
+          id="filled-middlename-input"
+          name='middlename'
+          placeholder='Segundo nombre'
+          type="text"
+          value={registrationForm.middlename || ''}
+          onChange={handleInputChange}
+        />
+        <label htmlFor="">Apellido Paterno *</label>
+        <input
+          id="filled-lastname1-input"
+          name='lastname1'
+          placeholder='Apellido Paterno'
+          type="text"
+          value={registrationForm.lastname1 || ''}
+          onChange={handleInputChange}
+        />
+        <label htmlFor="">Apellido Materno *</label>
+        <input
+          id="filled-lastname2-input"
+          name='lastname2'
+          placeholder='Apellido Materno'
+          type="text"
+          value={registrationForm.lastname2 || ''}
+          onChange={handleInputChange}
+        />
+        <label htmlFor="">RUT *</label>
+        <input
+          id="filled-rut-input"
+          name='rut'
+          placeholder='RUT'
+          type="text"
+          value={registrationForm.rut || ''}
+          onChange={handleInputChange}
+        />
       </form>
       
     </div>
