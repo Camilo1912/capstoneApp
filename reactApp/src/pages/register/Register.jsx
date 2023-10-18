@@ -7,12 +7,12 @@ import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 
-import { registrationSteps } from '../utils/data';
+import { registrationSteps } from '../../utils/data';
 import { useState } from 'react';
-import RegisterPersonalFields from './register/RegisterPersonalFields';
-import RegisterResidentialFields from './register/RegisterResidentialFields';
-import RegisterCredentialFields from './register/RegisterCredentialFields';
-import RegistrationContextProvider from '../contexts/RegitrationContext';
+import RegisterPersonalFields from './RegisterPersonalFields';
+import RegisterResidentialFields from './RegisterResidentialFields';
+import RegisterCredentialFields from './RegisterCredentialFields';
+import RegistrationContextProvider from '../../contexts/RegitrationContext';
 
 const Register = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -56,16 +56,14 @@ const Register = () => {
                     disabled={index === 0}
                     onClick={handleBack}
                     sx={{ mt: 1, mr: 1 }}
-                >
-                  Atras
+                > Atras
                 </Button>
 
                 <Button
                   variant="contained"
                   onClick={handleNext}
                   sx={{ mt: 1, mr: 1 }}
-                >
-                  {index === registrationSteps.length - 1 ? 'Registrarse' : 'Siguiente'}
+                > {index === registrationSteps.length - 1 ? 'Registrarse' : 'Siguiente'}
                 </Button>
               </div>
 

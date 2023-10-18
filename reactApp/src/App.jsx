@@ -1,7 +1,6 @@
 import "./styles/App.scss";
 import React from 'react';
 import PublicLayout from "./layouts/PublicLayout";
-import PrivateLayout from "./layouts/PrivateLayout";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import UserContextProvider from "./contexts/UserContext";
 import PrivateRoute from "./routes/PrivateRoute";

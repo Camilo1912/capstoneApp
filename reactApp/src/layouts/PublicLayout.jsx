@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 import Login from "../pages/Login";
-import Register from "../pages/Register";
+import Register from "../pages/register/Register";
 
 const GeneralLayout = () => {
     const location = useLocation();
