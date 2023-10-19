@@ -20,3 +20,10 @@ export const project_states = async () => {
     const response = await axiosClient.get("project_states/");
     return response.data;
 };
+
+
+export const get_projects = async () => {
+    const response = await axiosClient.get("projects/");
+    console.log(response.data);
+    return response.data;
+};

@@ -3,14 +3,16 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import IconButton from '@mui/material/IconButton';
 import OutlinedInput from '@mui/material/OutlinedInput';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { InputAdornment  } from '@mui/material';
+import { RegistrationContext } from '../../contexts/RegitrationContext';
 
 const strengthLevels = ['debil','media', 'fuerte', 'muy fuerte', 'demasiado corta'];
 const MIN_PASSWORD_LENGTH = 8;
 
 
 const RegisterCredentialFields = () => {
+    const { registrationForm, handleRegistrationForm } = useContext(RegistrationContext);
     const [strength, setStrength] = useState(null);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -69,6 +71,7 @@ const RegisterCredentialFields = () => {
 
     return (
         <div className='credentials-form'>
+            <label htmlFor="email">Correo electrónico</label>
             <OutlinedInput
                 id="filled-email-input"
                 placeholder='Email'
@@ -77,6 +80,8 @@ const RegisterCredentialFields = () => {
                 value={email}
                 onChange={handleEmailChange}
             />
+            <label htmlFor="pass">Contraseña</label>
+            <input type="email" />
             <OutlinedInput
                 id="outlined-adornment-password"
                 type={showPassword ? 'text' : 'password'}
