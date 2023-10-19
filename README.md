@@ -36,5 +36,5 @@ npm run dev
 
 ## Contacto
 
-Autores: Camilo Marilaf y Rodlfo Rodriguez
-Correo Electronico: camilomarilafm@gmail.com
+* Autores: Camilo Marilaf y Rodlfo Rodriguez
+* Correo Electronico: camilomarilafm@gmail.com
