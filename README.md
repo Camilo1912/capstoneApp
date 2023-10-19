@@ -15,19 +15,24 @@ Esta aplicación web en React está diseñada para ayudar a las juntas de vecino
 
 ## Instalación
 
-1. Clona el repositorio:
+### 1. Clona el repositorio:
 
 ```bash
 git clone https://github.com/tu-usuario/capstoneApp.git
+```
 
-2. Instala las dependencias:
+### 2. Instala las dependencias:
 
+```bash
 cd capstoneApp/reactApp
 npm install
+```
 
-3. Inicia la aplicación:
+### 3. Inicia la aplicación:
 
-npm start
+```bash
+npm run dev
+```
 
 ## Contacto
 
