@@ -1,0 +1,71 @@
+@import "../variables/index.scss";
+
+.header-wrapper, .header-iconset {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.header-wrapper {
+    justify-content: space-between;
+    padding: 1rem;
+    width: 100%;
+    height: 5rem;
+    color: $text-color-normal-light;
+    box-shadow: 0px 0px 5px rgba($color: #000000, $alpha: .2) inset;
+}
+
+.header-wrapper::before {
+    content: "";
+    top: 0;
+    right: 0;
+    width: 69%;
+    height: 5rem;
+    position: absolute;
+    background: $gradient-background-color-light,
+                url("https://source.unsplash.com/random/1920x1080/?community");
+    background-size: cover;
+    background-repeat: no-repeat;
+    z-index: -1;
+}
+
+.header-wrapper > h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #333333;
+}
+
+.header-iconset {
+    border-radius: 100px;
+    padding: 0.3rem;
+    backdrop-filter: blur(10px);
+    gap: 10px;
+}
+
+.profile-button-set {
+    background-color: #ececec;
+    border-radius: 100px;
+}
+
+.user-edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+@media (prefers-color-scheme: dark) {
+    .header-wrapper {
+        color: $text-color-normal-dark;
+    }
+
+    .header-wrapper > h1 {
+        color: $text-color-normal-dark;
+    }
+
+    .header-wrapper::before {
+        background: $gradient-background-color-dark,
+                url("https://source.unsplash.com/random/1920x1080/?community");
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+}

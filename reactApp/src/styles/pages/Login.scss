@@ -1,0 +1,84 @@
+@import "../variables/index.scss";
+
+.login-card {
+    background-color: $background-color-light-blur;
+    padding: 40px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    border-top: $border-top-light;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+    color: $text-color-normal-light;
+}
+
+.login-card h1 {
+    font-size: 2rem;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.no-account-container {
+    font-size: 1rem;
+    width: 100%;
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.bars {
+    margin: 8px 0;
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 6px;
+    border-radius: 3px;
+    background: #DFE1F0;
+}
+
+.bars div {
+    height: 6px;
+    border-radius: 3px;
+    transition: 0.4s;
+    width: 0%;
+}
+
+.bars.debil div {
+    background: #E24C71;
+    width: 25%;
+}
+
+.bars.media div {
+    background: #ff7900;
+    width: 50%;
+}
+
+.bars.fuerte div {
+    background: #cfcd3a;
+    width: 75%;
+}
+
+.bars.stronger div {
+    background: #57C558;
+    width: 100%;
+}
+.strength {
+    text-align: left;
+    height: 30px;
+    text-transform: capitalize;
+    color: #868B94;
+}
+
+
+
+@media (prefers-color-scheme: dark) {
+    .login-card {
+        background-color: $background-color-dark-blur;
+        color: $text-color-normal-dark;
+        border-top: $border-top-dark;
+    }
+}

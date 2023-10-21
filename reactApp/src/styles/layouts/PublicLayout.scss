@@ -1,0 +1,11 @@
+.public-layout {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100dvw;
+    height: 100dvh;
+    background-image: url("src/assets/images/neiborghood.jpg");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}

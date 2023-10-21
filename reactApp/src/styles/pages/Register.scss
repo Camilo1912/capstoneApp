@@ -1,0 +1,20 @@
+@import "../variables/index.scss";
+
+.registration-card {
+    background-color: $background-color-light-blur;
+    padding: 40px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    border-top: $border-top-light;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+    color: $text-color-normal-light;
+}
+
+
+@media (prefers-color-scheme: dark) {
+    .registration-card {
+        background-color: $background-color-dark-blur;
+        color: $text-color-normal-dark;
+        border-top: $border-top-dark;
+    }
+}
