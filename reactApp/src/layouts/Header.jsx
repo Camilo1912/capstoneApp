@@ -26,10 +26,19 @@ const Header = () => {
     const { setSelectedComponent } = useSelectedComponent()
 
     const [open, setOpen] = useState(false);
-
     const [editMode, setEditMode] = useState(false);
     const [newEmail, setNewEmail] = useState(userInfo.email);
     const [newPhoneNumber, setNewPhoneNumber] = useState(userInfo.phone_number);
+    const [labelColor, setLabelColor] = useState('blue');
+
+    useEffect(() => {
+        console.log(userInfo.role.role_id);
+        if ([2,3,4].includes(userInfo.role?.role_id)) {
+            setLabelColor('#FFC300');
+        } else {
+            setLabelColor('#3584e4b4');
+        }
+    }, []);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -66,9 +75,13 @@ const Header = () => {
 
     return (
         <div className="header-wrapper">
-            <div style={{ textTransform: 'capitalize' }}>
+            <div className='header-title-wrapper' style={{ textTransform: 'capitalize' }}>
                 <h1>Comunidad vecinal {userInfo.neighborhood.neighborhood_name}</h1>
-                <h2>{userInfo.first_name} {userInfo.last_name} ({userInfo.role.role_name})</h2>
+                <div>
+                    <h2>{userInfo.first_name} {userInfo.last_name}</h2>
+                    <p  style={{backgroundColor: labelColor}}> {userInfo.role.role_name}</p>
+                </div>
+                
             </div>
             <div className="header-iconset">
                 <Avatar className='profile-avatar' alt="Vecino" src={userInfo.profilePhoto} />
