@@ -81,7 +81,6 @@ const RegisterCredentialFields = () => {
                 onChange={handleEmailChange}
             />
             <label htmlFor="pass">Contraseña</label>
-            <input type="email" />
             <OutlinedInput
                 id="outlined-adornment-password"
                 type={showPassword ? 'text' : 'password'}

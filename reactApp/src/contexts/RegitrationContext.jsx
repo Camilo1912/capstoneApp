@@ -21,17 +21,10 @@ const defaultRegistrationForm = {
 };
 
 const RegistrationContextProvider = (props) => {
-
-
     const [registrationForm, setRegistrationForm] = useState(defaultRegistrationForm);
-    const [registrationStep, setRegistrationStep] = useState(0);
 
     const handleRegistrationForm = (value) => {
         setRegistrationForm(value);
-    };
-
-    const handleRegistrationStep = (value) => {
-        setRegistrationStep(value);
     };
 
     const resetRegistrationForm = () => {
@@ -43,8 +36,6 @@ const RegistrationContextProvider = (props) => {
             value={{
                 registrationForm,
                 handleRegistrationForm,
-                registrationStep,
-                handleRegistrationStep,
                 resetRegistrationForm,
             }}
         >

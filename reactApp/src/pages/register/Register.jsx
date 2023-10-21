@@ -14,15 +14,12 @@ import { RegistrationContext } from '../../contexts/RegitrationContext';
 import { register } from '../../requests/Register';
 import { useNavigate } from 'react-router-dom';
 import SendIcon from '@mui/icons-material/Send';
-import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
 
 const Register = () => {
   const navigate = useNavigate();
   const { 
     registrationForm,
-    handleRegistrationForm,
-    registrationStep,
     handleRegistrationStep,
     resetRegistrationForm } = useContext(RegistrationContext);
   const [activeStep, setActiveStep] = useState(0);
@@ -41,15 +38,14 @@ const Register = () => {
     setActiveStep(0);
   };
 
-  useEffect(() => {
-    handleRegistrationStep(activeStep);
-  }, [activeStep]);
+  // useEffect(() => {
+  //   handleRegistrationStep(activeStep);
+  // }, [activeStep]);
 
   useEffect(() => {
-    console.log(registrationForm['firstname']);
-    if (activeStep === 0 && registrationForm['firstname'] && registrationForm['lastname1'] && registrationForm['lastname2'] && registrationForm['rut']) {
+    if (activeStep === 0 && registrationForm['firstname'] && registrationForm['lastname1'] && registrationForm['lastname2'] && registrationForm['rut'] && registrationForm['birthDate']) {
       setIsNextButtonDisabled(false);
-    } else if (activeStep === 1 && registrationForm["regionId"] && registrationForm["communeId"] && registrationForm["neighborhoodId"]){
+    } else if (activeStep === 1 && registrationForm["regionId"] && registrationForm["communeId"] && registrationForm["neighborhoodId"] && registrationForm['street'] && registrationForm['number']){
       setIsNextButtonDisabled(false);
     } else if (activeStep === 2 && registrationForm["email"] && registrationForm["password"]) {
       setIsNextButtonDisabled(false);
@@ -58,8 +54,42 @@ const Register = () => {
     }
   }, [registrationForm]);
 
-  // const handleSignIn = () => {
-  // }
+  const handleSignIn = async (e) => {
+    e.preventDefault();
+    const newUserData = {
+      'neighbor': {
+
+        'fist_name': registrationForm['fistname'],
+        'sencond_name': registrationForm['middlename'],
+        'last_name': registrationForm['lastname1'],
+        'last_name_2': registrationForm['lastname2'],
+        'birth_date': registrationForm['birthDate'],
+        'email': registrationForm['email'],
+        'street_address': registrationForm['street'],
+        'street_number': registrationForm['number'],
+        'rut': registrationForm['rut'],
+        'password': registrationForm['password'],
+        'neighborhood_id': registrationForm['neighborhoodId'],
+        'commune_id': registrationForm['communeId'],
+      }
+    }
+
+    try {
+      const response = await register(newUserData);
+      console.log(response);
+      if (response.status === 200) {
+        console.log("Usuario creado");
+        handleReset();
+        resetRegistrationForm();
+        navigate("/");
+      } else {
+        console.log("Hubo un problema al crear el usuario. Código de estado: " + response.status);
+      }
+      
+    } catch (error) {
+      console.log(error);
+    }
+  }
   
   const handleBackToLogin = () => {
     resetRegistrationForm();
@@ -96,7 +126,7 @@ const Register = () => {
                   disabled={isNextButtonDisabled}
                   onClick={handleNext}
                   sx={{ mt: 1, mr: 1 }}
-                  > {index === registrationSteps.length - 1 ? 'Finalizar' : 'Siguiente'}
+                  > {index === registrationSteps.length - 1 ? 'Siguiente' : 'Siguiente'}
                 </Button>
               </div>
             </StepContent>
@@ -110,10 +140,7 @@ const Register = () => {
           <h2>Todos los pasos fueron completados</h2>
           <Typography>Deberás esperar a que la directiva de tu junta apruebe tu solicitud, haz clic en <strong>envíar</strong> para finalizar. </Typography>
           <div>
-            <Button variant="outlined" color='error' onClick={handleBackToLogin} endIcon={<CancelRoundedIcon />}>
-              Cancelar
-            </Button>
-            <Button variant="contained" endIcon={<SendIcon />}>
+            <Button variant="contained" color='success' onClick={handleSignIn} endIcon={<SendIcon />}>
               Enviar Solicitud
             </Button>
           </div>

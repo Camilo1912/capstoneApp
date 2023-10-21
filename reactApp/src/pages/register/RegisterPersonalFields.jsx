@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react';
 import { useState, useContext  } from 'react';
 import { RegistrationContext } from '../../contexts/RegitrationContext';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 const RegisterPersonalFields = () => {
   const {registrationForm, handleRegistrationForm } = useContext(RegistrationContext);
   const [rutError, setRutError] = useState(false);
   const [rut, setRut] = useState('');
   const [dv, setDv] = useState(0);
+  const [selectedDate, setSelectedDate] = useState({});
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -33,6 +35,10 @@ const RegisterPersonalFields = () => {
     }
   };
 
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
+
   useEffect(() => {
     setRutError(validateRut(rut));
     if (validateRut()) {
@@ -48,6 +54,25 @@ const RegisterPersonalFields = () => {
     }
   }, [rut, dv]);
 
+  useEffect(() => {
+    console.log(selectedDate);
+    if (selectedDate) {
+      if (selectedDate.$D && selectedDate.$M && selectedDate.$y) {
+
+        handleRegistrationForm({
+          ...registrationForm,
+          birthDate: `${selectedDate.$D}-${selectedDate.$M + 1}-${selectedDate.$y}`
+        });
+      } else {
+        handleRegistrationForm({
+          ...registrationForm,
+          birthDate: ''
+        });
+      }
+    }
+  }, [selectedDate]);
+
+
   return (
     <div>
       <form action="" className='registration-form'>
@@ -59,7 +84,7 @@ const RegisterPersonalFields = () => {
               id="filled-fisrtname-input"
               name="firstname"
               placeholder="Primer nombre"
-              type="text"  // En lugar de "string"
+              type="text"
               value={registrationForm.firstname || ''}
               onChange={handleInputChange}
             />
@@ -125,6 +150,21 @@ const RegisterPersonalFields = () => {
             <option value="k">k</option>
           </select>
           {!rutError ? <p className="error-message">RUT no válido</p> : <></>}
+        </div>
+        <div className='rut-form'>
+          <label htmlFor="birthdate">Fecha de nacimiento *</label>
+          <DatePicker 
+            name="birthDate"
+            value={selectedDate}
+            onChange={handleDateChange}
+            slotProps={{
+              textField: {
+                variant: 'outlined',
+                color: 'secondary',
+                size: 'small',
+              },
+            }}
+          />
         </div>
       </form>
       

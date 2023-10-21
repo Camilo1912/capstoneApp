@@ -49,26 +49,6 @@ const RegisterResidentialFields = () => {
         });
     }, [registrationForm.communeId]);
 
-    // useEffect(() => {
-    //     if (registrationForm.neighborhoodId) {
-    //     }
-    // }, [registrationForm.neighborhoodId]);
-
-
-    const handleSelectedRegion = (e) => {
-        handleRegistrationForm({
-            ...registrationForm,
-            regionId: e.target.value,
-        })
-    };
-
-    const handleSelectedCommune = (e) => {
-        handleRegistrationForm({
-            ...registrationForm,
-            communeId: e.target.value,
-        })
-    };
-
     const handleSelectedNeighborhood = (e) => {
         const selectedNeighborhood = JSON.parse(e.target.value);
         handleRegistrationForm({
@@ -78,16 +58,33 @@ const RegisterResidentialFields = () => {
         setNeighborhoodInfo(selectedNeighborhood);
     };
 
+    const handleSelectionChange = (e) => {
+        if (e.target.name === 'neighborhood') {
+            const selectedNeighborhood = JSON.parse(e.target.value);
+            handleRegistrationForm({
+                ...registrationForm,
+                neighborhoodId: selectedNeighborhood.id,
+            })
+            setNeighborhoodInfo(selectedNeighborhood);
+        } else {
+            const { name, value } = e.target;
+            handleRegistrationForm({
+                ...registrationForm,
+                [name]: value
+            });
+        }
+    };
+
     return (
         <div className='registration-address-selection-container'>
             <strong>Busque la junta de vecinos a la que desee pertenecer.</strong>
             <div className='register-combobox-container'>
                 <label htmlFor="region">Seleccione su región:</label>
                 <select 
-                name="region" 
+                name="regionId" 
                 id="region" 
                 value={registrationForm.regionId} 
-                onChange={handleSelectedRegion}>
+                onChange={handleSelectionChange}>
                 <option value="">-- Seleccione región --</option>
                 {regionsList.map((region, index) => (
                     <option key={index} value={region.id}>
@@ -100,10 +97,10 @@ const RegisterResidentialFields = () => {
                 <div className='register-combobox-container'>
                     <label htmlFor="commune">Seleccione una comuna:</label>
                     <select 
-                    name="commune" 
+                    name="communeId" 
                     id="commune" 
                     value={registrationForm.communeId} 
-                    onChange={handleSelectedCommune}>
+                    onChange={handleSelectionChange}>
                     <option value="">-- Seleccione comuna --</option>
                     {communesList.map((commune, index) => (
                         <option key={index} value={commune.id}>
@@ -138,22 +135,26 @@ const RegisterResidentialFields = () => {
             {Object.keys(neighborhoodInfo).length && registrationForm.neighborhoodId ?
                 <>
                 <div className='neighborhood-info-card'>
+
                     <div className='neighborhood-info-card-title-container'>
-                    <h1>Junta de Vecinos {neighborhoodInfo.name} </h1>
-                    <div>
-                        <PeopleAltRoundedIcon />
-                        {neighborhoodInfo.membership}
+                        <h1>Junta de Vecinos {neighborhoodInfo.name} </h1>
+                        <div>
+                            <PeopleAltRoundedIcon />
+                            {neighborhoodInfo.membership}
+                        </div>
                     </div>
                     
-                    </div>
-                    
-                    <div className='registration-directive-card'>
-                    <h2>Directiva</h2>
-                    <p>Presidente: {neighborhoodInfo.president}</p>
-                    <p>Secretari@: {neighborhoodInfo.secretary}</p>
-                    <p>Tesorero: {neighborhoodInfo.treasurer}</p>
-                    <br />
-                    <p>Descripción: {neighborhoodInfo.description}</p>
+                    <div id='jv-content'>
+                        <div className='registration-directive-card'>
+                            <h2>Directiva</h2>
+                            <p>Presidente: {neighborhoodInfo.president}</p>
+                            <p>Secretari@: {neighborhoodInfo.secretary}</p>
+                            <p>Tesorero: {neighborhoodInfo.treasurer}</p>
+                        </div>
+                        
+                        <div>
+                            <p>{neighborhoodInfo.description}</p>
+                        </div>
                     </div>
                     
                 </div>
@@ -162,6 +163,40 @@ const RegisterResidentialFields = () => {
                 <>
                 </>
             }
+            <div className='register-combobox-container'>
+
+                <label htmlFor="streetName">Calle *</label>
+                <input
+                    id="filled-street-input"
+                    name="street"
+                    placeholder="Ingrese Calle"
+                    type="text"
+                    value={registrationForm.street || ''}
+                    onChange={handleSelectionChange}
+                />
+            </div>
+            <div className='register-combobox-container'>
+                <label htmlFor="streetNumber">Numero *</label>
+                <input
+                    id="filled-streetNumber-input"
+                    name="number"
+                    placeholder="Ingrese Numero"
+                    type="text"
+                    value={registrationForm.number || ''}
+                    onChange={handleSelectionChange}
+                />
+            </div>
+            {/* <div className='register-combobox-container'>
+                <label htmlFor="deptoNumber">Casa/Dpto/Off</label>
+                <input
+                    id="filled-typeNumb-input"
+                    name="typeNumber"
+                    placeholder="nro."
+                    type="text"
+                    value={registrationForm. || ''}
+                    onChange={handleInputChange}
+                />
+            </div> */}
         </div>
     )
 }
