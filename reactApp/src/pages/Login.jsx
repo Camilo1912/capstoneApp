@@ -48,10 +48,12 @@ const Login = () => {
             setFeedbackMessage('');
             try {
                 const response = await login(username, password);
-                console.log(response.error);
+
                 handleUserInfo(response);
-                navigate(UserRols(response['role_id']));
+                console.log("va a redireccionar : ", response["role"]["role_id"]);
+                navigate(UserRols(response["role"]["role_id"]));
             } catch (error) {
+                console.log(error);
                 setFeedbackMessage(error.response.data.error);
             }
             setUsername('');

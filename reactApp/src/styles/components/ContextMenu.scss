@@ -2,24 +2,26 @@
 
 .context-menu-wrapper {
     background-color: $background-color-light;
-    padding: 1rem;
+
     color: $text-color-normal-light;
 }
 
 .context-menu-wrapper > h2 {
-    border-radius: 100px;
+    // border-radius: 100px;
     padding: 0.5rem 1rem;
+    margin: 15px 10px 10px 0px;
     font-size: 1rem;
-    background-color: $accent-color-light-n2;
+    border-bottom: 3px solid $accent-color-light-n2;
+    // background-color: $accent-color-light-n2;
 }
 
 @media (prefers-color-scheme: dark) {
     .context-menu-wrapper {
-        background-color: $background-color-dark-n0;
+        background-color: $background-color-dark;
         color: $text-color-normal-dark;
     }
 
     .context-menu-wrapper > h2 {
-        background-color: $accent-color-dark-n1;
+        border-color: $accent-color-dark-n1;
     }
 }
