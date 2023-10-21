@@ -6,16 +6,18 @@
 
     grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
     align-items: top;
+    gap: 10px;
 
     overflow: auto;
     border-radius: 15px;
+    margin-left: 15px;
+    margin-top: 15px;
 }
 
 .project-card {
     background-color: $background-color-light;
     border: 1px solid rgba($color: #000, $alpha: .1);
     border-radius: 15px;
-    margin: 5px;
     padding: 15px;
     
 }

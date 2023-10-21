@@ -1,0 +1,154 @@
+@import '../variables/index.scss';
+
+.project-creation-layout {
+    display: flex;
+    gap: 15px;
+    align-items: start;
+    justify-content: space-between;
+    height: calc(100dvh - 8.5rem);
+    overflow: auto;
+    padding-left: 15px;
+}
+
+.create-project-card {
+    margin-top: 15px;
+    background-color: $background-color-light;
+    // padding: 15px;
+    border-radius: 15px;
+    max-width: fit-content;
+    display: flex;
+    flex-direction: column;
+    // gap: 15px;
+    box-shadow: 0px 2px 5px rgba($color: #000000, $alpha: .2);
+    z-index: 20;
+
+    >h1 {
+        font-size: 1.3rem;
+        border-top: 1px solid white;
+        border-bottom: 1px solid #d3d3d3;
+        background-color: #ebebeb;
+        padding: 15px;
+        border-radius: 10px 10px 0px 0px;
+        margin-bottom: 15px;
+    }
+
+    >div {
+        display: flex;
+        flex-direction: column;
+        padding: 0px 15px 15px 15px;
+
+        >label {
+            margin: 0px 0px 5px 0px;
+        }
+
+        >textarea {
+            padding: 10px;
+            height: 10rem;
+            background-color: $background-color-light-n1;
+            border: 1px dashed #555555;
+            border-radius: 10px;
+        }
+    }
+}
+
+.from-to-budget-contaner {
+    display: flex;
+    flex-direction: column;
+
+    > div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1ch;
+        margin-top: 15px;
+    }
+}
+
+.project-creation-info-card {
+    background-color: $background-color-light;
+    padding: 15px;
+    margin-top: 15px;
+    border-radius: 10px;
+    max-width: 40ch;
+    // box-shadow: 0px 2px 5px rgba($color: #000000, $alpha: .2);
+
+    >h1 {
+        font-size: 1.2rem;
+        padding-bottom: 10px;
+        border-bottom: 1px dashed #555555;
+    }
+
+    >ul {
+        margin-left: 15px;
+    }
+
+    h2 {
+        font-size: 1.1rem;
+    }
+}
+
+.project-creation-button-container {
+    display: flex;
+    align-items: end;
+
+    > button {
+        width: fit-content;
+        padding: .5rem 1rem;
+        border: none;
+        background-color: rgba(0, 128, 0, 0.5);
+        border-radius: 10px;
+        border-top: 1px solid rgb(0, 160, 0);
+        // border-bottom: 1px solid rgba(0, 128, 0, 0.8);
+        font-weight: 600;
+    }
+
+    > button:active {
+        background-color: rgba(0, 128, 0, 0.7);
+    }
+
+    > button:hover {
+        background-color: rgba(0, 128, 0, 0.3);
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .create-project-card {
+        background-color: $background-color-dark;
+
+        >h1 {
+            border-top: 1px solid #666666;
+            border-bottom: 1px solid #555555;
+            background-color: $accent-color-dark-n1;
+        }
+
+        >div {
+            >textarea {
+                background-color: $background-color-dark-n0;
+                border: 1px dashed #555555;
+            }
+        }
+    
+    }
+
+    .project-creation-info-card {
+        background-color: $background-color-dark;
+    }
+
+    .project-creation-button-container {
+        > button {
+            background-color: rgba(0, 128, 0, 0.5);
+            border-top: 1px solid rgb(0, 160, 0);
+            // border-bottom: 1px solid rgba(0, 128, 0, 0.8);
+        }
+
+        > button:hover {
+            background-color: rgba(0, 128, 0, 0.7);
+        }
+    
+        > button:active {
+            background-color: rgba(0, 128, 0, 0.3);
+        }
+    }
+
+    
+}

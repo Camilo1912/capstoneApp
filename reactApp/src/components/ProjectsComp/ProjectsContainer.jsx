@@ -9,8 +9,17 @@ const ProjectsContainer = () => {
 
     return (
         <div className='news-main-layout'>
-            <h1>Proyectos</h1>
-            {(selectedComponent.menu === 0)? <ProjectList /> : <CreateProyectForm />}
+            {(selectedComponent.menu === 0)? 
+            <>
+                <h1>Proyectos</h1>
+                <ProjectList /> 
+            </>
+            : 
+            <>
+                <h1>Proyectos / Postular nuevo proyecto</h1>
+                <CreateProyectForm />
+            </>
+            }
         </div>
     )
 }
