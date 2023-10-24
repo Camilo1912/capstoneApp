@@ -26,3 +26,8 @@ export const get_projects = async () => {
     const response = await axiosClient.get("projects/");
     return response.data;
 };
+
+export const get_projects_by_neighborhood_id = async (neighborhood_id) => {
+    const response = await axiosClient.get(`neighborhoods/${neighborhood_id}/projects`);
+    return response.data;
+};
