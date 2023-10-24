@@ -96,49 +96,50 @@ const Header = () => {
             </div>
 
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Ajustes de usuario</DialogTitle>
+                <DialogTitle>Datos y ajustes de usuario</DialogTitle>
                 <DialogContent>
-                    A continuación se muestran tus datos de usuario
     
                     <div className='user-edit-form'>
-
-                        <FormLabel>Nombre completo</FormLabel>
-                        <p style={{ textTransform: 'capitalize' }}>{userInfo.first_name} {userInfo.second_name} {userInfo.last_name} {userInfo.last_name_2}</p>
-                        
-                        <FormLabel>RUT</FormLabel>
-                        <p>{userInfo.rut}</p>
-                        
-                        <FormLabel>Fecha de nacimiento</FormLabel>
-                        <p>{userInfo.birth_date}</p>
-                        
-                        <FormLabel>Correo electrónico</FormLabel>
-                        {editMode ? (
-                            <TextField
-                            label="Nuevo correo electrónico"
-                            variant="outlined"
-                            value={newEmail}
-                            onChange={(e) => setNewEmail(e.target.value)}
-                            />
-                            ) : (
-                                <p>{userInfo.email}</p>
-                                )}
-                        
-                        <FormLabel>Dirección de residencia</FormLabel>
-                        <p>{userInfo.street_address} {userInfo.number_address}, {userInfo.commune.commune_name}, Región {userInfo.region.region_name}</p>
-
-                        <FormLabel>Telefono</FormLabel>
-
-                        {editMode ? (
-                            <TextField
-                            label="Nuevo telefono de contacto"
-                            variant="outlined"
-                            value={newPhoneNumber}
-                            onChange={(e) => setNewPhoneNumber(e.target.value)}
-                            />
-                            ) : (
-                                <p>{userInfo.phone_number}</p>
-                                )}
-
+                        <div>
+                            <FormLabel>Nombre completo</FormLabel>
+                            <p style={{ textTransform: 'capitalize' }}>{userInfo.first_name} {userInfo.second_name} {userInfo.last_name} {userInfo.last_name_2}</p>
+                        </div>
+                        <div>
+                            <FormLabel>RUT</FormLabel>
+                            <p>{userInfo.rut}</p>
+                        </div>
+                        <div>
+                            <FormLabel>Fecha de nacimiento</FormLabel>
+                            <p>{userInfo.birth_date}</p>
+                        </div>
+                        <div>
+                            <FormLabel>Correo electrónico</FormLabel>
+                            {editMode ? (
+                                <input
+                                label="Nuevo correo electrónico"
+                                value={newEmail}
+                                onChange={(e) => setNewEmail(e.target.value)}
+                                />
+                                ) : (
+                                    <p>{userInfo.email}</p>
+                                    )}
+                        </div>
+                        <div>
+                            <FormLabel>Dirección de residencia</FormLabel>
+                            <p>{userInfo.street_address} {userInfo.number_address}, {userInfo.commune.commune_name}, Región {userInfo.region.region_name}</p>
+                        </div>
+                        <div>
+                            <FormLabel>Telefono</FormLabel>
+                            {editMode ? (
+                                <input
+                                label="Nuevo telefono de contacto"
+                                value={newPhoneNumber}
+                                onChange={(e) => setNewPhoneNumber(e.target.value)}
+                                />
+                                ) : (
+                                    <p>{userInfo.phone_number}</p>
+                                    )}
+                            </div>
 
                     </div>
                 </DialogContent>
