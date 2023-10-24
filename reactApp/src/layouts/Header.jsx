@@ -4,15 +4,12 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import Avatar from '@mui/material/Avatar';
 
 import { useContext, useState, useEffect } from 'react';
-import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
-import { userRolsTypes } from '../utils/data';
 
 import { UserContext } from '../contexts/UserContext';
 import { FormLabel } from '@mui/material';
@@ -35,6 +32,8 @@ const Header = () => {
         console.log(userInfo.role.role_id);
         if ([2,3,4].includes(userInfo.role?.role_id)) {
             setLabelColor('#FFC300');
+        } else if (userInfo.role?.role_id === 5) {
+            setLabelColor('#ff770085');
         } else {
             setLabelColor('#3584e4b4');
         }
@@ -76,7 +75,8 @@ const Header = () => {
     return (
         <div className="header-wrapper">
             <div className='header-title-wrapper' style={{ textTransform: 'capitalize' }}>
-                <h1>Comunidad vecinal {userInfo.neighborhood.neighborhood_name}</h1>
+                {userInfo.role.role_id !== 5 ? <h1>Comunidad vecinal {userInfo.neighborhood.neighborhood_name}</h1> : <h1>SISTEMA DE ADMINISTRACIÓN</h1>}
+                
                 <div>
                     <h2>{userInfo.first_name} {userInfo.last_name}</h2>
                     <p  style={{backgroundColor: labelColor}}> {userInfo.role.role_name}</p>

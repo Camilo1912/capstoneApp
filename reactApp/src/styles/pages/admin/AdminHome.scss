@@ -1,0 +1,90 @@
+@import "../../variables/index.scss";
+
+.admin-home-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.admin-jv-selection-container {
+    display: flex;
+    flex-direction: column;
+    padding: 15px 15px 15px 15px;
+    height: calc(100dvh - 5rem);
+    gap: 10px;
+    min-width: 40ch;
+    z-index: 50;
+    box-shadow: 0px 2px 5px rgba($color: #000000, $alpha: .2);
+    border-radius: 0px 15px 0px 0px;
+
+    >h1 {
+        font-size: 1.2rem;
+    }
+}
+
+.jv-search-combobox-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 5px;
+    gap: 10px;
+}
+
+.list-feedback {
+    color: gray;
+    text-align: center;
+}
+
+
+.jv-list-wrapper {
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+    border-radius: 15px;
+    gap: 10px;
+}
+
+.neighborhood-list-info-card {
+    display: flex;
+    flex-direction: column;
+    background-color: $accent-color-light-n1;
+    border-radius: 15px;
+    border: 2px solid rgba($color: #000000, $alpha: 0);
+
+    #jv-content {
+        display: flex;
+        gap: 10px;
+        padding: 5px 15px 15px 15px;
+        font-size: .8rem;
+        
+        div {
+            flex: 1;
+        }
+    }
+}
+
+.neighborhood-list-info-card:hover {
+    border: 2px solid rgba(0, 0, 255, 0.329);
+}
+
+.neighborhood-info-card-title-wrapper{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: $accent-color-light-n2;
+    border-radius: 15px 15px 0px 0px ;
+    padding: 5px 15px;
+    align-items: center;
+    >h1 {
+        font-size: 1rem;
+    }
+
+    >div {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 5px;
+    }
+}
+
+

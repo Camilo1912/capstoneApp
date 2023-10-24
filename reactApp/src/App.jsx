@@ -8,7 +8,7 @@ import PresidentHome from "./pages/PresidentHome";
 import Login from "./pages/Login";
 import NeighborHome from "./pages/NeighborHome";
 import SecretaryHome from "./pages/SecretaryHome";
-import AdminHome from "./pages/AdminHome";
+import AdminHome from "./pages/adminPage/AdminHome";
 import TreasurerLayout from "./pages/TreasurerLayout";
 import { SelectedComponentProvider } from "./contexts/SelectedComponentContext";
 import { LocalizationProvider } from '@mui/x-date-pickers';

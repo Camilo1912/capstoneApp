@@ -1,12 +1,16 @@
 import Header from "./Header";
 import Navbar from "./Navbar";
 import { Outlet } from "react-router-dom";
+import { UserContext } from "../contexts/UserContext";
+import { useContext } from "react";
 
 const PrivateLayout = () => {
+    const { userInfo, handleUserInfo } = useContext(UserContext);
     return (
         <div className="general-layout">
             <Header />
-            <Navbar />
+            { userInfo.role.role_id !== 5 ? <Navbar /> : <></>}
+            
             <Outlet />
             {/* <div className="header">
                 <Header />
