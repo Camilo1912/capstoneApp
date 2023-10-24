@@ -39,7 +39,7 @@
 .jv-list-wrapper {
     display: flex;
     flex-direction: column;
-    overflow: scroll;
+    overflow: auto;
     border-radius: 15px;
     gap: 10px;
 }

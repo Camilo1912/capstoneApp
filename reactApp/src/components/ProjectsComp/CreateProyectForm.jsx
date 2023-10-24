@@ -1,17 +1,22 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useState } from 'react';
 import { projectTypes } from '../../utils/data';
 import { project_create, project_states } from '../../requests/Projects'
+import { UserContext } from '../../contexts/UserContext';
 
 const CreateProyectForm = () => {
-  const [newProjectData, setNewProjectData] = useState({
+  const {userInfo} = useContext(UserContext);
+  const defaultProjectState = {
     title: '',
     project_type: 'NA',
     description: '',
     budget_max: '',
     budget_min: '',
     project_state_id: 1,
-  });
+    neighborhood_id: userInfo.neighborhood.neighborhood_id,
+    neighbor_id: userInfo.id,
+  }
+  const [newProjectData, setNewProjectData] = useState(defaultProjectState);
   const [characterCount, setCharacterCount] = useState(0);
 
   const maxLengthDescription = 3000;
@@ -43,10 +48,11 @@ const CreateProyectForm = () => {
   };
 
   const handleSubmit = async () => {
-    console.log(newProjectData);
     const payload = {'project': newProjectData};
     const project_response = await project_create(payload);
-    console.log(project_response);
+    if (project_response) {
+      setNewProjectData(defaultProjectState);
+    }
   }
 
   return (
