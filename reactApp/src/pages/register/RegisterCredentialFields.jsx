@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import IconButton from '@mui/material/IconButton';
@@ -21,6 +21,17 @@ const RegisterCredentialFields = () => {
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
     const handleMouseDownPassword = (e) => { e.preventDefault(); };
+
+    useEffect(() => {
+        if (password && email) {
+            handleRegistrationForm({
+                ...registrationForm,
+                password: password,
+                email: email
+            });
+        }
+        
+    },[password, email]);
 
     const getStrength = (password) => {
         if (password.trim() === '') {

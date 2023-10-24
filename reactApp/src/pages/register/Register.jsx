@@ -20,7 +20,6 @@ const Register = () => {
   const navigate = useNavigate();
   const { 
     registrationForm,
-    handleRegistrationStep,
     resetRegistrationForm } = useContext(RegistrationContext);
   const [activeStep, setActiveStep] = useState(0);
   const [isNextButtonDisabled, setIsNextButtonDisabled] = useState(true);
@@ -37,10 +36,6 @@ const Register = () => {
   const handleReset = () => {
     setActiveStep(0);
   };
-
-  // useEffect(() => {
-  //   handleRegistrationStep(activeStep);
-  // }, [activeStep]);
 
   useEffect(() => {
     if (activeStep === 0 && registrationForm['firstname'] && registrationForm['lastname1'] && registrationForm['lastname2'] && registrationForm['rut'] && registrationForm['birthDate']) {
@@ -59,20 +54,21 @@ const Register = () => {
     const newUserData = {
       'neighbor': {
 
-        'fist_name': registrationForm['fistname'],
-        'sencond_name': registrationForm['middlename'],
+        'first_name': registrationForm['firstname'],
+        'second_name': registrationForm['middlename'],
         'last_name': registrationForm['lastname1'],
         'last_name_2': registrationForm['lastname2'],
         'birth_date': registrationForm['birthDate'],
         'email': registrationForm['email'],
         'street_address': registrationForm['street'],
-        'street_number': registrationForm['number'],
+        'number_address': registrationForm['number'],
         'rut': registrationForm['rut'],
         'password': registrationForm['password'],
         'neighborhood_id': registrationForm['neighborhoodId'],
         'commune_id': registrationForm['communeId'],
       }
     }
+    console.log(newUserData);
 
     try {
       const response = await register(newUserData);
