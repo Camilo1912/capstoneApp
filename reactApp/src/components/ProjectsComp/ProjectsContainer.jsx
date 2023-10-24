@@ -11,7 +11,7 @@ const ProjectsContainer = () => {
         <div className='news-main-layout'>
             {(selectedComponent.menu === 0)? 
             <>
-                <h1>Proyectos</h1>
+                <h1>Proyectos / Todos</h1>
                 <ProjectList /> 
             </>
             : 

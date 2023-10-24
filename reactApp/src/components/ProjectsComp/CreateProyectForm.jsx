@@ -6,20 +6,27 @@ import { project_create, project_states } from '../../requests/Projects'
 const CreateProyectForm = () => {
   const [newProjectData, setNewProjectData] = useState({
     title: '',
-    type: 'NA',
+    project_type: 'NA',
     description: '',
-    budgetMin: '',
-    budgetMax: '',
+    budget_max: '',
+    budget_min: '',
     project_state_id: 1,
   });
+  const [characterCount, setCharacterCount] = useState(0);
+
+  const maxLengthDescription = 3000;
 
   const handleInputChange = (event) => {
     const {name, value} = event.target;
 
-    if (name === 'budgetMin' || name === 'budgetMax') {
+    if (name === 'budget_min' || name === 'budget_max') {
       if (!(/^\d+$/.test(value))) {
         return;
       }
+    }
+
+    if (name === 'description') {
+      setCharacterCount(maxLengthDescription - (maxLengthDescription - value.length));
     }
 
     setNewProjectData({
@@ -31,14 +38,14 @@ const CreateProyectForm = () => {
   const handleSelectChange = (event) => {
     setNewProjectData({
       ...newProjectData,
-      type: event.target.value,
+      project_type: event.target.value,
     });
   };
 
   const handleSubmit = async () => {
     console.log(newProjectData);
-    // const project_response = await project_create(newProjectData);
-    const project_response = await project_states();
+    const payload = {'project': newProjectData};
+    const project_response = await project_create(payload);
     console.log(project_response);
   }
 
@@ -46,14 +53,14 @@ const CreateProyectForm = () => {
     <div className='project-creation-layout'>
       <div className='create-project-card'>
 
-        <h1>Formulario de postulación de poryecto vecinal</h1>
+        <h1>Formulario de postulación de proyecto vecinal</h1>
         <div>
           <label>Titulo del proyecto</label>
-          <input type="text" name="title" value={newProjectData.title} onChange={handleInputChange} />
+          <input type="text" name="title" maxLength={100} value={newProjectData.title} onChange={handleInputChange} />
         </div>
         <div>
           <label>Seleccione el tipo de proyecto</label>
-          <select value={newProjectData.type} onChange={handleSelectChange}>
+          <select value={newProjectData.project_type} onChange={handleSelectChange}>
             <option value="MI">Mejora de Infraestructura</option>
             <option value="PSC">Proyecto Social y Cultural</option>
             <option value="SP">Seguridad y Prevención</option>
@@ -66,14 +73,15 @@ const CreateProyectForm = () => {
         </div>
         <div>
           <label>Descripción del proyecto</label>
-          <textarea name="description" placeholder='Escriba descripción ...' value={newProjectData.description} onChange={handleInputChange} />
+          <textarea name="description" placeholder='Escriba descripción ...' maxLength={maxLengthDescription} value={newProjectData.description} onChange={handleInputChange} />
+          <p>{characterCount}/{maxLengthDescription}</p>
         </div>
         <div className='from-to-budget-contaner'>
           <label>Presupuesto requerido</label>
             <p>Ingrese el presupuesto aproximado que cree usted que costaría la implementación completa del proyecto.</p>
           <div>
-            Desde <input type="text" name="budgetMin" value={newProjectData.budgetMin} onChange={handleInputChange} /> 
-            hasta <input type="text" name="budgetMax" value={newProjectData.budgetMax} onChange={handleInputChange} />
+            Desde <input type="text" name="budget_min" value={newProjectData.budget_min} onChange={handleInputChange} /> 
+            hasta <input type="text" name="budget_max" value={newProjectData.budget_max} onChange={handleInputChange} />
           </div>
         </div>
         <div className='project-creation-button-container'>

@@ -21,3 +21,30 @@
     padding: 15px;
     
 }
+
+.project-state-indicator {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+
+    >h1 {
+        font-size: 1.2rem;
+    }
+    
+    >p {
+        background-color: rgba(0, 128, 0, 0.541);
+        min-width: 10ch;
+        padding: 5px 10px;
+        text-align: center;
+        font-size: .8rem;
+        font-weight: 600;
+        border-radius: 100px;
+    }
+}
+
+
+@media (prefers-color-scheme: dark) {
+    .project-card { 
+        background-color: $background-color-dark;
+    }
+}

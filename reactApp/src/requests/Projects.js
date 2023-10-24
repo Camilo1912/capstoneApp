@@ -24,6 +24,5 @@ export const project_states = async () => {
 
 export const get_projects = async () => {
     const response = await axiosClient.get("projects/");
-    console.log(response.data);
     return response.data;
 };

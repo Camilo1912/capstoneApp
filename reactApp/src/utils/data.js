@@ -32,3 +32,11 @@ export const userRolsTypes = {
   4: 'Tesorero',
   5: 'Administrador'
 }
+
+export const projectStates = {
+  1: 'Propuesto',
+  2: 'Votado',
+  3: 'Aprobado',
+  4: 'En ejecución',
+  5: 'Cancelado'
+}
