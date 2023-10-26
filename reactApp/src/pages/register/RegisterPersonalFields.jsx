@@ -61,7 +61,7 @@ const RegisterPersonalFields = () => {
 
         handleRegistrationForm({
           ...registrationForm,
-          birthDate: `${selectedDate.$D}-${selectedDate.$M + 1}-${selectedDate.$y}`
+          birthDate: `${selectedDate.$y}-${selectedDate.$M + 1}-${selectedDate.$D}`
         });
       } else {
         handleRegistrationForm({

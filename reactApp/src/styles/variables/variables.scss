@@ -11,17 +11,20 @@ $background-color-dark-n1: rgb(40, 41, 42);
 $background-color-light-blur: rgba(255, 255, 255, 0.8);
 $background-color-dark-blur: rgba(34, 34, 34, 0.8);
 
-// GRADIENTS 
-
-$gradient-background-color-light: linear-gradient(90deg,rgba(255,255,255,1) 0%, rgba(0,212,255,0) 100%);
-$gradient-background-color-dark: linear-gradient(90deg,$background-color-dark-n0 0%, rgba(0,212,255,0) 100%);
-
 // ACCENT COLORS
 
 $accent-color-light-n1: #e9f0fd;
 $accent-color-dark-n1: rgb(61, 64, 67);
 
 $accent-color-light-n2: rgba(203, 240, 248, 1);
+
+// GRADIENTS 
+
+$gradient-background-color-light: linear-gradient(90deg,rgba(255,255,255,1) 0%, rgba(0,212,255,0) 100%);
+$gradient-background-color-dark: linear-gradient(90deg,$background-color-dark-n0 0%, rgba(0,212,255,0) 100%);
+
+$gradient-bottom-white: linear-gradient(0deg ,white 0%, rgba(0,212,255,0) 100%);
+$gradient-bottom-accent-n1: linear-gradient(0deg ,$background-color-light-n1 0%, rgba(0,212,255,0) 100%);
 
 // TEXT COLORS
 

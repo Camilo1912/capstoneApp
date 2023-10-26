@@ -1,4 +1,4 @@
-const getStrength = (password) => {
+export const getStrength = (password) => {
     if (password.trim() === '') {
         setStrength(null);
     } else if (password.length < MIN_PASSWORD_LENGTH) {
@@ -34,6 +34,20 @@ const getStrength = (password) => {
         }
         setStrength(strengthLevels[strengthIndicator]);
     }
-  };
+};
 
-export default getStrength();
+export const formatearFecha = (fechaStr) => {
+    const fecha = new Date(fechaStr);
+    const dia = fecha.getDate().toString().padStart(2, '0');
+    const mes = (fecha.getMonth() + 1).toString().padStart(2, '0');
+    const año = fecha.getFullYear();
+    const horas = fecha.getHours().toString().padStart(2, '0');
+    const minutos = fecha.getMinutes().toString().padStart(2, '0');
+  
+    return `${dia}-${mes}-${año} a las ${horas}:${minutos}`;
+}
+
+export const formatTextBr = (text) => {
+    const formattedText = text.replace(/\n/g, "<br>");
+    return formatTextBr;
+} 

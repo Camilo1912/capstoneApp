@@ -15,20 +15,32 @@
 
 .project-card {
     background-color: $background-color-light;
-    border: 1px solid rgba($color: #000, $alpha: .1);
+    border: 2px solid rgba($color: #000, $alpha: .1);
     border-radius: 15px;
     padding: 15px;
+
+    >p {
+        max-height: 4.5rem;
+        overflow: hidden;
+    }
+}
+
+.project-card:hover {
+    border: 2px solid rgba(0, 0, 255, 0.329);
+    cursor: pointer;
 }
 
 .project-state-indicator {
     display: flex;
     justify-content: space-between;
     align-items: start;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba($color: #000, $alpha: .1);;
+
     >p {
         display: flex;
         justify-content: center;
         align-items: center;
-        // background-color: rgba(0, 128, 0, 0.541);
         background-color: $accent-color-light-n1;
         min-width: 10ch;
         height: 2rem;
@@ -43,7 +55,7 @@
 .project-status-icon-container {
     display: flex;
     gap: 5px;
-    align-items: center;
+    align-items: start;
 
     >h1 {
         font-size: 1.2rem;
@@ -56,7 +68,7 @@
         background-color: $accent-color-light-n1;
         border-radius: 100px;
         text-align: center;
-        width: 2rem;
+        min-width: 2rem;
         height: 2rem;
     }
 

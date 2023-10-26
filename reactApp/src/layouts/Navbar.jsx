@@ -45,7 +45,7 @@ const Navbar = () => {
             >
                 <BottomNavigationAction label="Anuncios" value={0} icon={<NewspaperIcon />} style={{color: value === 0 ? styles.selectedColor : styles.color, backgroundColor: styles.backgroundColor}} />
                 <BottomNavigationAction label="Proyectos" value={1} icon={<HandymanOutlinedIcon />} style={{color: value === 1 ? styles.selectedColor : styles.color, backgroundColor: styles.backgroundColor}} />
-                <BottomNavigationAction label="Encuestas" value={2} icon={<BallotOutlinedIcon />} style={{color: value === 2 ? styles.selectedColor : styles.color, backgroundColor: styles.backgroundColor}} />
+                {/* <BottomNavigationAction label="Encuestas" value={2} icon={<BallotOutlinedIcon />} style={{color: value === 2 ? styles.selectedColor : styles.color, backgroundColor: styles.backgroundColor}} /> */}
                 <BottomNavigationAction label="Calendario" value={3} icon={<CalendarMonthOutlinedIcon />} style={{color: value === 3 ? styles.selectedColor : styles.color, backgroundColor: styles.backgroundColor}} />
                 <BottomNavigationAction label="Actividades" value={4} icon={<NaturePeopleOutlinedIcon />} style={{color: value === 4 ? styles.selectedColor : styles.color, backgroundColor: styles.backgroundColor}} />
                 <BottomNavigationAction label="Solicitudes" value={5} icon={<ScheduleSendOutlinedIcon />} style={{color: value === 5 ? styles.selectedColor : styles.color, backgroundColor: styles.backgroundColor}} />

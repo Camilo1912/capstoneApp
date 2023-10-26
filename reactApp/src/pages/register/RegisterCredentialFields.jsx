@@ -9,6 +9,7 @@ import { RegistrationContext } from '../../contexts/RegitrationContext';
 
 const strengthLevels = ['debil','media', 'fuerte', 'muy fuerte', 'demasiado corta'];
 const MIN_PASSWORD_LENGTH = 8;
+const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
 
 const RegisterCredentialFields = () => {
@@ -16,6 +17,7 @@ const RegisterCredentialFields = () => {
     const [strength, setStrength] = useState(null);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -23,15 +25,36 @@ const RegisterCredentialFields = () => {
     const handleMouseDownPassword = (e) => { e.preventDefault(); };
 
     useEffect(() => {
-        if (password && email) {
+        const isPasswordMatch = password === confirmPassword;
+        if (password && isPasswordMatch) {
             handleRegistrationForm({
                 ...registrationForm,
-                password: password,
-                email: email
+                password: password
+            });
+        } else {
+            handleRegistrationForm({
+                ...registrationForm,
+                password: ""
             });
         }
         
-    },[password, email]);
+    },[password, confirmPassword]);
+
+    useEffect(() => {
+        const isEmailValid = emailRegex.test(email);
+        if (email && isEmailValid) {
+            handleRegistrationForm({
+                ...registrationForm,
+                email: email
+            });
+        } else {
+            handleRegistrationForm({
+                ...registrationForm,
+                email: ""
+            });
+        }
+        
+    },[email]);
 
     const getStrength = (password) => {
         if (password.trim() === '') {
@@ -80,6 +103,10 @@ const RegisterCredentialFields = () => {
         getStrength(newPassword);
     };
 
+    const handleConfirmPasswordChange = (e) => {
+        setConfirmPassword(e.target.value);
+    };
+
     return (
         <div className='credentials-form'>
             <label htmlFor="email">Correo electrónico</label>
@@ -89,6 +116,7 @@ const RegisterCredentialFields = () => {
                 type="email"
                 variant="outlined"
                 value={email}
+                size='small'
                 onChange={handleEmailChange}
             />
             <label htmlFor="pass">Contraseña</label>
@@ -98,6 +126,7 @@ const RegisterCredentialFields = () => {
                 placeholder='Contraseña'
                 onChange={handlePasswordChange}
                 value={password}
+                size='small'
                 endAdornment={
                 <InputAdornment position="end">
                     <IconButton
@@ -110,6 +139,14 @@ const RegisterCredentialFields = () => {
                     </IconButton>
                 </InputAdornment>
                 }
+            />
+            <OutlinedInput
+                id="outlined-adornment-password"
+                type={'password'}
+                placeholder='Repetir contraseña'
+                size='small'
+                onChange={handleConfirmPasswordChange}
+                value={confirmPassword}
             />
             <div className={`bars ${ (strength == 'muy fuerte') ? 'stronger' : strength}`}>
                 <div></div>

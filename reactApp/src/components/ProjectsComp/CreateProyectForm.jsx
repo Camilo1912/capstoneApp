@@ -48,7 +48,11 @@ const CreateProyectForm = () => {
   };
 
   const handleSubmit = async () => {
-    const payload = {'project': newProjectData};
+    const payload = {'project': {
+        newProjectData
+        // description: newProjectData.description.replace(/\n/g, "\\n")
+      }
+    };
     const project_response = await project_create(payload);
     if (project_response) {
       setNewProjectData(defaultProjectState);

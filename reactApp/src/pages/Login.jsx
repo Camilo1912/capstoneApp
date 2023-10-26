@@ -73,6 +73,7 @@ const Login = () => {
                     type="email"
                     autoComplete="current-email"
                     variant="outlined"
+                    size='small'
                     value={username}
                     onChange={handleUsernameChange}
                 />
@@ -80,6 +81,7 @@ const Login = () => {
                     id="outlined-adornment-password"
                     type={showPassword ? 'text' : 'password'}
                     placeholder='Contraseña'
+                    size='small'
                     onChange={handlePasswordChange}
                     value={password}
                     endAdornment={
@@ -106,6 +108,14 @@ const Login = () => {
                     endIcon={<LoginIcon />}
                 >
                     Iniciar Sesión
+                </Button>
+
+                <Button 
+                    type='submit'
+                    variant="outlined"
+                    endIcon={<LoginIcon />}
+                >
+                    Invitado
                 </Button>
                 
                 <div className='no-account-container'>
