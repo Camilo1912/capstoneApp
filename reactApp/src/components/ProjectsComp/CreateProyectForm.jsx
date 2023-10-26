@@ -49,7 +49,7 @@ const CreateProyectForm = () => {
 
   const handleSubmit = async () => {
     const payload = {'project': {
-        newProjectData
+        ...newProjectData
         // description: newProjectData.description.replace(/\n/g, "\\n")
       }
     };
