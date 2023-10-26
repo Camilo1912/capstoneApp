@@ -66,6 +66,7 @@ const Register = () => {
         'password': registrationForm['password'],
         'neighborhood_id': registrationForm['neighborhoodId'],
         'commune_id': registrationForm['communeId'],
+        'gender': registrationForm['gender'],
       }
     }
     console.log(newUserData);

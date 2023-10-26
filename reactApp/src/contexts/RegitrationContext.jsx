@@ -16,7 +16,8 @@ const defaultRegistrationForm = {
     communeId: '',
     neighborhoodId: '',
     email: '',
-    password: ''
+    password: '',
+    gender: ''
 };
 
 const RegistrationContextProvider = (props) => {

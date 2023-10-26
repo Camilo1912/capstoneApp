@@ -8,7 +8,7 @@ const CreateProyectForm = () => {
   const {userInfo} = useContext(UserContext);
   const defaultProjectState = {
     title: '',
-    project_type: 'NA',
+    project_type: '',
     description: '',
     budget_max: '',
     budget_min: '',
@@ -71,6 +71,7 @@ const CreateProyectForm = () => {
         <div>
           <label>Seleccione el tipo de proyecto</label>
           <select value={newProjectData.project_type} onChange={handleSelectChange}>
+            <option disabled value="">-- Seleccione tipo --</option>
             <option value="MI">Mejora de Infraestructura</option>
             <option value="PSC">Proyecto Social y Cultural</option>
             <option value="SP">Seguridad y Prevención</option>

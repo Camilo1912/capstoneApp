@@ -166,6 +166,16 @@ const RegisterPersonalFields = () => {
             }}
           />
         </div>
+
+        <div className='form-name-container'>
+            <label htmlFor="genero">Genero</label>
+            <select value={registrationForm.gender} name='gender' onChange={handleInputChange}>
+              <option disabled value="">-- Seleccione Genero --</option>
+              <option value="M">Masculino</option>
+              <option value="F">Femenino</option>
+              <option value="O">Otro</option>
+            </select>
+        </div>
       </form>
       
     </div>
