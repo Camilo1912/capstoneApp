@@ -25,6 +25,7 @@ const App = () => {
                 <Route index element={<Login />} />
               </Route>
               <Route path="/register" element={<PublicLayout />} />
+              <Route path="/guest_home" element={<PublicLayout />} />
               <Route element={<PrivateRoute allowedRoles={[1]} />} >
                 <Route path="/neighbor_home" element={<NeighborHome />} />
               </Route>

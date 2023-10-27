@@ -2,6 +2,7 @@ import { useLocation } from "react-router-dom";
 import Login from "../pages/Login";
 import Register from "../pages/register/Register";
 import RegistrationContextProvider from "../contexts/RegitrationContext";
+import GuestHome from "../pages/GuestPage/GuestHome";
 
 const GeneralLayout = () => {
     const location = useLocation();
@@ -10,7 +11,9 @@ const GeneralLayout = () => {
     return (
         <RegistrationContextProvider>
             <div className="public-layout">
-                { (currentPath === '/register') ? <Register /> : <Login />}
+                {(currentPath === '/') ? <Login /> : 
+                (currentPath === '/register' ? <Register /> :
+                <GuestHome />)}
             </div>
         </RegistrationContextProvider>
     );

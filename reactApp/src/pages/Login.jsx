@@ -61,6 +61,10 @@ const Login = () => {
         }
     };
 
+    const handleGestRedirection = () => {
+        navigate('/guest_home');
+    };
+
     return (
         <>
             <div className='login-card'>
@@ -103,7 +107,7 @@ const Login = () => {
                 <Button 
                     type='submit'
                     variant="contained"
-                    disableElevation
+                    // disableElevation
                     onClick={handleSubmit}
                     endIcon={<LoginIcon />}
                 >
@@ -113,6 +117,7 @@ const Login = () => {
                 <Button 
                     type='submit'
                     variant="outlined"
+                    onClick={handleGestRedirection}
                     endIcon={<LoginIcon />}
                 >
                     Invitado
