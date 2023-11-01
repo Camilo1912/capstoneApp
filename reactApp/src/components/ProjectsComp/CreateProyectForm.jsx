@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { projectTypes } from '../../utils/data';
 import { project_create, project_states } from '../../requests/Projects'
 import { UserContext } from '../../contexts/UserContext';
+import { toast } from 'react-toastify';
 
 const CreateProyectForm = () => {
   const {userInfo} = useContext(UserContext);
@@ -54,7 +55,8 @@ const CreateProyectForm = () => {
       }
     };
     const project_response = await project_create(payload);
-    if (project_response) {
+    if (project_response.status === 200) {
+      toast.success('El proyecto se creó correctamente', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
       setNewProjectData(defaultProjectState);
     }
   }
@@ -93,6 +95,7 @@ const CreateProyectForm = () => {
           <div>
             Desde <input type="text" name="budget_min" value={newProjectData.budget_min} onChange={handleInputChange} /> 
             hasta <input type="text" name="budget_max" value={newProjectData.budget_max} onChange={handleInputChange} />
+            pesos
           </div>
         </div>
         <div className='project-creation-button-container'>

@@ -27,8 +27,8 @@ export const projectStates = {
   2: 'Votado',
   3: 'Aprobado',
   4: 'En ejecución',
-  5: 'Cancelado',
-  6: 'Finalizado'
+  5: 'Finalizado',
+  6: 'Cancelado'
 }
 
 export const projectTypes = {

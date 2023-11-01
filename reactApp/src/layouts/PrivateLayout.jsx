@@ -3,6 +3,7 @@ import Navbar from "./Navbar";
 import { Outlet } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
 import { useContext } from "react";
+import { ToastContainer } from 'react-toastify';
 
 const PrivateLayout = () => {
     const { userInfo, handleUserInfo } = useContext(UserContext);

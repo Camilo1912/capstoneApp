@@ -12,7 +12,7 @@ export const project_by_id = async (project_number) => {
 
 export const project_create = async (project_info) => {
     const response = await axiosClient.post("projects/", project_info);
-    return response.data;
+    return response;
 };
 
 

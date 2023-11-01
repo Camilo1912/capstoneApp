@@ -12,7 +12,9 @@ import AdminHome from "./pages/adminPage/AdminHome";
 import TreasurerLayout from "./pages/TreasurerLayout";
 import { SelectedComponentProvider } from "./contexts/SelectedComponentContext";
 import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
   return (
@@ -40,6 +42,7 @@ const App = () => {
               <Route path="*" element={<p>No hay nada aquí: error 404</p>} />
             </Routes>
           </BrowserRouter>
+          <ToastContainer />
         </SelectedComponentProvider>
       </UserContextProvider>
     </LocalizationProvider>
