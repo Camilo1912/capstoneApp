@@ -4,47 +4,51 @@ import Button from '@mui/material/Button';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import { poll_create } from '../../requests/Polls';
 import { toast } from 'react-toastify';
-
+import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
+import { DialogActions } from '@mui/material';
 
 const PollCreationForm = ({projectId, updateShowParent}) => {
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
     const currentDateTime = new Date();
-    
-    console.log(startDate, '   ', endDate);
 
     const handleCreatePollClick = async () => {
         if (startDate && endDate) {
             const unaHoraEnMilisegundos = 60 * 60 * 1000;
-            if (endDate.getTime() - startDate.getTime() < unaHoraEnMilisegundos) {
+            if (endDate.getDate() === startDate.getDate() && endDate.getTime() - startDate.getTime() < unaHoraEnMilisegundos) {
                 toast.warn('¡La hora de termino debe ser al menos una hora después de la hora de inicio!', { autoClose: 5000, position: toast.POSITION.TOP_CENTER })
                 return;
             } else {
                 const newPollPayload = {
                     poll: {
                         state: 'creada',
-                        start_date: `${startDate.$y}-${startDate.$M + 1}-${startDate.$D}`,
-                        end_date: `${endDate.$y}-${endDate.$M + 1}-${endDate.$D}`,
+                        start_date: `${startDate.getFullYear()}-${(startDate.getMonth() + 1).toString().padStart(2, '0')}-${startDate.getDate().toString().padStart(2, '0')}`,
+                        end_date: `${endDate.getFullYear()}-${(endDate.getMonth() + 1).toString().padStart(2, '0')}-${endDate.getDate().toString().padStart(2, '0')}`,
                         project_id: projectId
                     }
                 }
                 console.log('payload: ', newPollPayload);
+                console.log(startDate, '   ', endDate);
                 try {
                     const poll_response = await poll_create(newPollPayload);
                     if (poll_response.status === 200) {
                         toast.success('La votación se creó correctamente', { autoClose: 3000, position: toast.POSITION.TOP_CENTER });
-                        console.log('Votación creada correctamente ... ');
-                    } else {
-                        toast.error('No se pudo crear la votación', { autoClose: 3000, position: toast.POSITION.TOP_CENTER })
                     }
                 } catch (error) {
-                    toast.error('Error al crear votación', { autoClose: 3000, position: toast.POSITION.TOP_CENTER })
-                    console.log(error);
+                    if (error.response.status === 422) {
+                        toast.error('Error al crear votación. ¡Es posible que ya exista para este proyecto!', { autoClose: 3000, position: toast.POSITION.TOP_CENTER })
+                    }
                 }
                 updateShowParent(false);
             }
             return;
         }
+    };
+
+    const handleClosePollClick = () => {
+        setEndDate(null);
+        setStartDate(null);
+        updateShowParent(false);
     };
 
     return (
@@ -54,11 +58,11 @@ const PollCreationForm = ({projectId, updateShowParent}) => {
             <br></br>
             <label htmlFor="poll-start-datetime">Fecha y hora de inicio</label>
             <DateTimePicker
-                label="Basic date time picker"
+                label="Fecha y hora de Inicio"
                 value={startDate}
                 onChange={(newValue) => {setStartDate(newValue)}}
                 minDateTime={currentDateTime}
-                inputFormat="dd/MM/yyyy HH:mm"
+                inputFormat="dd/mm/yyyy HH:mm"
                 slotProps={{
                     textField: {
                       variant: 'outlined',
@@ -71,11 +75,11 @@ const PollCreationForm = ({projectId, updateShowParent}) => {
             <br></br>
             <label htmlFor="poll-end-datetime">Fecha y hora de termino</label>
             <DateTimePicker
-                label="Basic date time picker"
+                label="Fecha y hora de Termino"
                 value={endDate}
                 onChange={(newValue) => setEndDate(newValue)}
                 minDateTime={startDate}
-                inputFormat="dd/MM/yyyy HH:mm"
+                inputFormat="dd/mm/yyyy HH:mm"
                 disabled={!startDate}
                 slotProps={{
                     textField: {
@@ -85,15 +89,25 @@ const PollCreationForm = ({projectId, updateShowParent}) => {
                     },
                 }}
             />
-
-            <Button
-                onClick={handleCreatePollClick}
-                color='success'
-                variant='contained'
-                disableElevation
-                startIcon={<CheckRoundedIcon />}>
-                Crear
-            </Button>
+            <DialogActions>
+                <Button
+                    onClick={handleClosePollClick}
+                    variant='outlined'
+                    disableElevation
+                    startIcon={<ArrowBackRoundedIcon />}>
+                    volver
+                </Button>
+                <Button
+                    onClick={handleCreatePollClick}
+                    color='success'
+                    variant='contained'
+                    disableElevation
+                    disabled={!startDate && !endDate}
+                    startIcon={<CheckRoundedIcon />}>
+                    Crear
+                </Button>
+            </DialogActions>
+            
         </div>
     )
 }

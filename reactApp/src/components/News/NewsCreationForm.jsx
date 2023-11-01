@@ -33,7 +33,7 @@ const NewsCreationForm = () => {
             <div className='from-to-budget-contaner'>
             </div>
             <div className='project-creation-button-container'>
-            <button onClick={}>Enviar Proyecto</button>
+            {/* <button onClick={}>Enviar Proyecto</button> */}
             </div>
             
         </div>

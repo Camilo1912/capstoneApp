@@ -173,8 +173,9 @@ const ProjectList = () => {
                     }
                 </DialogContent>
                 
+                {!showPollCreationForm ?
                 <DialogActions>
-                    {(userInfo.role.role_id !== 1 && selectedProjectInfo.project_state_id === 1 && !showPollCreationForm) ? 
+                    {(userInfo.role.role_id !== 1 && selectedProjectInfo.project_state_id === 1) ? 
                         <Button 
                         variant='contained' 
                         disableElevation
@@ -185,7 +186,7 @@ const ProjectList = () => {
                         </Button> 
                     : null}
                     <Button variant='outlined' onClick={handleClose}>Cerrar</Button>
-                </DialogActions>
+                </DialogActions> : null}
             </Dialog>
         </div>
     )
