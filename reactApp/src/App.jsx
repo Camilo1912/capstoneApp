@@ -11,14 +11,19 @@ import SecretaryHome from "./pages/SecretaryHome";
 import AdminHome from "./pages/adminPage/AdminHome";
 import TreasurerLayout from "./pages/TreasurerLayout";
 import { SelectedComponentProvider } from "./contexts/SelectedComponentContext";
+
 import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+
+// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
+    // <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
       <UserContextProvider>
         <SelectedComponentProvider>
           <BrowserRouter>
