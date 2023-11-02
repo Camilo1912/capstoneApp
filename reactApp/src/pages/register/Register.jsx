@@ -69,7 +69,6 @@ const Register = () => {
         'gender': registrationForm['gender'],
       }
     }
-    console.log(newUserData);
 
     try {
       const response = await register(newUserData);

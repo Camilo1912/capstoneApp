@@ -29,7 +29,6 @@ const Header = () => {
     const [labelColor, setLabelColor] = useState('blue');
 
     useEffect(() => {
-        console.log(userInfo.role.role_id);
         if ([2,3,4].includes(userInfo.role?.role_id)) {
             setLabelColor('#FFC300');
         } else if (userInfo.role?.role_id === 5) {

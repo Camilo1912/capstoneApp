@@ -8,7 +8,9 @@ const RegisterPersonalFields = () => {
   const [rutError, setRutError] = useState(false);
   const [rut, setRut] = useState('');
   const [dv, setDv] = useState(0);
-  const [selectedDate, setSelectedDate] = useState({});
+  const [selectedDate, setSelectedDate] = useState(null);
+  const restrictionDate = new Date();
+  restrictionDate.setFullYear(restrictionDate.getFullYear() - 14);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -56,19 +58,17 @@ const RegisterPersonalFields = () => {
 
   useEffect(() => {
     console.log(selectedDate);
-    if (selectedDate) {
-      if (selectedDate.$D && selectedDate.$M && selectedDate.$y) {
 
-        handleRegistrationForm({
-          ...registrationForm,
-          birthDate: `${selectedDate.$y}-${selectedDate.$M + 1}-${selectedDate.$D}`
-        });
-      } else {
-        handleRegistrationForm({
-          ...registrationForm,
-          birthDate: ''
-        });
-      }
+    if (selectedDate) {
+      handleRegistrationForm({
+        ...registrationForm,
+        birthDate: `${selectedDate.getFullYear()}-${(selectedDate.getMonth() + 1).toString().padStart(2, '0')}-${selectedDate.getDate().toString().padStart(2, '0')}`
+      });
+    } else {
+      handleRegistrationForm({
+        ...registrationForm,
+        birthDate: ''
+      });
     }
   }, [selectedDate]);
 
@@ -156,6 +156,7 @@ const RegisterPersonalFields = () => {
           <DatePicker 
             name="birthDate"
             value={selectedDate}
+            maxDate={restrictionDate}
             onChange={handleDateChange}
             slotProps={{
               textField: {

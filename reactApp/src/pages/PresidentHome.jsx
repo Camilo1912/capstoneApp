@@ -18,7 +18,8 @@ const PresidentHome = () => {
         ],
         "Proyectos": [
             'Ver proyectos',
-            'Crear propuesta'
+            'Crear propuesta',
+            'Ver votaciones'
         ],
         "Encuestas": [
             'Activas',

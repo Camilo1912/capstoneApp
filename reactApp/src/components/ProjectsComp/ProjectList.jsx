@@ -21,6 +21,8 @@ import ForestRoundedIcon from '@mui/icons-material/ForestRounded';
 import { UserContext } from '../../contexts/UserContext';
 import { formatearFecha, formatTextBr } from '../../utils/utils';
 import PollCreationForm from '../Polls/PollCreationForm';
+import EmojiPeopleRoundedIcon from '@mui/icons-material/EmojiPeopleRounded';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 
 const ProjectList = () => {
     const [open, setOpen] = useState(false);
@@ -54,7 +56,6 @@ const ProjectList = () => {
     }, [selectedProjectInfo]);
 
     const getPostUser = async () => {
-        console.log(selectedProjectInfo);
         if (selectedProjectInfo?.neighbor_id) {
             const postUserData = await get_user_by_id(selectedProjectInfo.neighbor_id);
             setSelectedProjectUserInfo(postUserData);
@@ -64,7 +65,6 @@ const ProjectList = () => {
     const handleClickOpen = (project) => {
         setOpen(true);
         setSelectedProjectInfo(project);
-        console.log(project);
     };
 
     const handleClose = () => {
@@ -94,7 +94,7 @@ const ProjectList = () => {
                                 proyecto.project_type === 'SP' ? <SecurityRoundedIcon fontSize="small"/> :
                                 proyecto.project_type === 'MA' ? <ForestRoundedIcon fontSize="small"/> :
                                 proyecto.project_type === 'DEL' ? <MonetizationOnRoundedIcon fontSize="small"/> :
-                                proyecto.project_type === 'PC' ? <HowToVoteRoundedIcon fontSize="small"/> :
+                                proyecto.project_type === 'PC' ? <EmojiPeopleRoundedIcon fontSize="small"/> :
                                 proyecto.project_type === 'PV' ? <HomeWorkRoundedIcon fontSize="small"/> :
                                 proyecto.project_type === 'PS' ? <LocalHospitalRoundedIcon fontSize="small"/> :
                                 <>na</>
@@ -125,27 +125,27 @@ const ProjectList = () => {
                             <div className='project-detail-info-wrapper'>
                                 <div className='project-detail-title-container'>
                                     <h1>{selectedProjectInfo.title}</h1>
-                                    <IconButton color="primary" aria-label="add to shopping cart">
-                                        <EditRoundedIcon />
-                                    </IconButton>
-                                </div>
-                                <div className='project-type-icon'>
-                                    { selectedProjectInfo.project_type === 'MI' ? <ConstructionRoundedIcon /> :
-                                    selectedProjectInfo.project_type === 'PSC' ? <Diversity2RoundedIcon /> : 
-                                    selectedProjectInfo.project_type === 'SP' ? <SecurityRoundedIcon fontSize='large'/> :
-                                    selectedProjectInfo.project_type === 'MA' ? <ForestRoundedIcon /> :
-                                    selectedProjectInfo.project_type === 'DEL' ? <MonetizationOnRoundedIcon /> :
-                                    selectedProjectInfo.project_type === 'PC' ? <HowToVoteRoundedIcon /> :
-                                    selectedProjectInfo.project_type === 'PV' ? <HomeWorkRoundedIcon /> :
-                                    selectedProjectInfo.project_type === 'PS' ? <LocalHospitalRoundedIcon /> :
-                                    <>na</>
-                                    }
+                                
+                                    <div className='project-type-icon'>
+                                        { selectedProjectInfo.project_type === 'MI' ? <ConstructionRoundedIcon /> :
+                                        selectedProjectInfo.project_type === 'PSC' ? <Diversity2RoundedIcon /> : 
+                                        selectedProjectInfo.project_type === 'SP' ? <SecurityRoundedIcon fontSize='large'/> :
+                                        selectedProjectInfo.project_type === 'MA' ? <ForestRoundedIcon /> :
+                                        selectedProjectInfo.project_type === 'DEL' ? <MonetizationOnRoundedIcon /> :
+                                        selectedProjectInfo.project_type === 'PC' ? <EmojiPeopleRoundedIcon /> :
+                                        selectedProjectInfo.project_type === 'PV' ? <HomeWorkRoundedIcon /> :
+                                        selectedProjectInfo.project_type === 'PS' ? <LocalHospitalRoundedIcon /> :
+                                        <>na</>
+                                        }
+                                    </div>
                                 </div>
                                 <div>
                                     <p>Propuesta de <strong>{projectTypes[selectedProjectInfo.project_type]}</strong></p>
                                     <p>Posteado por <strong>{selectedProjectUserInfo.first_name} {selectedProjectUserInfo.last_name} {selectedProjectUserInfo.last_name_2}</strong></p>
                                 </div>
-                                
+                                <div>
+                                    <p>Costo estimado entre <strong>${selectedProjectInfo?.budget_min?.toLocaleString()} y ${selectedProjectInfo?.budget_max?.toLocaleString()}</strong></p>
+                                </div>
                                 <div>
                                     <label htmlFor="fecha-creado">Fecha de creación</label>
                                     <p>{selectedProjectInfo?.neighbor_id ? formatearFecha(selectedProjectInfo.created_at) : null}</p>
@@ -175,15 +175,32 @@ const ProjectList = () => {
                 
                 {!showPollCreationForm ?
                 <DialogActions>
-                    {(userInfo.role.role_id !== 1 && selectedProjectInfo.project_state_id === 1) ? 
-                        <Button 
-                        variant='contained' 
-                        disableElevation
-                        startIcon={<HowToVoteRoundedIcon />}
-                        onClick={handleClickCreatePoll}
-                        >
-                            Crear Votación
-                        </Button> 
+                    {([2, 3, 4, 5].includes(userInfo.role.role_id) && selectedProjectInfo.project_state_id === 1) ? 
+                        <>
+                            <Button 
+                            variant='contained'
+                            color='error'
+                            disableElevation
+                            startIcon={<ThumbDownIcon />}
+                            >
+                                Rechazar
+                            </Button> 
+                            <Button 
+                            variant='contained' 
+                            disableElevation
+                            startIcon={<HowToVoteRoundedIcon />}
+                            onClick={handleClickCreatePoll}
+                            >
+                                Crear Votación
+                            </Button> 
+                            <Button 
+                            variant='contained' 
+                            disableElevation
+                            startIcon={<EditRoundedIcon />}
+                            >
+                                Modificar
+                            </Button> 
+                        </>
                     : null}
                     <Button variant='outlined' onClick={handleClose}>Cerrar</Button>
                 </DialogActions> : null}

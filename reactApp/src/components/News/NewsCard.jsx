@@ -9,7 +9,6 @@ const NewsCard = ({ cardData }) => {
   useEffect(() => {
     const getAnnouncements = async () => {
       const response = await get_announcements_by_neighborhood_id(userInfo.neighborhood.neighborhood_id);
-      console.log("ANNOUNCEMENTS: ", response);
       setNewsList(response);
     };
     getAnnouncements();
