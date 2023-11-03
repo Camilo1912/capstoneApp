@@ -15,7 +15,7 @@
 
 .project-card {
     background-color: $background-color-light;
-    border: 2px solid rgba($color: #000, $alpha: .1);
+    border: 1px solid rgba($color: #000, $alpha: .1);
     border-radius: 15px;
     padding: 15px;
 
@@ -26,8 +26,9 @@
 }
 
 .project-card:hover {
-    border: 2px solid rgba(0, 0, 255, 0.329);
+    border: 1px solid rgba(0, 0, 255, 0.329);
     cursor: pointer;
+    box-shadow: 0px 0px 5px rgba(0, 0, 255, 0.329);
 }
 
 .project-state-indicator {

@@ -4,6 +4,7 @@ import { projectTypes } from '../../utils/data';
 import { project_create, project_states } from '../../requests/Projects'
 import { UserContext } from '../../contexts/UserContext';
 import { toast } from 'react-toastify';
+import { Button } from '@mui/material';
 
 const CreateProyectForm = () => {
   const {userInfo} = useContext(UserContext);
@@ -99,7 +100,16 @@ const CreateProyectForm = () => {
           </div>
         </div>
         <div className='project-creation-button-container'>
-          <button onClick={handleSubmit}>Enviar Proyecto</button>
+          {/* <button onClick={handleSubmit}>Enviar Proyecto</button> */}
+          <Button 
+            variant='contained' 
+            disableElevation
+            color='success'
+            size='small'
+            onClick={handleSubmit}
+          >
+              Postular proyecto
+          </Button> 
         </div>
         
       </div>

@@ -19,7 +19,7 @@ const PresidentHome = () => {
         "Proyectos": [
             'Ver proyectos',
             'Crear propuesta',
-            'Ver votaciones'
+            'Votaciones'
         ],
         "Encuestas": [
             'Activas',
@@ -34,7 +34,7 @@ const PresidentHome = () => {
             'Proximas actividades',
             'Activiades pasadas',
             'Editar actividades',
-            'Crera actividad'
+            'Crear actividad'
         ],
         "Solicitudes": [
             'Solicitudes',
