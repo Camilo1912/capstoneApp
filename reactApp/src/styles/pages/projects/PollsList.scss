@@ -48,6 +48,16 @@
     width: 100%;
 }
 
+.poll-state-separator {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding-left: 10px;
+    >h2 {
+        font-size: 1.5rem;
+    }
+}
+
 
 .polls-list-container {
     display: grid;
@@ -73,12 +83,6 @@
     }
 }
 
-.poll-card:hover {
-    border: 1px solid rgba(0, 0, 255, 0.329);
-    cursor: pointer;
-    box-shadow: 0px 0px 5px rgba(0, 0, 255, 0.329);
-}
-
 
 .active-poll {
     background-color: rgba(250, 224, 138, .69);
@@ -86,4 +90,15 @@
 
 .closed-poll {
     background-color: white;
+}
+
+
+.vote-button-container {
+    display: flex;
+    gap: 15px;
+}
+
+.vote-button {
+    height: 70px;
+    width: 150px;
 }

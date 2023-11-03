@@ -9,4 +9,15 @@ export const poll_create = async (poll_info) => {
 export const get_polls = async (neighborhoodId) => {
     const response = await axiosClient.get(`polls/by_neighborhood/${neighborhoodId}`);
     return response;
+};
+
+export const poll_submit_vote = async (poll_id, payload) => {
+    console.log('enviando voto....');
+    const response = await axiosClient.post(`polls/${poll_id}/vote`, payload);
+    return response;
 }
+
+export const get_user_voting_status = async (poll_id, neighbor_id) => {
+    const response = await axiosClient.get(`polls/${poll_id}/check_vote/${neighbor_id}`);
+    return response;
+};

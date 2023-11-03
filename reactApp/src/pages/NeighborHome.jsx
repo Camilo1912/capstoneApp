@@ -16,7 +16,8 @@ const NeighborHome = () => {
         ],
         "Proyectos": [
             'Ver proyectos',
-            'Crar propuesta'
+            'Crear propuesta',
+            'Votaciones'
         ],
         "Encuestas": [
             'Activas',
