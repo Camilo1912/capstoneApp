@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState } from 'react';
-import { get_polls, get_user_voting_status, poll_submit_vote } from '../../requests/Polls';
+import { get_polls, get_user_voting_status, poll_submit_vote, update_poll_state } from '../../requests/Polls';
 import { UserContext } from '../../contexts/UserContext';
 import { formatearFecha } from '../../utils/utils';
 import { get_project_by_id } from '../../requests/Projects';
@@ -109,6 +109,27 @@ const PollList = () => {
         toast.error('Error al votar. ¡Es posible que ya haya votado en este proyecto!', { autoClose: 3000, position: toast.POSITION.TOP_CENTER })
       }
     }
+
+    setOpen(false);
+  };
+
+  const handlePollStateUpdate = async (e, pollId) => {
+    const payload = {
+      poll: {
+        state: e.target.value
+      }
+    }
+
+    try {
+      const updateStateResponse = await update_poll_state(pollId, payload);
+      if (updateStateResponse.status === 201) {
+        toast.success('La votación se validó correctamente.', { autoClose: 3000, position: toast.POSITION.TOP_CENTER });
+      }
+    } catch (error) {
+      if (error?.response?.status === 422) {
+        toast.error('Error!', { autoClose: 3000, position: toast.POSITION.TOP_CENTER })
+      }
+    }
   };
 
   return (
@@ -171,6 +192,11 @@ const PollList = () => {
               Votos en contra {poll.reject}
               <br />
               Total de votos {poll.reject + poll.approve}
+              {[2, 3, 4, 5].includes(userInfo.role.role_id) ? 
+                <Button value="Votado" onClick={handlePollStateUpdate(poll.id)}>Validar votación</Button>
+                :
+                null
+              }
             </div>
           ))}
         </div>
