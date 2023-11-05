@@ -24,11 +24,12 @@ export const userRolsTypes = {
 
 export const projectStates = {
   1: 'Propuesto',
-  2: 'Votado',
-  3: 'Aprobado',
-  4: 'En ejecución',
-  5: 'Finalizado',
-  6: 'Cancelado'
+  2: 'En Votación',
+  3: 'Votado',
+  4: 'Aprobado',
+  5: 'En ejecución',
+  6: 'Finalizado',
+  7: 'Cancelado'
 }
 
 export const projectTypes = {

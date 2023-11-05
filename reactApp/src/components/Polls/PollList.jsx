@@ -113,16 +113,16 @@ const PollList = () => {
     setOpen(false);
   };
 
-  const handlePollStateUpdate = async (e, pollId) => {
+  const handlePollStateUpdate = async (pollId) => {
     const payload = {
       poll: {
-        state: e.target.value
+        state: 'cerrada'
       }
     }
-
+    console.log(payload);
     try {
       const updateStateResponse = await update_poll_state(pollId, payload);
-      if (updateStateResponse.status === 201) {
+      if (updateStateResponse.status === 200) {
         toast.success('La votación se validó correctamente.', { autoClose: 3000, position: toast.POSITION.TOP_CENTER });
       }
     } catch (error) {
@@ -193,7 +193,7 @@ const PollList = () => {
               <br />
               Total de votos {poll.reject + poll.approve}
               {[2, 3, 4, 5].includes(userInfo.role.role_id) ? 
-                <Button value="Votado" onClick={handlePollStateUpdate(poll.id)}>Validar votación</Button>
+                <Button value="Votado" onClick={() => handlePollStateUpdate(poll.id)}>Validar votación</Button>
                 :
                 null
               }

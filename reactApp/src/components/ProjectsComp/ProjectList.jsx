@@ -127,14 +127,14 @@ const ProjectList = () => {
                                     <h1>{selectedProjectInfo.title}</h1>
                                 
                                     <div className='project-type-icon'>
-                                        { selectedProjectInfo.project_type === 'MI' ? <ConstructionRoundedIcon /> :
-                                        selectedProjectInfo.project_type === 'PSC' ? <Diversity2RoundedIcon /> : 
+                                        { selectedProjectInfo.project_type === 'MI' ? <ConstructionRoundedIcon fontSize='large'/> :
+                                        selectedProjectInfo.project_type === 'PSC' ? <Diversity2RoundedIcon fontSize='large'/> : 
                                         selectedProjectInfo.project_type === 'SP' ? <SecurityRoundedIcon fontSize='large'/> :
-                                        selectedProjectInfo.project_type === 'MA' ? <ForestRoundedIcon /> :
-                                        selectedProjectInfo.project_type === 'DEL' ? <MonetizationOnRoundedIcon /> :
-                                        selectedProjectInfo.project_type === 'PC' ? <EmojiPeopleRoundedIcon /> :
-                                        selectedProjectInfo.project_type === 'PV' ? <HomeWorkRoundedIcon /> :
-                                        selectedProjectInfo.project_type === 'PS' ? <LocalHospitalRoundedIcon /> :
+                                        selectedProjectInfo.project_type === 'MA' ? <ForestRoundedIcon fontSize='large'/> :
+                                        selectedProjectInfo.project_type === 'DEL' ? <MonetizationOnRoundedIcon fontSize='large'/> :
+                                        selectedProjectInfo.project_type === 'PC' ? <EmojiPeopleRoundedIcon fontSize='large'/> :
+                                        selectedProjectInfo.project_type === 'PV' ? <HomeWorkRoundedIcon fontSize='large'/> :
+                                        selectedProjectInfo.project_type === 'PS' ? <LocalHospitalRoundedIcon fontSize='large'/> :
                                         <>na</>
                                         }
                                     </div>
@@ -164,10 +164,11 @@ const ProjectList = () => {
                         </div>
                         <div className='project-step-indicator-container'>
                             <p style={selectedProjectInfo.project_state_id >= 1 ? completedStep : null}>Propuesto</p>
-                            <p style={selectedProjectInfo.project_state_id >= 2 ? completedStep : null}>Votado</p>
-                            <p style={selectedProjectInfo.project_state_id >= 3 ? completedStep : null}>Aprobado</p>
-                            <p style={selectedProjectInfo.project_state_id >= 4 ? completedStep : null}>En ejecución</p>
-                            <p style={selectedProjectInfo.project_state_id == 5 ? completedStep : null}>Finalizado</p>
+                            <p style={selectedProjectInfo.project_state_id >= 2 ? completedStep : null}>En Votación</p>
+                            <p style={selectedProjectInfo.project_state_id >= 3 ? completedStep : null}>Votado</p>
+                            <p style={selectedProjectInfo.project_state_id >= 4 ? completedStep : null}>Aprobado</p>
+                            <p style={selectedProjectInfo.project_state_id >= 5 ? completedStep : null}>En ejecución</p>
+                            <p style={selectedProjectInfo.project_state_id == 6 ? completedStep : null}>Finalizado</p>
                         </div>
                     </div>
                     }

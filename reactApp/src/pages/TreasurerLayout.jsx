@@ -18,7 +18,8 @@ const TreasurerLayout = () => {
         ],
         "Proyectos": [
             'Ver proyectos',
-            'Crear propuesta'
+            'Crear propuesta',
+            'Votaciones'
         ],
         "Encuestas": [
             'Activas',
