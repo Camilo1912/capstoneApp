@@ -17,7 +17,12 @@ const defaultRegistrationForm = {
     neighborhoodId: '',
     email: '',
     password: '',
-    gender: ''
+    gender: '',
+    image_avatar: null,
+    image_front: null,
+    image_back: null,
+    image_face: null,
+    image_invoice: null
 };
 
 const RegistrationContextProvider = (props) => {

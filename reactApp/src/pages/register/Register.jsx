@@ -15,6 +15,7 @@ import { register } from '../../requests/Register';
 import { useNavigate } from 'react-router-dom';
 import SendIcon from '@mui/icons-material/Send';
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
+import RegisterVerificationFields from './RegisterVerificationFields';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -42,7 +43,9 @@ const Register = () => {
       setIsNextButtonDisabled(false);
     } else if (activeStep === 1 && registrationForm["regionId"] && registrationForm["communeId"] && registrationForm["neighborhoodId"] && registrationForm['street'] && registrationForm['number']){
       setIsNextButtonDisabled(false);
-    } else if (activeStep === 2 && registrationForm["email"] && registrationForm["password"]) {
+    } else if (activeStep === 2 && registrationForm['image_front'] && registrationForm['image_back'] && registrationForm['image_invoice'] && registrationForm['image_face']) {
+      setIsNextButtonDisabled(false);
+    } else if (activeStep === 3 && registrationForm["email"] && registrationForm["password"]) {
       setIsNextButtonDisabled(false);
     } else {
       setIsNextButtonDisabled(true);
@@ -51,23 +54,25 @@ const Register = () => {
 
   const handleSignIn = async (e) => {
     e.preventDefault();
-    const newUserData = {
-      'neighbor': {
 
-        'first_name': registrationForm['firstname'],
-        'second_name': registrationForm['middlename'],
-        'last_name': registrationForm['lastname1'],
-        'last_name_2': registrationForm['lastname2'],
-        'birth_date': registrationForm['birthDate'],
-        'email': registrationForm['email'],
-        'street_address': registrationForm['street'],
-        'number_address': registrationForm['number'],
-        'rut': registrationForm['rut'],
-        'password': registrationForm['password'],
-        'neighborhood_id': registrationForm['neighborhoodId'],
-        'commune_id': registrationForm['communeId'],
-        'gender': registrationForm['gender'],
-      }
+    const newUserData = {
+        'neighbor[first_name]': registrationForm['firstname'],
+        'neighbor[second_name]': registrationForm['middlename'],
+        'neighbor[last_name]': registrationForm['lastname1'],
+        'neighbor[last_name_2]': registrationForm['lastname2'],
+        'neighbor[birth_date]': registrationForm['birthDate'],
+        'neighbor[email]': registrationForm['email'],
+        'neighbor[street_address]': registrationForm['street'],
+        'neighbor[number_address]': registrationForm['number'],
+        'neighbor[rut]': registrationForm['rut'],
+        'neighbor[password]': registrationForm['password'],
+        'neighbor[neighborhood_id]': registrationForm['neighborhoodId'],
+        'neighbor[commune_id]': registrationForm['communeId'],
+        'neighbor[gender]': registrationForm['gender'],
+        'image_front': registrationForm['image_front'],
+        'image_back': registrationForm['image_back'],
+        'image_face': registrationForm['image_face'],
+        'image_invoice': registrationForm['image_invoice']
     }
 
     try {
@@ -95,15 +100,18 @@ const Register = () => {
   return (
 
     <div className='registration-card'>
-      <Button onClick={handleBackToLogin} startIcon={<ArrowBackIosNewRoundedIcon />}>Volver al inicio</Button>
-      <h1>Formulario de registro</h1>
+      <div className='registration-card-title'>
+        <Button onClick={handleBackToLogin} startIcon={<ArrowBackIosNewRoundedIcon />}>Volver</Button>
+        <h1>Formulario de registro</h1>
+      </div>
+      
       <Stepper activeStep={activeStep} orientation="vertical">
         {registrationSteps.map((step, index) => (
           <Step key={step.label}>
 
             <StepLabel> {step.label} </StepLabel>
             <StepContent>
-              {activeStep == 0 ? <RegisterPersonalFields /> : (activeStep == 1) ? <RegisterResidentialFields /> : <RegisterCredentialFields />}
+              {activeStep == 0 ? <RegisterPersonalFields /> : (activeStep == 1) ? <RegisterResidentialFields /> : (activeStep == 2) ? <RegisterVerificationFields /> : <RegisterCredentialFields />}
               
               <div className='register-steps-buttons-container'>
 
