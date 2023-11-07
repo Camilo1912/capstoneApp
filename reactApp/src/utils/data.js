@@ -9,6 +9,10 @@ export const registrationSteps = [
         '',
     },
     {
+      label: 'Verificación',
+      description: ``,
+    },
+    {
       label: 'Credenciales',
       description: ``,
     },
@@ -28,8 +32,7 @@ export const projectStates = {
   3: 'Votado',
   4: 'Aprobado',
   5: 'En ejecución',
-  6: 'Finalizado',
-  7: 'Cancelado'
+  6: 'Finalizado'
 }
 
 export const projectTypes = {

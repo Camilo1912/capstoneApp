@@ -6,6 +6,7 @@ import CalendarContainer from "../components/CalendarContainer";
 import { useSelectedComponent } from '../contexts/SelectedComponentContext';
 import ActivitiesContainer from "../components/Activities/ActivitiesContainer";
 import SolicitudContainer from "../components/SolicitudContainer";
+import MembersContainer from "../components/Members/MembersContainer";
 
 const PresidentHome = () => {
     const { selectedComponent } = useSelectedComponent();
@@ -40,6 +41,9 @@ const PresidentHome = () => {
             'Solicitudes',
             'Nueva solicitud',
             'Solicitudes resueltas'
+        ],
+        "Integrantes": [
+            'Todos'
         ]
     };
 
@@ -56,20 +60,20 @@ const PresidentHome = () => {
             contextualMenuOptionsForComponent = contextualMenuOptions["Proyectos"];
             break;
         case 2:
-            contentComponent = <PollsContainer />;
-            contextualMenuOptionsForComponent = contextualMenuOptions["Encuestas"];
-            break;
-        case 3:
             contentComponent = <CalendarContainer />;
             contextualMenuOptionsForComponent = contextualMenuOptions["Calendario"];
             break;
-        case 4:
+        case 3:
             contentComponent = <ActivitiesContainer />;
             contextualMenuOptionsForComponent = contextualMenuOptions["Actividades"];
             break;
-        case 5:
+        case 4:
             contentComponent = <SolicitudContainer />;
             contextualMenuOptionsForComponent = contextualMenuOptions["Solicitudes"];
+            break;
+        case 5:
+            contentComponent = <MembersContainer />;
+            contextualMenuOptionsForComponent = contextualMenuOptions["Integrantes"];
             break;
         default:
             contextualMenuOptionsForComponent = contextualMenuOptions["Anuncios"];
