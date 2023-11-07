@@ -10,6 +10,10 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+
 import SecurityRoundedIcon from '@mui/icons-material/SecurityRounded';
 import MonetizationOnRoundedIcon from '@mui/icons-material/MonetizationOnRounded';
 import Diversity2RoundedIcon from '@mui/icons-material/Diversity2Rounded';
@@ -23,6 +27,8 @@ import { formatearFecha, formatTextBr } from '../../utils/utils';
 import PollCreationForm from '../Polls/PollCreationForm';
 import EmojiPeopleRoundedIcon from '@mui/icons-material/EmojiPeopleRounded';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+
+const steps = Object.values(projectStates);
 
 const ProjectList = () => {
     const [open, setOpen] = useState(false);
@@ -163,12 +169,19 @@ const ProjectList = () => {
                             <p>{selectedProjectInfo?.description ? selectedProjectInfo.description: null}</p>
                         </div>
                         <div className='project-step-indicator-container'>
-                            <p style={selectedProjectInfo.project_state_id >= 1 ? completedStep : null}>Propuesto</p>
+                            {/* <p style={selectedProjectInfo.project_state_id >= 1 ? completedStep : null}>{selectedProjectInfo.project_state_id === 1 ? <>Propuesto</> : 1}</p>
                             <p style={selectedProjectInfo.project_state_id >= 2 ? completedStep : null}>En Votación</p>
                             <p style={selectedProjectInfo.project_state_id >= 3 ? completedStep : null}>Votado</p>
                             <p style={selectedProjectInfo.project_state_id >= 4 ? completedStep : null}>Aprobado</p>
                             <p style={selectedProjectInfo.project_state_id >= 5 ? completedStep : null}>En ejecución</p>
-                            <p style={selectedProjectInfo.project_state_id == 6 ? completedStep : null}>Finalizado</p>
+                            <p style={selectedProjectInfo.project_state_id == 6 ? completedStep : null}>Finalizado</p> */}
+                            <Stepper activeStep={selectedProjectInfo?.project_state_id - 1} alternativeLabel>
+                                {steps.map((label, index) => (
+                                    <Step key={index}>
+                                        <StepLabel>{label}</StepLabel>
+                                    </Step>
+                                ))}
+                            </Stepper>
                         </div>
                     </div>
                     }

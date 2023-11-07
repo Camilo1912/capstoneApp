@@ -38,10 +38,8 @@
     >h1 {
         font-size: 1.2rem;
     }
-
-    
-
 }
+
 .project-type-icon {
     display: flex;
     justify-content: center;
@@ -62,30 +60,29 @@
 .project-step-indicator-container {
     display: flex;
     flex-direction: row;
-    gap: 30px;
     width: 100%;
     justify-content: space-between;
     align-items: center;
-    position: relative;
-    height: 30px;
+    // position: relative;
 
-    >p {
-        font-size: .7rem;
-        padding: 5px 10px;
-        background-color: rgb(231, 231, 231);
-        text-wrap: nowrap;
-        min-width: 12ch;
-        border-radius: 100px;
-        text-align: center;
-        z-index: 10;
-    }
+
+    // >p {
+    //     font-size: .7rem;
+    //     padding: 5px 10px;
+    //     background-color: rgb(231, 231, 231);
+    //     text-wrap: nowrap;
+    //     min-width: 12ch;
+    //     border-radius: 100px;
+    //     text-align: center;
+    //     z-index: 10;
+    // }
 }
 
-.project-step-indicator-container::before {
-    content: '';
-    width: calc(100% - 4px);
-    height: 6px;
-    background-color: rgb(231, 231, 231);
-    position: absolute;
-    left: 2px;
-}
+// .project-step-indicator-container::before {
+//     content: '';
+//     width: calc(100% - 4px);
+//     height: 6px;
+//     background-color: rgb(231, 231, 231);
+//     position: absolute;
+//     left: 2px;
+// }
