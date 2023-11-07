@@ -6,10 +6,11 @@ import BallotOutlinedIcon from '@mui/icons-material/BallotOutlined';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import NaturePeopleOutlinedIcon from '@mui/icons-material/NaturePeopleOutlined';
 import ScheduleSendOutlinedIcon from '@mui/icons-material/ScheduleSendOutlined';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useSelectedComponent } from '../contexts/SelectedComponentContext';
 import { useMediaQuery, useTheme } from '@mui/material';
 import PeopleAltRoundedIcon from '@mui/icons-material/PeopleAltRounded';
+import { UserContext } from '../contexts/UserContext';
 
 
 // Estilos para tema claro
@@ -28,6 +29,7 @@ const darkThemeStyles = {
 
 const Navbar = () => {
     const [value, setValue] = useState(0);
+    const { userInfo, handleUserInfo } = useContext(UserContext);
     const { setSelectedComponent } = useSelectedComponent();
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
@@ -49,7 +51,8 @@ const Navbar = () => {
                 <BottomNavigationAction label="Calendario" value={2} icon={<CalendarMonthOutlinedIcon />} style={{color: value === 2 ? styles.selectedColor : styles.color, backgroundColor: styles.backgroundColor}} />
                 <BottomNavigationAction label="Actividades" value={3} icon={<NaturePeopleOutlinedIcon />} style={{color: value === 3 ? styles.selectedColor : styles.color, backgroundColor: styles.backgroundColor}} />
                 <BottomNavigationAction label="Solicitudes" value={4} icon={<ScheduleSendOutlinedIcon />} style={{color: value === 4 ? styles.selectedColor : styles.color, backgroundColor: styles.backgroundColor}} />
-                <BottomNavigationAction label="Miembros" value={5} icon={<PeopleAltRoundedIcon />} style={{color: value === 5 ? styles.selectedColor : styles.color, backgroundColor: styles.backgroundColor}} />
+                {[2, 3, 4, 5].includes(userInfo?.role?.role_id) ? <BottomNavigationAction label="Miembros" value={5} icon={<PeopleAltRoundedIcon />} style={{color: value === 5 ? styles.selectedColor : styles.color, backgroundColor: styles.backgroundColor}} /> : null}
+                
             </BottomNavigation>
         </div>
     );

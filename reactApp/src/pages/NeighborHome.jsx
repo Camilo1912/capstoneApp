@@ -19,11 +19,6 @@ const NeighborHome = () => {
             'Crear propuesta',
             'Votaciones'
         ],
-        "Encuestas": [
-            'Activas',
-            'Finalizadas',
-            'Respondidas'
-        ],
         "Calendario": [
             'Todo'
         ],
@@ -50,18 +45,14 @@ const NeighborHome = () => {
             contextualMenuOptionsForComponent = contextualMenuOptions["Proyectos"];
             break;
         case 2:
-            contentComponent = <PollsContainer />;
-            contextualMenuOptionsForComponent = contextualMenuOptions["Encuestas"];
-            break;
-        case 3:
             contentComponent = <CalendarContainer />;
             contextualMenuOptionsForComponent = contextualMenuOptions["Calendario"];
             break;
-        case 4:
+        case 3:
             contentComponent = <ActivitiesContainer />;
             contextualMenuOptionsForComponent = contextualMenuOptions["Actividades"];
             break;
-        case 5:
+        case 4:
             contentComponent = <SolicitudContainer />;
             contextualMenuOptionsForComponent = contextualMenuOptions["Solicitudes"];
             break;
