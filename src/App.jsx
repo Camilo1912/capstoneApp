@@ -28,21 +28,21 @@ const App = () => {
         <SelectedComponentProvider>
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<PublicLayout />}>
+              <Route path="/capstoneApp/" element={<PublicLayout />}>
                 <Route index element={<Login />} />
               </Route>
-              <Route path="/register" element={<PublicLayout />} />
-              <Route path="/guest_home" element={<PublicLayout />} />
+              <Route path="/capstoneApp/register" element={<PublicLayout />} />
+              <Route path="/capstoneApp/guest_home" element={<PublicLayout />} />
               <Route element={<PrivateRoute allowedRoles={[1]} />} >
-                <Route path="/neighbor_home" element={<NeighborHome />} />
+                <Route path="/capstoneApp/neighbor_home" element={<NeighborHome />} />
               </Route>
               <Route element={<PrivateRoute allowedRoles={[2 ,3 ,4]} />}>
-                <Route path="/president_home" element={<PresidentHome />} />
-                <Route path="/secretary_home" element={<SecretaryHome />} />
-                <Route path="/treasurer_home" element={<TreasurerLayout />} />
+                <Route path="/capstoneApp/president_home" element={<PresidentHome />} />
+                <Route path="/capstoneApp/secretary_home" element={<SecretaryHome />} />
+                <Route path="/capstoneApp/treasurer_home" element={<TreasurerLayout />} />
               </Route>
               <Route element={<PrivateRoute allowedRoles={[5]} />}>
-                <Route path="/admin_home" element={<AdminHome />} />
+                <Route path="/capstoneApp/admin_home" element={<AdminHome />} />
               </Route>
               <Route path="*" element={<p>No hay nada aquí: error 404</p>} />
             </Routes>
