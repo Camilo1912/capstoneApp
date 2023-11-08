@@ -35,6 +35,14 @@
     color: $text-color-normal-light;
 }
 
+.logo-image-login {
+    background-image: url("../assets/images/appLogo.png");
+    width: 150px;
+    height: 150px;
+    background-position: center;
+    background-size: contain;
+}
+
 .login-card h1 {
     font-size: 2rem;
     width: 100%;

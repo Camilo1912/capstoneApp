@@ -98,7 +98,7 @@ const Login = () => {
                 </div>
             
                 <div className='login-card'>
-                    <img src="src/assets/images/appLogo.png" height='150px' width='150px' alt="" />
+                    <div className='logo-image-login'></div>
                     <h1>Inicio de sesión</h1>
                     <form action="" className='login-form'>
         
