@@ -31,7 +31,7 @@ const App = () => {
               <Route path="/" element={<PublicLayout />}>
                 <Route index element={<Login />} />
               </Route>
-              <Route path="/casptoneApp/register" element={<PublicLayout />} />
+              <Route path="/register" element={<PublicLayout />} />
               <Route path="/guest_home" element={<PublicLayout />} />
               <Route element={<PrivateRoute allowedRoles={[1]} />} >
                 <Route path="/neighbor_home" element={<NeighborHome />} />
