@@ -65,69 +65,92 @@ const Login = () => {
         navigate('/guest_home');
     };
 
+    const handleRegisterRedirection = () => {
+        navigate('/register');
+    };
+
     return (
         <>
-            <div className='login-card'>
-                <h1>Inicio de sesión</h1>
-                <form action="" className='login-form'>
-    
-                <OutlinedInput
-                    id="filled-username-input"
-                    placeholder='Email'
-                    type="email"
-                    autoComplete="current-email"
-                    variant="outlined"
-                    size='small'
-                    value={username}
-                    onChange={handleUsernameChange}
-                />
-                <OutlinedInput
-                    id="outlined-adornment-password"
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder='Contraseña'
-                    size='small'
-                    onChange={handlePasswordChange}
-                    value={password}
-                    endAdornment={
-                        <InputAdornment position="end">
-                            <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={handleClickShowPassword}
-                                onMouseDown={handleMouseDownPassword}
-                                edge="end"
-                            >
-                                {showPassword ? <Visibility /> : <VisibilityOff />}
-                            </IconButton>
-                        </InputAdornment>
-                    }
-                />
-                <p style={{ color: 'red' }}>{feedbackMessage}</p>
-                
-
-                <Button 
-                    type='submit'
-                    variant="contained"
-                    // disableElevation
-                    onClick={handleSubmit}
-                    endIcon={<LoginIcon />}
-                >
-                    Iniciar Sesión
-                </Button>
-
-                <Button 
-                    type='submit'
-                    variant="outlined"
-                    onClick={handleGestRedirection}
-                    endIcon={<LoginIcon />}
-                >
-                    Invitado
-                </Button>
-                
-                <div className='no-account-container'>
-                    ¿No tienes cuenta de usuario?
-                    <Link to='/register'> Registrarse</Link>
+            <div className='login-card-wrapper'>
+                <div className='guest-options-login'>
+                    <h2>¡Bienvenido!</h2>
+                    <p>Sistema de administración para juntas de vecinos.</p>
+                    <h3>¿No tienes cuenta de usuario?</h3>
+                    <p>Si aún no estás registrado en tu junta de vecinos puedes registrarte haciendo clic en "Registrarse".</p>
+                    <Button 
+                        type='submit'
+                        variant="outlined"
+                        onClick={handleRegisterRedirection}
+                        endIcon={<LoginIcon />}
+                    >
+                        Registrarse
+                    </Button>
+                    <h3>Otros servicios</h3>
+                    <p>Si solo necesita obtener su <strong>certificado de residencia</strong> o desea inscribirse en alguna <strong>actividad de su junta de vecinos</strong> haga clic en "Acceso de invitado"</p>
+                    <Button 
+                        type='submit'
+                        variant="outlined"
+                        onClick={handleGestRedirection}
+                        endIcon={<LoginIcon />}
+                    >
+                        Acceso de invitado
+                    </Button>
                 </div>
-                </form>
+            
+                <div className='login-card'>
+                    <img src="src/assets/images/appLogo.png" height='150px' width='150px' alt="" />
+                    <h1>Inicio de sesión</h1>
+                    <form action="" className='login-form'>
+        
+                    <OutlinedInput
+                        id="filled-username-input"
+                        placeholder='Email'
+                        type="email"
+                        autoComplete="current-email"
+                        variant="outlined"
+                        size='small'
+                        value={username}
+                        onChange={handleUsernameChange}
+                    />
+                    <OutlinedInput
+                        id="outlined-adornment-password"
+                        type={showPassword ? 'text' : 'password'}
+                        placeholder='Contraseña'
+                        size='small'
+                        onChange={handlePasswordChange}
+                        value={password}
+                        endAdornment={
+                            <InputAdornment position="end">
+                                <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={handleClickShowPassword}
+                                    onMouseDown={handleMouseDownPassword}
+                                    edge="end"
+                                >
+                                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                                </IconButton>
+                            </InputAdornment>
+                        }
+                    />
+                    <p style={{ color: 'red' }}>{feedbackMessage}</p>
+                    
+
+                    <Button 
+                        type='submit'
+                        variant="contained"
+                        // disableElevation
+                        onClick={handleSubmit}
+                        endIcon={<LoginIcon />}
+                    >
+                        Iniciar Sesión
+                    </Button>
+                    
+                    <div className='no-account-container'>
+                        ¿No tienes cuenta de usuario?
+                        
+                    </div>
+                    </form>
+                </div>
             </div>
         </>
     )
