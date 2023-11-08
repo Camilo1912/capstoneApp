@@ -9,13 +9,16 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import RefreshRoundedIcon from '@mui/icons-material/RefreshRounded';
 
 import HowToVoteRoundedIcon from '@mui/icons-material/HowToVoteRounded';
 import AssessmentRoundedIcon from '@mui/icons-material/AssessmentRounded';
 import EventRoundedIcon from '@mui/icons-material/EventRounded';
 import ThumbUpRoundedIcon from '@mui/icons-material/ThumbUpRounded';
 import ThumbDownRoundedIcon from '@mui/icons-material/ThumbDownRounded';
-import { buttonBaseClasses } from '@mui/material';
+import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
+import * as XLSX from 'xlsx/xlsx.mjs';
 
 const PollList = () => {
   const { userInfo, handleUserInfo } = useContext(UserContext);
@@ -29,12 +32,13 @@ const PollList = () => {
   const [activePollsList, setActivePollsList] = useState(null);
   const [scheduledPollsList, setScheduledPollsList] = useState(null);
   const [closedPollsList, setClosedPollsList] = useState(null);
+  const [refresh, setRefresh] = useState(true);
 
   useEffect(() => {
     const newCurrentDate = new Date();
     setCurrentDate(newCurrentDate);
 
-    if (!pollsList) {
+    // if (!pollsList) {
         const getPolls = async () => {
           const response = await get_polls(neighborhood);
           const pollsData = response.data.reverse();
@@ -66,8 +70,8 @@ const PollList = () => {
           setPollsList(pollsWithProjects);
         };
         getPolls();
-    }
-  }, []);
+    // }
+  }, [refresh]);
 
   useEffect(() => {
     if (pollsList) {
@@ -113,141 +117,175 @@ const PollList = () => {
     setOpen(false);
   };
 
-  const handlePollStateUpdate = async (pollId) => {
-    const payload = {
-      poll: {
-        state: 'cerrada'
-      }
-    }
-    console.log(payload);
-    try {
-      const updateStateResponse = await update_poll_state(pollId, payload);
-      if (updateStateResponse.status === 200) {
-        toast.success('La votación se validó correctamente.', { autoClose: 3000, position: toast.POSITION.TOP_CENTER });
-      }
-    } catch (error) {
-      if (error?.response?.status === 422) {
-        toast.error('Error!', { autoClose: 3000, position: toast.POSITION.TOP_CENTER })
-      }
-    }
-  };
+    const handlePollStateUpdate = async (pollId) => {
+        const payload = {
+            poll: {
+                state: 'cerrada'
+            }
+        }
+        console.log(payload);
+        try {
+            const updateStateResponse = await update_poll_state(pollId, payload);
+            if (updateStateResponse.status === 200) {
+                toast.success('La votación se publicó correctamente.', { autoClose: 3000, position: toast.POSITION.TOP_CENTER });
+            }
+            setRefresh(!refresh);
+        } catch (error) {
+            if (error?.response?.status === 422) {
+                toast.error('Error!', { autoClose: 3000, position: toast.POSITION.TOP_CENTER })
+            }
+        }
+    };
+
+    const handleExport = () => {
+        if (pollsList) {
+            const workbook = XLSX.utils.book_new();
+            const worksheet = XLSX.utils.json_to_sheet(pollsList);
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Hoja1");
+            XLSX.writeFile(workbook, "Votaciones.xlsx");
+          } else {
+            console.error('No hay datos para exportar.');
+          }
+    };
 
   return (
-    <div className='polls-wrapper'>
-      <div className='polls-list'>
-
-        <div className='poll-state-separator'>
-          <HowToVoteRoundedIcon />
-          <h2>Activas</h2>
+    <>
+        <div className='refresh-button-container'>
+            <IconButton onClick={() => setRefresh(!refresh)} id='refresh-button'>
+                <RefreshRoundedIcon />
+            </IconButton>
+            {[2, 3, 4].includes(userInfo.role.role_id) ? 
+            <IconButton onClick={handleExport}>
+                <DownloadRoundedIcon />
+            </IconButton>
+            : null }
         </div>
-        <div className='polls-list-container'>
-          {activePollsList?.map((poll) => (
-            <div key={poll.id} className='poll-card active-poll'>
-              <h3>Proyecto a votar: {poll.projectTitle}</h3>
-              Termina el {formatearFecha(poll.endDate)}
-              <br />
-              {poll.userVoted}
-              {!poll.userVoted ? 
-              <>
-                <Button onClick={() => handleOpenDialog(poll)}>Votar</Button>
-              </> : <>Voto envíado</>}
+        <div className='polls-wrapper'>
+            <div className='polls-list'>
+                <div className='poll-state-separator'>
+                    <HowToVoteRoundedIcon />
+                    <h2>Activas</h2>
+                </div>
+                <div className='polls-list-container'>
+                    {activePollsList?.map((poll) => (
+                        <div key={poll.id} className='poll-card active-poll'>
+                        <h3>Proyecto a votar: {poll.projectTitle}</h3>
+                        Termina el {formatearFecha(poll.endDate)}
+                        <br />
+                        {poll.userVoted}
+                        {!poll.userVoted ? 
+                        <>
+                            <Button onClick={() => handleOpenDialog(poll)}>Votar</Button>
+                        </> : <>Voto envíado</>}
+                        </div>
+                    ))}
+                </div>
+                {activePollsList?.length === 0 && <p>No hay votaciones activas</p>}
+
+                <div className='poll-state-separator'>
+                    <EventRoundedIcon />
+                    <h2>Próximas</h2>
+                </div>
+                <div className='polls-list-container'>
+                    {scheduledPollsList?.map((poll) => (
+                        <div key={poll.id} className='poll-card'>
+                        <h3>Proyecto a votar: {poll.projectTitle}</h3>
+                        Inicia el {formatearFecha(poll.startDate)}
+                        <br />
+                        Termina el {formatearFecha(poll.endDate)}
+                        <br />
+                        </div>
+                    ))}
+                </div>
+                {scheduledPollsList?.length === 0 && <p>No hay datos que mostrar</p>}
+
+                <div className='poll-state-separator'>
+                    <AssessmentRoundedIcon />
+                    <h2>Cerradas</h2>
+                </div>
+                <div className='polls-list-container'>
+                    {closedPollsList?.map((poll) => (
+                        <div key={poll.id} className='poll-card closed-poll'>
+                            <h3>{poll.projectTitle} {poll.approve > poll.reject ? <>APROBADO</>: <>RECHAZADO</>}</h3>
+                            ID: {poll.id}
+                            <br />
+                            Inició el {formatearFecha(poll.startDate)}
+                            <br />
+                            Terminó el {formatearFecha(poll.endDate)}
+
+                            {poll.state === 'cerrada' || [2, 3, 4, 5].includes(userInfo.role.role_id) ? 
+                            <>
+                            <br />
+                            Votos a favor {poll.approve}
+                            <br />
+                            Votos en contra {poll.reject}
+                            <br />
+                            Total de votos {poll.reject + poll.approve}
+                            <br />
+                            </>
+                            : null }
+                            
+                            {([2, 3, 4, 5].includes(userInfo.role.role_id) && poll.state !== 'cerrada') ? 
+                                <Button value="Votado" onClick={() => handlePollStateUpdate(poll.id)}>Publicar resultados</Button>
+                                :
+                                null
+                            }
+                        </div>
+                    ))}
+                </div>
+                {closedPollsList?.length === 0 && <p>No hay datos que mostrar</p>}
             </div>
-          ))}
-        </div>
-        {activePollsList?.length === 0 && <p>No hay votaciones activas</p>}
 
-        <div className='poll-state-separator'>
-          <EventRoundedIcon />
-          <h2>Próximas</h2>
-        </div>
-        <div className='polls-list-container'>
-          {scheduledPollsList?.map((poll) => (
-            <div key={poll.id} className='poll-card'>
-              <h3>Proyecto a votar: {poll.projectTitle}</h3>
-              Inicia el {formatearFecha(poll.startDate)}
-              <br />
-              Termina el {formatearFecha(poll.endDate)}
-              <br />
+            <div className='poll-info-card'>
+                <h1>Sobre las votaciones</h1>
+                <ul>
+                <li><h2>Votaciones ACTIVAS</h2><p>Corresponden a las votaciones en curso, en ellas se indica el proyecto que se está votando, el horario de votación y si ya haz votado o no.</p></li>
+                <li><h2>Votaciones PROXIMAS</h2><p>Aquí se muestran las votaciones que aún no están activas pero que ya se encuentran programadas con fecha de inicio y termino.</p></li>
+                <li><h2>Votaciones CERRADAS</h2><p>Estas son votaciones que ya terminaron y por lo tanto se muestra el conteo de votos y el total de sufragios, además del resultado final.</p></li>
+                </ul>
             </div>
-          ))}
-        </div>
-        {scheduledPollsList?.length === 0 && <p>No hay datos que mostrar</p>}
 
-        <div className='poll-state-separator'>
-          <AssessmentRoundedIcon />
-          <h2>Cerradas</h2>
-        </div>
-        <div className='polls-list-container'>
-          {closedPollsList?.map((poll) => (
-            <div key={poll.id} className='poll-card closed-poll'>
-              <h3>{poll.projectTitle} {poll.approve > poll.reject ? <>APROBADO</>: <>RECHAZADO</>}</h3>
-              ID: {poll.id}
-              <br />
-              Inició el {formatearFecha(poll.startDate)}
-              <br />
-              Terminó el {formatearFecha(poll.endDate)}
-              <br />
-              Votos a favor {poll.approve}
-              <br />
-              Votos en contra {poll.reject}
-              <br />
-              Total de votos {poll.reject + poll.approve}
-              {[2, 3, 4, 5].includes(userInfo.role.role_id) ? 
-                <Button value="Votado" onClick={() => handlePollStateUpdate(poll.id)}>Validar votación</Button>
-                :
-                null
-              }
-            </div>
-          ))}
-        </div>
-        {closedPollsList?.length === 0 && <p>No hay datos que mostrar</p>}
-      </div>
+            <Dialog open={open} onClose={handleCloseDialog}>
+                <DialogContent>
+                    Código de votación: {selectedPoll?.id}
+                    <br />
+                    Proyecto a votar: {selectedPoll?.projectTitle}
+                    <br />
+                    ID de proyecto: {selectedPoll?.project_id}
+                    <br />
+                    <div className='vote-button-container'>
 
-      <div className='poll-info-card'>
-        <h1>Sobre las votaciones</h1>
-        <ul>
-          <li><h2>Votaciones ACTIVAS</h2><p>Corresponden a las votaciones en curso, en ellas se indica el proyecto que se está votando, el horario de votación y si ya haz votado o no.</p></li>
-          <li><h2>Votaciones PROXIMAS</h2><p>Aquí se muestran las votaciones que aún no están activas pero que ya se encuentran programadas con fecha de inicio y termino.</p></li>
-          <li><h2>Votaciones CERRADAS</h2><p>Estas son votaciones que ya terminaron y por lo tanto se muestra el conteo de votos y el total de sufragios, además del resultado final.</p></li>
-        </ul>
-      </div>
+                        <Button 
+                        size='large' 
+                        value='approve' 
+                        startIcon={<ThumbUpRoundedIcon />} 
+                        color='success' 
+                        variant='contained' 
+                        className='vote-button'
+                        onClick={handleSubmitVote}
+                        >Apruebo
+                        </Button>
 
-      <Dialog open={open} onClose={handleCloseDialog}>
-        <DialogContent>
-          Código de votación: {selectedPoll?.id}
-          <br />
-          Proyecto a votar: {selectedPoll?.projectTitle}
-          <br />
-          ID de proyecto: {selectedPoll?.project_id}
-          <br />
-          <div className='vote-button-container'>
-            <Button 
-              size='large' 
-              value='approve' 
-              startIcon={<ThumbUpRoundedIcon />} 
-              color='success' 
-              variant='contained' 
-              className='vote-button'
-              onClick={handleSubmitVote}
-            >Apruebo
-            </Button>
-            <Button 
-              size='large' 
-              value='reject' 
-              startIcon={<ThumbDownRoundedIcon />} 
-              color='error' 
-              variant='contained' 
-              className='vote-button'
-              onClick={handleSubmitVote}
-            >Rechazo
-            </Button>
-          </div>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog}>Cancelar</Button>
-        </DialogActions>
-      </Dialog>
-    </div>
+                        <Button 
+                        size='large' 
+                        value='reject' 
+                        startIcon={<ThumbDownRoundedIcon />} 
+                        color='error' 
+                        variant='contained' 
+                        className='vote-button'
+                        onClick={handleSubmitVote}
+                        >Rechazo
+                        </Button>
+                        
+                    </div>
+                </DialogContent>
+
+                <DialogActions>
+                    <Button onClick={handleCloseDialog}>Cancelar</Button>
+                </DialogActions>
+            </Dialog>
+        </div>
+    </>
   );
 };
 
