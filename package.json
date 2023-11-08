@@ -39,7 +39,6 @@
     "install": "^0.13.0",
     "npm": "^10.2.3",
     "vite": "^4.4.5"
-  },
-  "homepage": "https://camilo1912.github.io/"
+  }
 
 }
