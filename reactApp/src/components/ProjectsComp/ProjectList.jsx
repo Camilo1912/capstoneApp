@@ -7,7 +7,6 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 
 import Stepper from '@mui/material/Stepper';
@@ -38,11 +37,6 @@ const ProjectList = () => {
     const [selectedProjectInfo, setSelectedProjectInfo] = useState({});
     const [selectedProjectUserInfo, setSelectedProjectUserInfo] = useState({});
     const [showPollCreationForm, setShowPollCreationForm] = useState(false);
-
-    const completedStep = {
-        color: 'white',
-        backgroundColor: '#7f7fff',
-    };
 
     useEffect(() => {
         if (projectsList) {
@@ -169,12 +163,6 @@ const ProjectList = () => {
                             <p>{selectedProjectInfo?.description ? selectedProjectInfo.description: null}</p>
                         </div>
                         <div className='project-step-indicator-container'>
-                            {/* <p style={selectedProjectInfo.project_state_id >= 1 ? completedStep : null}>{selectedProjectInfo.project_state_id === 1 ? <>Propuesto</> : 1}</p>
-                            <p style={selectedProjectInfo.project_state_id >= 2 ? completedStep : null}>En Votación</p>
-                            <p style={selectedProjectInfo.project_state_id >= 3 ? completedStep : null}>Votado</p>
-                            <p style={selectedProjectInfo.project_state_id >= 4 ? completedStep : null}>Aprobado</p>
-                            <p style={selectedProjectInfo.project_state_id >= 5 ? completedStep : null}>En ejecución</p>
-                            <p style={selectedProjectInfo.project_state_id == 6 ? completedStep : null}>Finalizado</p> */}
                             <Stepper activeStep={selectedProjectInfo?.project_state_id - 1} alternativeLabel>
                                 {steps.map((label, index) => (
                                     <Step key={index}>

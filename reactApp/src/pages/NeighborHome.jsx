@@ -6,6 +6,7 @@ import CalendarContainer from "../components/CalendarContainer";
 import { useSelectedComponent } from '../contexts/SelectedComponentContext';
 import ActivitiesContainer from "../components/Activities/ActivitiesContainer";
 import SolicitudContainer from "../components/SolicitudContainer";
+import MembersContainer from "../components/Members/MembersContainer";
 
 const NeighborHome = () => {
     const { selectedComponent } = useSelectedComponent();
@@ -29,6 +30,9 @@ const NeighborHome = () => {
         "Solicitudes": [
             'Mis solicitudes',
             'Nueva solicitud',
+        ],
+        "Nosotros": [
+            'Información'
         ]
     };
 
@@ -55,6 +59,10 @@ const NeighborHome = () => {
         case 4:
             contentComponent = <SolicitudContainer />;
             contextualMenuOptionsForComponent = contextualMenuOptions["Solicitudes"];
+            break;
+        case 5:
+            contentComponent = <MembersContainer />;
+            contextualMenuOptionsForComponent = contextualMenuOptions["Nosotros"];
             break;
         default:
             contextualMenuOptionsForComponent = contextualMenuOptions["Anuncios"];

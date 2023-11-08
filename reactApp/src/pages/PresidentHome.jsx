@@ -42,8 +42,9 @@ const PresidentHome = () => {
             'Nueva solicitud',
             'Solicitudes resueltas'
         ],
-        "Integrantes": [
-            'Todos'
+        "Nosotros": [
+            'Información',
+            'Integrantes'
         ]
     };
 
@@ -73,7 +74,7 @@ const PresidentHome = () => {
             break;
         case 5:
             contentComponent = <MembersContainer />;
-            contextualMenuOptionsForComponent = contextualMenuOptions["Integrantes"];
+            contextualMenuOptionsForComponent = contextualMenuOptions["Nosotros"];
             break;
         default:
             contextualMenuOptionsForComponent = contextualMenuOptions["Anuncios"];

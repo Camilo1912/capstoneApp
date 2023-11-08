@@ -1,0 +1,73 @@
+@import "../../variables/variables.scss";
+
+.refresh-button-container {
+    margin-left: 15px;
+    position: absolute;
+    right: 15px;
+}
+
+.user-card {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    background-color: $accent-color-light-n1;
+    // background-color: white;
+    border-radius: 15px;
+    padding: 10px;
+    // border: 1px solid $accent-color-light-n1;
+
+    >div>h1 {
+        color: $text-color-accent-1;
+        font-size: 1.1rem;
+    }
+}
+
+.user-card:hover {
+    // border: 1px solid rgba(0, 0, 255, 0.329);
+    cursor: pointer;
+    box-shadow: 0px 0px 5px rgba(0, 0, 255, 0.329);
+}
+
+.member-info-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    padding: 15px 15px 0px 15px;
+    gap: 15px;
+
+    h2 {
+        font-size: 1rem;
+        color: $text-color-accent-1;
+        border-bottom: 1px solid $text-color-accent-1;
+    }
+
+    p {
+        font-size: .8rem;
+    }
+
+    strong {
+        font-size: 1rem;
+    }
+}
+
+.member-avatar-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    justify-content: start;
+}
+
+.info-box-layout {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    width: 100%;
+
+    >div {
+        background-color: $accent-color-light-n1;
+        padding: 10px;
+        border-radius: 10px;
+        width: 100%;
+    }
+}
