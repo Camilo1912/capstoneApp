@@ -15,7 +15,13 @@ export function getUser() {
 export function getUsername() {
     const user_info = localStorage.getItem("user_info");
     const user_info_obj = JSON.parse(user_info);
-    return user_info_obj.user.username;
+    return user_info_obj.email;
+}
+
+export function getUserId() {
+    const user_info = localStorage.getItem("user_info");
+    const user_info_obj = JSON.parse(user_info);
+    return user_info_obj.id;
 }
 
 export function getValidToken() {

@@ -1,0 +1,159 @@
+@import '../../variables/index.scss';
+
+.project-creation-layout {
+    display: flex;
+    gap: 15px;
+    align-items: start;
+    justify-content: space-between;
+    height: calc(100dvh - 8.5rem);
+    overflow: auto;
+    padding: 0px 15px;
+}
+
+.create-project-card {
+    margin-top: 15px;
+    background-color: $background-color-light;
+    border-radius: 15px;
+    max-width: fit-content;
+    display: flex;
+    flex-direction: column;
+    // box-shadow: 0px 2px 5px rgba($color: #000000, $alpha: .2);
+    z-index: 20;
+    border: 1px solid $accent-color-light-n3;
+
+    >h1 {
+        font-size: 1.3rem;
+        // background-color: #ebebeb;
+        background-color: $accent-color-light-n2;
+        padding: 15px;
+        border-radius: 14px 14px 0px 0px;
+        margin-bottom: 15px;
+        color: $text-color-accent-2;
+    }
+
+    >div {
+        display: flex;
+        flex-direction: column;
+        padding: 0px 15px 15px 15px;
+
+        >label {
+            margin: 0px 0px 5px 0px;
+        }
+
+        >textarea {
+            padding: 10px;
+            height: 10rem;
+            background-color: $background-color-light-n1;
+            border: 1px dashed #555555;
+            border-radius: 10px;
+        }
+    }
+}
+
+.from-to-budget-contaner {
+    display: flex;
+    flex-direction: column;
+
+    > div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1ch;
+        margin-top: 15px;
+    }
+}
+
+.project-creation-info-card {
+    // background-color: $background-color-light;
+    background-color: $text-color-accent-1;
+    color: white;
+    padding: 5px;
+    margin-top: 15px;
+    border-radius: 10px;
+    max-width: 40ch;
+    box-shadow: 0px 2px 5px rgba($color: $text-color-accent-2, $alpha: .2);
+    height: fit-content;
+
+    >h1 {
+        font-size: 1.2rem;
+        padding: 10px;
+        // border: 1px dashed $accent-color-light-n3;
+        border-radius: 5px;
+        color: $text-color-accent-2;
+        background-color: rgba($color: rgba($color: $text-color-accent-2, $alpha: .2), $alpha: .1);
+    }
+
+    >ul {
+        margin-left: 15px;
+        padding: 10px;
+    }
+
+    h2 {
+        font-size: 1.1rem;
+    }
+}
+
+.project-creation-button-container {
+    display: flex;
+    align-items: end;
+
+    // > button {
+    //     width: fit-content;
+    //     padding: .5rem 1rem;
+    //     border: none;
+    //     background-color: rgba(0, 128, 0, 0.5);
+    //     border-radius: 10px;
+    //     border-top: 1px solid rgb(0, 160, 0);
+    //     font-weight: 600;
+    // }
+
+    // > button:active {
+    //     background-color: rgba(0, 128, 0, 0.7);
+    // }
+
+    // > button:hover {
+    //     background-color: rgba(0, 128, 0, 0.3);
+    //     cursor: pointer;
+    // }
+}
+
+@media (prefers-color-scheme: dark) {
+    .create-project-card {
+        background-color: $background-color-dark;
+
+        >h1 {
+            border-top: 1px solid #666666;
+            border-bottom: 1px solid #555555;
+            background-color: $accent-color-dark-n1;
+        }
+
+        >div {
+            >textarea {
+                background-color: $background-color-dark-n0;
+                border: 1px dashed #555555;
+            }
+        }
+    
+    }
+
+    .project-creation-info-card {
+        background-color: $background-color-dark;
+    }
+
+    // .project-creation-button-container {
+    //     > button {
+    //         background-color: rgba(0, 128, 0, 0.5);
+    //         border-top: 1px solid rgb(0, 160, 0);
+    //     }
+
+    //     > button:hover {
+    //         background-color: rgba(0, 128, 0, 0.7);
+    //     }
+    
+    //     > button:active {
+    //         background-color: rgba(0, 128, 0, 0.3);
+    //     }
+    // }
+
+    
+}

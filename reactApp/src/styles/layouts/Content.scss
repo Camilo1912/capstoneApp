@@ -1,7 +1,8 @@
+@import "../variables/index.scss";
 
 .content-layout {
   display: flex;
-  gap: 15px;
+  background-color: $background-color-light;
 }
 
 .sidebar {
@@ -12,7 +13,14 @@
 
 .main-content {
   // grid-area: main-content;
-  max-height: calc(100dvh - 9rem);
+  max-height: calc(100dvh - 7rem);
   width: 100%;
+}
+
+
+@media (prefers-color-scheme: dark) {
+  .content-layout {
+    background-color: $background-color-dark;
+  }
 }
   

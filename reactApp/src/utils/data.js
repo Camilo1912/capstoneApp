@@ -9,10 +9,31 @@ export const registrationSteps = [
         '',
     },
     {
+      label: 'Verificación',
+      description: ``,
+    },
+    {
       label: 'Credenciales',
       description: ``,
     },
 ];
+
+export const userRolsTypes = {
+  1: 'Vecino',
+  2: 'Presidente',
+  3: 'Secretario',
+  4: 'Tesorero',
+  5: 'Administrador'
+}
+
+export const projectStates = {
+  1: 'Propuesto',
+  2: 'En Votación',
+  3: 'Votado',
+  4: 'Aprobado',
+  5: 'En ejecución',
+  6: 'Finalizado'
+}
 
 export const projectTypes = {
   'MI': 'Mejora de Infraestructura',
@@ -24,11 +45,3 @@ export const projectTypes = {
   'PV': 'Proyectos de Vivienda',
   'PS': 'Proyectos de Salúd'
 };
-
-export const userRolsTypes = {
-  1: 'Vecino',
-  2: 'Presidente',
-  3: 'Secretario',
-  4: 'Tesorero',
-  5: 'Administrador'
-}

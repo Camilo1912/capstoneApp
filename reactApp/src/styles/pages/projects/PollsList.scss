@@ -1,0 +1,104 @@
+
+
+.polls-wrapper {
+    display: flex;
+    flex-direction: row;
+    // margin: 15px 0px 0px 15px;
+    padding: 15px;
+    overflow: auto;
+    gap: 15px;
+    >div>h2 {
+        margin-left: 10px;
+    }
+
+    >div>p {
+        margin-left: 15px;
+    }
+}
+
+.poll-info-card {
+    background-color: $text-color-accent-1;
+    color: white;
+    padding: 5px;
+    border-radius: 10px;
+    max-width: 40ch;
+    box-shadow: 0px 2px 5px rgba($color: $text-color-accent-2, $alpha: .2);
+    height: fit-content;
+
+    >h1 {
+        font-size: 1.2rem;
+        padding: 10px;
+        // border: 1px dashed $accent-color-light-n3;
+        border-radius: 5px;
+        color: $text-color-accent-2;
+        background-color: rgba($color: rgba($color: $text-color-accent-2, $alpha: .2), $alpha: .1);
+    }
+
+    >ul {
+        margin-left: 15px;
+        padding: 10px;
+    }
+
+    h2 {
+        font-size: 1.1rem;
+    }
+}
+
+.polls-list {
+    width: 100%;
+}
+
+.poll-state-separator {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding-left: 10px;
+    >h2 {
+        font-size: 1.5rem;
+    }
+}
+
+
+.polls-list-container {
+    display: grid;
+
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    align-items: top;
+    gap: 10px;
+
+    border-radius: 15px;
+    padding: 5px;
+}
+
+
+.poll-card {
+    background-color: $background-color-light;
+    border: 1px solid rgba($color: #000, $alpha: .1);
+    border-radius: 15px;
+    padding: 15px;
+
+    >p {
+        max-height: 4.5rem;
+        overflow: hidden;
+    }
+}
+
+
+.active-poll {
+    background-color: rgba(250, 224, 138, .69);
+}
+
+.closed-poll {
+    background-color: white;
+}
+
+
+.vote-button-container {
+    display: flex;
+    gap: 15px;
+}
+
+.vote-button {
+    height: 70px;
+    width: 150px;
+}

@@ -6,6 +6,7 @@ import CalendarContainer from "../components/CalendarContainer";
 import { useSelectedComponent } from '../contexts/SelectedComponentContext';
 import ActivitiesContainer from "../components/Activities/ActivitiesContainer";
 import SolicitudContainer from "../components/SolicitudContainer";
+import MembersContainer from "../components/Members/MembersContainer";
 
 const NeighborHome = () => {
     const { selectedComponent } = useSelectedComponent();
@@ -16,12 +17,8 @@ const NeighborHome = () => {
         ],
         "Proyectos": [
             'Ver proyectos',
-            'Crar propuesta'
-        ],
-        "Encuestas": [
-            'Activas',
-            'Finalizadas',
-            'Respondidas'
+            'Crear propuesta',
+            'Votaciones'
         ],
         "Calendario": [
             'Todo'
@@ -33,6 +30,9 @@ const NeighborHome = () => {
         "Solicitudes": [
             'Mis solicitudes',
             'Nueva solicitud',
+        ],
+        "Nosotros": [
+            'Información'
         ]
     };
 
@@ -49,20 +49,20 @@ const NeighborHome = () => {
             contextualMenuOptionsForComponent = contextualMenuOptions["Proyectos"];
             break;
         case 2:
-            contentComponent = <PollsContainer />;
-            contextualMenuOptionsForComponent = contextualMenuOptions["Encuestas"];
-            break;
-        case 3:
             contentComponent = <CalendarContainer />;
             contextualMenuOptionsForComponent = contextualMenuOptions["Calendario"];
             break;
-        case 4:
+        case 3:
             contentComponent = <ActivitiesContainer />;
             contextualMenuOptionsForComponent = contextualMenuOptions["Actividades"];
             break;
-        case 5:
+        case 4:
             contentComponent = <SolicitudContainer />;
             contextualMenuOptionsForComponent = contextualMenuOptions["Solicitudes"];
+            break;
+        case 5:
+            contentComponent = <MembersContainer />;
+            contextualMenuOptionsForComponent = contextualMenuOptions["Nosotros"];
             break;
         default:
             contextualMenuOptionsForComponent = contextualMenuOptions["Anuncios"];

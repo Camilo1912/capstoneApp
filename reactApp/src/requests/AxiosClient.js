@@ -2,7 +2,8 @@ import axios from "axios";
 import { getValidToken } from "../utils/LocalStorage";
 import { refreshToken } from "./Auth";
 
-const Develop = "http://127.0.0.1:3000/";
+// const Develop = "http://127.0.0.1:3000/";
+const Develop = "https://calm-ravine-26914-08e68e4d0255.herokuapp.com/";
 
 export const axiosClient = axios.create({
     baseURL: Develop,
@@ -15,19 +16,6 @@ axiosClient.interceptors.request.use(function (config) {
 });
 
 axiosClient.interceptors.response.use(
-    // (response) => {
-    //     return response;
-    // },
-    // async function (error) {
-    //     const originalRequest = error.config;
-    //     if (error.response.status === 401 && !originalRequest._retry) {
-    //         originalRequest._retry = true;
-    //         const access_token = await refreshToken();
-    //         axios.defaults.headers.common["Authorization"] = `Bearer ${access_token}`;
-    //         return axiosClient(originalRequest);
-    //     }
-    //     return Promise.reject(error);
-    // }
     (response) => {
         return response;
     },

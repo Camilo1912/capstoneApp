@@ -1,0 +1,119 @@
+@import "../variables/index.scss";
+
+.header-wrapper, .header-iconset {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.header-wrapper {
+    justify-content: space-between;
+    padding: 0 1rem;
+    width: 100%;
+    height: 5rem;
+    color: $text-color-normal-light;
+    background-color: $background-color-light;
+}
+
+.header-wrapper::before {
+    content: "";
+    top: 0;
+    right: 0;
+    width: 69%;
+    height: 5rem;
+    position: absolute;
+    background: $gradient-background-color-light,
+                url("https://source.unsplash.com/random/1920x1080/?community");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.header-wrapper::after {
+    content: "";
+    width: 100dvw;
+    height: 5rem;
+    left: 0px;
+    position: absolute;
+    // box-shadow: 0px 0px 5px rgba($color: #000000, $alpha: .2) inset;
+}
+
+.header-title-wrapper {
+    display: flex;
+    flex-direction: column;
+    z-index: 3;
+    > h1 {
+        height: 100%;
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #333333;
+    }
+    
+    >div {
+        display: flex;
+        align-items: center;
+        gap: 2ch;
+        >h2 {
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
+        >p {
+            padding: 0px .5rem;
+            border-radius: 15px;
+            font-size: 1rem;
+            background-color: $accent-color-light-n2;
+        }
+    }
+}
+
+.header-iconset {
+    border-radius: 100px;
+    padding: 0.3rem;
+    backdrop-filter: blur(10px);
+    gap: 10px;
+    z-index: 5;
+}
+
+.profile-button-set {
+    background-color: $accent-color-light-n2;
+    border-radius: 100px;
+}
+
+.user-edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    >div {
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        background-color: $accent-color-light-n1;
+        border-radius: 10px;
+        padding: 15px;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .header-wrapper {
+        color: $text-color-normal-dark;
+        background-color: $background-color-dark-n0;
+    }
+
+    .header-title-wrapper > h1 {
+        color: $text-color-normal-dark;
+    }
+
+    .header-wrapper::before {
+        background: $gradient-background-color-dark,
+                url("https://source.unsplash.com/random/1920x1080/?community");
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+
+    .header-title-wrapper {
+        >div>p {
+            color: black;
+        }
+    }
+}

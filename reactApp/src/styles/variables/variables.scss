@@ -3,18 +3,13 @@
 $background-color-dark-n0: #121212;
 
 $background-color-light: rgb(255, 255, 255);
-$background-color-dark: rgb(32, 33, 36);
+$background-color-dark: #222222;
 
 $background-color-light-n1: rgb(248, 250, 253);
 $background-color-dark-n1: rgb(40, 41, 42);
 
 $background-color-light-blur: rgba(255, 255, 255, 0.8);
 $background-color-dark-blur: rgba(34, 34, 34, 0.8);
-
-// GRADIENTS 
-
-$gradient-background-color-light: linear-gradient(90deg,rgba(255,255,255,1) 0%, rgba(0,212,255,0) 100%);
-$gradient-background-color-dark: linear-gradient(90deg,$background-color-dark-n0 0%, rgba(0,212,255,0) 100%);
 
 // ACCENT COLORS
 
@@ -23,12 +18,25 @@ $accent-color-dark-n1: rgb(61, 64, 67);
 
 $accent-color-light-n2: rgba(203, 240, 248, 1);
 
+$accent-color-light-n3: #b2e2f1;
+
+// GRADIENTS 
+
+$gradient-background-color-light: linear-gradient(90deg,rgba(255,255,255,1) 0%, rgba(0,212,255,0) 100%);
+$gradient-background-color-dark: linear-gradient(90deg,$background-color-dark-n0 0%, rgba(0,212,255,0) 100%);
+
+$gradient-bottom-white: linear-gradient(0deg ,white 0%, rgba(0,212,255,0) 100%);
+$gradient-bottom-accent-n1: linear-gradient(0deg ,$background-color-light-n1 0%, rgba(0,212,255,0) 100%);
+
 // TEXT COLORS
 
 $text-color-normal-light: #222222;
 $text-color-normal-dark: rgb(220,220,220);
 
 $text-color-disabled-light: #999999;
+
+$text-color-accent-1: #85abf4;
+$text-color-accent-2: #0a1e47;
 
 
 // BORDERS

@@ -48,15 +48,21 @@ const Login = () => {
             setFeedbackMessage('');
             try {
                 const response = await login(username, password);
-                console.log(response.error);
+
                 handleUserInfo(response);
-                navigate(UserRols(response['role_id']));
+                console.log("va a redireccionar : ", response["role"]["role_id"]);
+                navigate(UserRols(response["role"]["role_id"]));
             } catch (error) {
+                console.log(error);
                 setFeedbackMessage(error.response.data.error);
             }
             setUsername('');
             setPassword('');
         }
+    };
+
+    const handleGestRedirection = () => {
+        navigate('/guest_home');
     };
 
     return (
@@ -71,6 +77,7 @@ const Login = () => {
                     type="email"
                     autoComplete="current-email"
                     variant="outlined"
+                    size='small'
                     value={username}
                     onChange={handleUsernameChange}
                 />
@@ -78,6 +85,7 @@ const Login = () => {
                     id="outlined-adornment-password"
                     type={showPassword ? 'text' : 'password'}
                     placeholder='Contraseña'
+                    size='small'
                     onChange={handlePasswordChange}
                     value={password}
                     endAdornment={
@@ -99,11 +107,20 @@ const Login = () => {
                 <Button 
                     type='submit'
                     variant="contained"
-                    disableElevation
+                    // disableElevation
                     onClick={handleSubmit}
                     endIcon={<LoginIcon />}
                 >
                     Iniciar Sesión
+                </Button>
+
+                <Button 
+                    type='submit'
+                    variant="outlined"
+                    onClick={handleGestRedirection}
+                    endIcon={<LoginIcon />}
+                >
+                    Invitado
                 </Button>
                 
                 <div className='no-account-container'>
