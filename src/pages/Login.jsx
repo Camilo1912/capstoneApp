@@ -144,11 +144,6 @@ const Login = () => {
                     >
                         Iniciar Sesión
                     </Button>
-                    
-                    <div className='no-account-container'>
-                        ¿No tienes cuenta de usuario?
-                        
-                    </div>
                     </form>
                 </div>
             </div>
