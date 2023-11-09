@@ -8,6 +8,20 @@
     border-radius: 100px;
 }
 
+.neighborhood-info-detail-container {
+    padding: 15px 30px 0px 30px;
+}
+
+.neighborhood-info-header-container {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+
+    >img {
+        border-radius: 15px;
+    }
+}
+
 .user-card {
     display: flex;
     flex-direction: row;
@@ -52,6 +66,8 @@
         font-size: 1rem;
     }
 }
+
+
 
 .member-avatar-container {
     display: flex;
