@@ -10,7 +10,7 @@ Esta aplicación web en React está diseñada para ayudar a las juntas de vecino
 - Gestión de Miembros: Registra y administra los miembros de la junta de vecinos.
 - Calendario de Eventos: Planifica y realiza un seguimiento de las reuniones y eventos.
 - Comunicación: Facilita la comunicación entre la junta y los miembros mediante avisos y notificaciones.
-- Toma de Decisiones: Realiza votaciones y encuestas para tomar decisiones colectivas.
+- Toma de Decisiones: Realiza votaciones para tomar decisiones colectivas.
 - Gestión de espacios comunes: Permite solicitar reserva de espacios comunes.
 
 ## Instalación
@@ -24,7 +24,7 @@ git clone https://github.com/camilo1912/capstoneApp.git
 ### 2. Instala las dependencias:
 
 ```bash
-cd capstoneApp/reactApp
+cd capstoneApp
 npm install
 ```
 
