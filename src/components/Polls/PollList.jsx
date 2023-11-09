@@ -19,6 +19,7 @@ import ThumbUpRoundedIcon from '@mui/icons-material/ThumbUpRounded';
 import ThumbDownRoundedIcon from '@mui/icons-material/ThumbDownRounded';
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import * as XLSX from 'xlsx/xlsx.mjs';
+import { PieChart } from '@mui/x-charts/PieChart';
 
 const PollList = () => {
   const { userInfo, handleUserInfo } = useContext(UserContext);
@@ -42,7 +43,6 @@ const PollList = () => {
         const getPolls = async () => {
           const response = await get_polls(neighborhood);
           const pollsData = response.data.reverse();
-          console.log(response.data);
 
           const pollsWithProjects = await Promise.all(
             pollsData.map(async (poll) => {
@@ -99,10 +99,7 @@ const PollList = () => {
       vote_option: e.target.value,
       neighbor_id: userInfo.id
     }
-    console.log('ENVIANDO VOTO');
     try {
-      console.log('intentando .....');
-      console.log(selectedPoll.id, '   ', payload);
       const vote_response = await poll_submit_vote(selectedPoll.id, payload);
       if (vote_response.status === 201) {
 
@@ -123,7 +120,6 @@ const PollList = () => {
                 state: 'cerrada'
             }
         }
-        console.log(payload);
         try {
             const updateStateResponse = await update_poll_state(pollId, payload);
             if (updateStateResponse.status === 200) {
@@ -206,24 +202,45 @@ const PollList = () => {
                 <div className='polls-list-container'>
                     {closedPollsList?.map((poll) => (
                         <div key={poll.id} className='poll-card closed-poll'>
-                            <h3>{poll.projectTitle} {poll.approve > poll.reject ? <>APROBADO</>: <>RECHAZADO</>}</h3>
-                            ID: {poll.id}
+                            Código de votación: {poll.id}
                             <br />
+                            Proyecto Votado: {poll.projectTitle}
+                            <br />
+                            {/* <h3>{poll.projectTitle} {poll.approve > poll.reject ? <>APROBADO</>: <>RECHAZADO</>}</h3> */}
                             Inició el {formatearFecha(poll.startDate)}
                             <br />
                             Terminó el {formatearFecha(poll.endDate)}
 
                             {poll.state === 'cerrada' || [2, 3, 4, 5].includes(userInfo.role.role_id) ? 
                             <>
-                            <br />
-                            Votos a favor {poll.approve}
-                            <br />
-                            Votos en contra {poll.reject}
-                            <br />
-                            Total de votos {poll.reject + poll.approve}
-                            <br />
+                                <br />
+                                <br />
+                                <strong>Total de votos: {poll.reject + poll.approve}</strong>
+                                <br />
+                                <PieChart
+                                    series={[
+                                        {
+                                        data: [
+                                            { id: 0, value: poll.approve, label: `A favor: ${poll.approve}`, color: '#02b2af'},
+                                            { id: 1, value: poll.reject, label: `En contra: ${poll.reject}`, color: 'red' },
+                                        ],
+                                        // arcLabel: (item) => `${item.value}`,
+                                        innerRadius: 25,
+                                        outerRadius: 50,
+                                        paddingAngle: 1,
+                                        cornerRadius: 3,
+                                        startAngle: 0,
+                                        endAngle: 360,
+                                        highlightScope: { faded: 'global', highlighted: 'item' },
+                                        faded: { innerRadius: 22, additionalRadius: -5, color: 'gray' },
+                                        cx: 70,
+                                        },
+                                    ]}
+                                    width={300}
+                                    height={150}
+                                />
                             </>
-                            : null }
+                            : <><br /><br /><strong>Aún no se publican los resultados.</strong></> }
                             
                             {([2, 3, 4, 5].includes(userInfo.role.role_id) && poll.state !== 'cerrada') ? 
                                 <Button value="Votado" onClick={() => handlePollStateUpdate(poll.id)}>Publicar resultados</Button>

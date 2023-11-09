@@ -50,10 +50,8 @@ const Login = () => {
                 const response = await login(username, password);
 
                 handleUserInfo(response);
-                console.log("va a redireccionar : ", response["role"]["role_id"]);
                 navigate(UserRols(response["role"]["role_id"]));
             } catch (error) {
-                console.log(error);
                 setFeedbackMessage(error.response.data.error);
             }
             setUsername('');

@@ -13,23 +13,24 @@ const UsInfo = () => {
             const getNeighborhood = async () => {
                 const neighborhoodResponse = await get_neighborhood_by_id(neighborhoodId);
                 setNeighborhoodData(neighborhoodResponse.data);
-                console.log(neighborhoodResponse.data);
             }
             getNeighborhood();
         }
     }, [neighborhoodId]);
 
     return (
-        <div className='nnn'>
+        <div className='neighborhood-info-detail-container'>
             { neighborhoodData? 
                 <>
-                    {neighborhoodData.logo_url ? 
-                    <img src={neighborhoodData.logo_url} width='100px' height='100px' alt="jv-logo" /> : null
-                    }
-                    <div>
-                        <h1>Junta de vecinos {neighborhoodData.name}</h1>
-                        <p>Código legal: {neighborhoodData.jv_code}</p>
-                        <p>Creada el {formatearFecha(neighborhoodData.created_at)}</p>
+                    <div className='neighborhood-info-header-container'>
+                        {neighborhoodData.logo_url ? 
+                        <img src={neighborhoodData.logo_url} width='120px' height='120px' alt="jv-logo" /> : null
+                        }
+                        <div>
+                            <h1>Junta de vecinos {neighborhoodData.name}</h1>
+                            <p>Código legal: {neighborhoodData.jv_code}</p>
+                            <p>Creada el {formatearFecha(neighborhoodData.created_at)}</p>
+                        </div>
                     </div>
                     <div>
                         <h2>Descripción</h2>

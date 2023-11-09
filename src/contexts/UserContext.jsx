@@ -10,7 +10,6 @@ const UserContextProvider = (props) => {
 
     useEffect(() => {
         localStorage.setItem('user_info', JSON.stringify(userInfo));
-        console.log(userInfo);
     }, [userInfo]);
 
     const handleUserInfo = (user_info) => {

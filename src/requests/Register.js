@@ -23,7 +23,6 @@ export const register = async (userData) => {
     for (const key in userData) {
       formData.append(key, userData[key]);
     }
-    console.log(formData)
     const response = await axiosClient.post("neighbors/", formData);
     return response;
 };

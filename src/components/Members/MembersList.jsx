@@ -8,7 +8,8 @@ import Avatar from '@mui/material/Avatar';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import { userRolsTypes } from '../../utils/data';
-
+import * as XLSX from 'xlsx/xlsx.mjs';
+import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 
 const MembersList = ({updateCount}) => {
     const { userInfo, handleUserInfo } = useContext(UserContext);
@@ -17,6 +18,8 @@ const MembersList = ({updateCount}) => {
     const [open, setOpen] = useState(false);
     const [membersList, setMembersList] = useState([]);
     const [selectedMember, setSelectedMember] = useState(null);
+    const currentDate = new Date();
+    
 
     useEffect(() => {
         if (membersList) {
@@ -24,7 +27,6 @@ const MembersList = ({updateCount}) => {
                 const membersResponse = await get_users_by_neighborhood_id(neighborhood);
                 setMembersList(membersResponse.data);
                 updateCount(membersResponse.data.length);
-                console.log(membersResponse.data);
             }
             getMembers();
         }
@@ -40,12 +42,63 @@ const MembersList = ({updateCount}) => {
         setSelectedMember(null);
     };
 
+// : "7538"
+// : "973"
+// : 2
+// : "Minhiriath"
+// : "no verificado"
+
+    const handleExport = () => {
+        if (membersList) {
+            const selectedColumns = membersList.map(({
+                rut,
+                first_name,
+                second_name,
+                last_name,
+                last_name_2,
+                email,
+                gender,
+                birth_date,
+                street_address,
+                number_address,
+                phone_number,
+                role_id,
+                verification,
+            }) => ({
+                RUT: rut,
+                PRIMER_NOMBRE: first_name,
+                SEGUNDO_NOMBRE: second_name,
+                APELLIDO_PATERNO: last_name,
+                APELLIDO_MATERNO: last_name_2,
+                EMAIL: email,
+                GENERO: gender,
+                FECHA_NACIMIENTO: birth_date,
+                DIRECCION_CALLE: street_address,
+                DIRECCION_NUMERO: number_address,
+                TELEFONO: phone_number,
+                ROL: userRolsTypes[role_id] || "Desconocido",
+                VERIFICADO: verification,
+            }));
+            const workbook = XLSX.utils.book_new();
+            const worksheet = XLSX.utils.json_to_sheet(selectedColumns);
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Hoja1");
+            XLSX.writeFile(workbook, `ListaMiembros_${currentDate}.xlsx`);
+          } else {
+            console.error('No hay datos para exportar.');
+          }
+    };
+
     return (
         <>
             <div className='refresh-button-container'>
                 <IconButton onClick={() => setRefresh(!refresh)} id='refresh-button'>
                     <RefreshRoundedIcon />
                 </IconButton>
+                {[2, 3, 4].includes(userInfo.role.role_id) ? 
+                <IconButton onClick={handleExport}>
+                    <DownloadRoundedIcon />
+                </IconButton>
+                : null }
             </div>
             <div className='projects-list-container'>
                 

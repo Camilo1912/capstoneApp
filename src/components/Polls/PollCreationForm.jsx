@@ -27,7 +27,6 @@ const PollCreationForm = ({projectId, updateShowParent}) => {
                         project_id: projectId
                     }
                 }
-                console.log(newPollPayload);
                 try {
                     const poll_response = await poll_create(newPollPayload);
                     if (poll_response.status === 200) {

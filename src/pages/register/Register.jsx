@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import SendIcon from '@mui/icons-material/Send';
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
 import RegisterVerificationFields from './RegisterVerificationFields';
+import { toast } from 'react-toastify';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -77,9 +78,8 @@ const Register = () => {
 
     try {
       const response = await register(newUserData);
-      console.log(response);
       if (response.status === 200) {
-        console.log("Usuario creado");
+        toast.success('Solicitud de registro enviada correctamente', { autoClose: 3000, position: toast.POSITION.TOP_CENTER });
         handleReset();
         resetRegistrationForm();
         navigate("/");

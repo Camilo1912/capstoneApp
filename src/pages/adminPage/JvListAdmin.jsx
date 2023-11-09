@@ -38,7 +38,6 @@ const JvListAdmin = () => {
             const getNeighborhoods = async () => {
                 const responseData = await get_neighborhood_by_commune_id(selectedCommune);
                 setNeighborhoodsList(responseData);
-                console.log(responseData);
             };
             getNeighborhoods();
         } else {
