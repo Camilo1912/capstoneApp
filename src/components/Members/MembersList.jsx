@@ -27,7 +27,6 @@ const MembersList = ({updateCount}) => {
                 const membersResponse = await get_users_by_neighborhood_id(neighborhood);
                 setMembersList(membersResponse.data);
                 updateCount(membersResponse.data.length);
-                console.log(membersResponse.data);
             }
             getMembers();
         }

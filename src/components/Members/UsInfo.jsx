@@ -13,7 +13,6 @@ const UsInfo = () => {
             const getNeighborhood = async () => {
                 const neighborhoodResponse = await get_neighborhood_by_id(neighborhoodId);
                 setNeighborhoodData(neighborhoodResponse.data);
-                console.log(neighborhoodResponse.data);
             }
             getNeighborhood();
         }

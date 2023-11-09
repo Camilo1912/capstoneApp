@@ -43,7 +43,6 @@ const PollList = () => {
         const getPolls = async () => {
           const response = await get_polls(neighborhood);
           const pollsData = response.data.reverse();
-          console.log(response.data);
 
           const pollsWithProjects = await Promise.all(
             pollsData.map(async (poll) => {
@@ -100,10 +99,7 @@ const PollList = () => {
       vote_option: e.target.value,
       neighbor_id: userInfo.id
     }
-    console.log('ENVIANDO VOTO');
     try {
-      console.log('intentando .....');
-      console.log(selectedPoll.id, '   ', payload);
       const vote_response = await poll_submit_vote(selectedPoll.id, payload);
       if (vote_response.status === 201) {
 
@@ -124,7 +120,6 @@ const PollList = () => {
                 state: 'cerrada'
             }
         }
-        console.log(payload);
         try {
             const updateStateResponse = await update_poll_state(pollId, payload);
             if (updateStateResponse.status === 200) {
@@ -219,7 +214,8 @@ const PollList = () => {
                             {poll.state === 'cerrada' || [2, 3, 4, 5].includes(userInfo.role.role_id) ? 
                             <>
                                 <br />
-                                Total de votos: {poll.reject + poll.approve}
+                                <br />
+                                <strong>Total de votos: {poll.reject + poll.approve}</strong>
                                 <br />
                                 <PieChart
                                     series={[
@@ -244,7 +240,7 @@ const PollList = () => {
                                     height={150}
                                 />
                             </>
-                            : null }
+                            : <><br /><br /><strong>Aún no se publican los resultados.</strong></> }
                             
                             {([2, 3, 4, 5].includes(userInfo.role.role_id) && poll.state !== 'cerrada') ? 
                                 <Button value="Votado" onClick={() => handlePollStateUpdate(poll.id)}>Publicar resultados</Button>

@@ -57,7 +57,6 @@ const RegisterPersonalFields = () => {
   }, [rut, dv]);
 
   useEffect(() => {
-    console.log(selectedDate);
 
     if (selectedDate) {
       handleRegistrationForm({

@@ -11,8 +11,7 @@ const RegisterVerificationFields = () => {
     const {registrationForm, handleRegistrationForm } = useContext(RegistrationContext);
 
     const handleFileChange = (e, field) => {
-        const file = e.target.files[0]; // Obtener el primer archivo seleccionado
-        console.log(e.target.value);
+        const file = e.target.files[0];
         if (file) {
             handleRegistrationForm({
                 ...registrationForm,
