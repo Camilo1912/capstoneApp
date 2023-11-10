@@ -102,8 +102,7 @@ const CreateProyectForm = () => {
         <div className='project-creation-button-container'>
           {/* <button onClick={handleSubmit}>Enviar Proyecto</button> */}
           <Button 
-            variant='contained' 
-            disableElevation
+            variant='contained'
             color='success'
             size='small'
             onClick={handleSubmit}

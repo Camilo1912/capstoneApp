@@ -14,8 +14,7 @@ const PresidentHome = () => {
     const contextualMenuOptions = {
         "Anuncios": [
             'Ver anuncios',
-            'Crear anuncio',
-            'Editar anuncios'
+            'Crear anuncio'
         ],
         "Proyectos": [
             'Ver proyectos',

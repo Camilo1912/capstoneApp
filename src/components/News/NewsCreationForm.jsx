@@ -1,9 +1,97 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { UserContext } from '../../contexts/UserContext'
+
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import { Button } from '@mui/material';
+import SendRoundedIcon from '@mui/icons-material/SendRounded';
+import { submit_new_announcement } from '../../requests/News';
+import { toast } from 'react-toastify';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+
+import IconButton from '@mui/material/IconButton';
+import CachedRoundedIcon from '@mui/icons-material/CachedRounded';
+
 
 const NewsCreationForm = () => {
     const { userInfo } = useContext(UserContext);
+    const defaultAnnouncement = {
+        type: 'Normal',
+        title: '',
+        description: '',
+        neighbor_id: userInfo.id,
+        neighborhood_id: userInfo.neighborhood.neighborhood_id,
+        send_email: false,
+        image_file: null,
+    };
+    const [characterCount, setCharacterCount] = useState(0);
+    const [newAnnouncement, setNewAnnouncement] = useState(defaultAnnouncement);
+    const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
+    const maxLengthDescription = 5000;
 
+    useEffect(() => {
+        if (newAnnouncement.type === 'Normal' && newAnnouncement.title && newAnnouncement.description) {
+            setIsSubmitDisabled(false);
+        } else if (newAnnouncement.type === 'Afiche' && newAnnouncement.image_file) {
+            setIsSubmitDisabled(false);
+        } else {
+            setIsSubmitDisabled(true);
+        }
+    }, [newAnnouncement]);
+
+    const handleAnnouncementTypeChange = (event) => {
+        setNewAnnouncement({
+            ...newAnnouncement,
+            type: event.target.value
+        })
+    };
+
+    const handleDescriptionChange = (event) => {
+        setCharacterCount(maxLengthDescription - (maxLengthDescription - event.target.value.length));
+        setNewAnnouncement({
+            ...newAnnouncement,
+            description: event.target.value,
+        });
+    };
+
+    const handleTitleChange = (event) => {
+        setNewAnnouncement({
+            ...newAnnouncement,
+            title: event.target.value,
+        });
+    };
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setNewAnnouncement({
+                ...newAnnouncement,
+                image_file: file,
+            });
+        }
+    };
+
+    const handleSendEmailChange = (event) => {
+        setNewAnnouncement({
+            ...newAnnouncement,
+            send_email: event.target.checked,
+        });
+    };
+
+    const handleSubmit = async () => {
+        const payload = {'announcement': {
+            ...newAnnouncement
+          }
+        };
+        const project_response = await submit_new_announcement(payload);
+        if (project_response.status === 200) {
+          toast.success('El anuncio se publicó correctamente', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
+          setNewAnnouncement(defaultAnnouncement);
+        }
+    }
 
     return (
         <div className='project-creation-layout'>
@@ -11,43 +99,65 @@ const NewsCreationForm = () => {
 
                 <h1>Formulario de creación de anuncio</h1>
                 <div>
-                <label>Titulo</label>
-                {/* <input type="text" name="title" maxLength={100} value={} onChange={} /> */}
+                    <h3>Seleccione tipo de anuncio</h3>
+                    <RadioGroup
+                        row
+                        aria-labelledby="demo-radio-buttons-group-label"
+                        defaultValue="Normal"
+                        name="row-radio-buttons-group"
+                        onChange={handleAnnouncementTypeChange}
+                    >
+                        <FormControlLabel value="Normal" control={<Radio />} label="Normal" />
+                        <FormControlLabel value="Afiche" control={<Radio />} label="Afiche" />
+                    </RadioGroup>
                 </div>
-                {/* <div>
-                <label>Seleccione el tipo de proyecto</label>
-                <select value={newProjectData.project_type} onChange={handleSelectChange}>
-                    <option value="MI">Mejora de Infraestructura</option>
-                    <option value="PSC">Proyecto Social y Cultural</option>
-                    <option value="SP">Seguridad y Prevención</option>
-                    <option value="MA">Medio Ambiente</option>
-                    <option value="DEL">Desarrollo Económico Local</option>
-                    <option value="PC">Participación Ciudadana</option>
-                    <option value="PV">Proyectos de Vivienda</option>
-                    <option value="PS">Proyectos de Salud</option>
-                </select>
-                </div> */}
+
+                {newAnnouncement.type === 'Normal' ? 
+                <>
+                    <div>
+                        <label><strong>Titulo</strong> *</label>
+                        <input type="text" name="title" value={newAnnouncement.title} maxLength={100} onChange={handleTitleChange}/>
+                    </div>
+
+
+                    <div>
+                        <label><strong>Descripción</strong> *</label>
+                        <textarea name="description" value={newAnnouncement.description} placeholder='Escriba descripción ...' maxLength={maxLengthDescription} onChange={handleDescriptionChange} />
+                        <p>{characterCount}/{maxLengthDescription}</p>
+                    </div>
+                </>
+                : null}
+                
                 <div>
-                <label>Descripción del proyecto</label>
-                {/* <textarea name="description" placeholder='Escriba descripción ...' maxLength={maxLengthDescription} value={} onChange={} /> */}
-                {/* <p>{characterCount}/{maxLengthDescription}</p> */}
+                    <label><strong>Adjuntar imágen</strong> {newAnnouncement.type === 'Normal' ? "(Opcional)" : "*"}</label>
+                    
+                    <div>
+                        <Button component="label" variant="outlined" disableElevation disabled={newAnnouncement.image_file ?  true : false} color={ newAnnouncement.image_file ? 'success' : 'primary' } size='small' startIcon={newAnnouncement.image_file ? <CheckCircleIcon /> : <CloudUploadIcon />}>
+                            {newAnnouncement.image_file ? 'Cargado' : 'Cargar imagen'}
+                            <input type="file" accept=".png, .jpg, .jpeg" style={{ display: 'none' }} onChange={(e) => handleFileChange(e)} />
+                        </Button>
+                        <IconButton style={{ display: newAnnouncement.image_file ? "" : "none" }} onClick={() => (setNewAnnouncement({...newAnnouncement, image_file: null}))}>
+                            <CachedRoundedIcon />
+                        </IconButton>
+                    </div>
                 </div>
-                <div className='from-to-budget-contaner'>
+                
+                <div>
+                    <label><strong>Enviar por email</strong></label>
+                    <FormControlLabel control={<Checkbox checked={newAnnouncement.send_email} onChange={handleSendEmailChange} />} label='Enviar email' />
+                    <p>Al seleccionar esta opción se enviará el anuncio a todos los integrantes de su junta de vecinos via email.</p>
                 </div>
+
                 <div className='project-creation-button-container'>
-                {/* <button onClick={}>Enviar Proyecto</button> */}
+                    <Button variant='contained' disabled={isSubmitDisabled} color='success' onClick={handleSubmit} endIcon={<SendRoundedIcon />}>Publicar</Button>
                 </div>
                 
             </div>
             <div className='project-creation-info-card'>
-                <h1>Sobre la postulación de proyectos</h1>
+                <h1>Sobre la publicación de anuncios</h1>
                 <ul>
-                <li><h2>Nuevo proyecto</h2><p>Crear un nuevo proyecto hará que este sea visible para todos los integrantes de la junta de vecinos. Luego este será revisado por la directiva y esta podrá iniciar una votación.</p></li>
-                <li><h2>Votaciones</h2><p>Las votaciones tendrán fecha y hora tanto de inicio como de termino y todos los integrantes de la junta podrán votar. El procentaje de votos a favor para  la aprovación será definido por la directiva de la junta.</p></li>
-                <li><h2>Aprobación</h2><p>Una vez que la votación del proyecto termine, este será evaluado mas detenidamente por la directiva. Finalmente, si la directiva está de acuerdo con la ejecución del proyecto será marcado como <strong>APROBADO</strong>.</p></li>
-                <li><h2>Puesta en marcha</h2><p>Luego de la aprobación, se tomarán las medidas necesarias para comenzar el proyecto. Cuando estas estén en orden el proyecto pasará a estár <strong>EN EJECUCIÓN.</strong></p></li>
-                <li><h2>Finalización</h2><p>Una vez que el proyecto se haya implementado completamente, este pasará a su estado final como <strong>FINALIZADO.</strong></p></li>
-                </ul>
+                <li><h2>Tipo de Anuncio</h2><p>El tipo de anuncio indica si se mostrará solo una imágen (tipo afiche) o </p></li>
+            </ul>
             </div>
         </div>
     )
