@@ -10,3 +10,8 @@ export const get_announcements = async () => {
     const response = await axiosClient.get('announcements/');
     return response.data;
 };
+
+export const submit_new_announcement = async (announcement) => {
+    const response = await axiosClient.post('announcements/', announcement);
+    return response;
+};
