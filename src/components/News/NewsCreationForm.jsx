@@ -29,7 +29,18 @@ const NewsCreationForm = () => {
     };
     const [characterCount, setCharacterCount] = useState(0);
     const [newAnnouncement, setNewAnnouncement] = useState(defaultAnnouncement);
+    const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
     const maxLengthDescription = 5000;
+
+    useEffect(() => {
+        if (newAnnouncement.type === 'Normal' && newAnnouncement.title && newAnnouncement.description) {
+            setIsSubmitDisabled(false);
+        } else if (newAnnouncement.type === 'Afiche' && newAnnouncement.image_file) {
+            setIsSubmitDisabled(false);
+        } else {
+            setIsSubmitDisabled(true);
+        }
+    }, [newAnnouncement]);
 
     const handleAnnouncementTypeChange = (event) => {
         setNewAnnouncement({
@@ -138,7 +149,7 @@ const NewsCreationForm = () => {
                 </div>
 
                 <div className='project-creation-button-container'>
-                    <Button variant='contained' color='success' onClick={handleSubmit} endIcon={<SendRoundedIcon />}>Publicar</Button>
+                    <Button variant='contained' disabled={isSubmitDisabled} color='success' onClick={handleSubmit} endIcon={<SendRoundedIcon />}>Publicar</Button>
                 </div>
                 
             </div>

@@ -15,3 +15,13 @@ export const submit_new_announcement = async (announcement) => {
     const response = await axiosClient.post('announcements/', announcement);
     return response;
 };
+
+export const update_announcement = async (announcement_id, payload) => {
+    const response = await axiosClient.put(`announcements/${announcement_id}`, payload);
+    return response;
+};
+
+export const delete_announcement = async (announcement_id) => {
+    const response = await axiosClient.delete(`announcements/${announcement_id}`);
+    return response;
+};

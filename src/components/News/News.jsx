@@ -13,11 +13,11 @@ const News = () => {
                 <h1>Anuncios y noticias / Todos</h1>
                 <NewsCard />
             </>
-            : 
+            : (selectedComponent.menu === 1) ?
             <>
                 <h1>Anuncios / Crear nuevo</h1>
                 <NewsCreationForm />
-            </>}
+            </>:null}
         </div>
     );
 };
