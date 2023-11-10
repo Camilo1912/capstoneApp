@@ -12,7 +12,13 @@ export const get_announcements = async () => {
 };
 
 export const submit_new_announcement = async (announcement) => {
-    const response = await axiosClient.post('announcements/', announcement);
+    const formData = new FormData();
+    formData.append("image_1", announcement.image_1);
+    delete announcement.image_1;
+    for (const key in announcement) {
+        formData.append(key, announcement[key]);
+    }
+    const response = await axiosClient.post('announcements/', formData);
     return response;
 };
 

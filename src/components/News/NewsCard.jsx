@@ -62,6 +62,7 @@ const NewsCard = ({ cardData }) => {
                     toast.success('El anuncio se eliminó correctamente', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
                     setOpen(false);
                     setSelectedAnnouncement(null);
+                    setRefresh(!refresh);
                 }
             }
             deleteAnnouncement();
