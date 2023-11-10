@@ -34,11 +34,11 @@ const NewsCard = ({ cardData }) => {
     }, [refresh])
 
     const handleDialogClose = () => {
-        setSelectedAnnouncement(null);
         setOpen(false);
         setIsEditing(false);
         setEditedTitle('');
         setEditedDescription('');
+        setSelectedAnnouncement(null);
         setRefresh(!refresh);
     };
 
@@ -174,7 +174,8 @@ const NewsCard = ({ cardData }) => {
                             </>
                         }
                         </>
-                    : null}
+                    : 
+                    <Button size='small' onClick={handleDialogClose}>Cerrar</Button>}
                     
                 </DialogActions>
             </Dialog>
