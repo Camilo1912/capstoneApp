@@ -82,9 +82,12 @@ const NewsCreationForm = () => {
     };
 
     const handleSubmit = async () => {
-        const payload = {'announcement': {
-            ...newAnnouncement
-          }
+        const payload = {
+            'announcement[title]': newAnnouncement.title,
+            'announcement[description]': newAnnouncement.description,
+            'announcement[neighbor_id]': newAnnouncement.neighbor_id,
+            'announcement[neighborhood_id]': newAnnouncement.neighborhood_id,
+            'image_1': newAnnouncement.image_file
         };
         const project_response = await submit_new_announcement(payload);
         if (project_response.status === 200) {
