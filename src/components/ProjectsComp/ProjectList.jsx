@@ -47,6 +47,8 @@ const ProjectList = () => {
     const [editBudgetMin, setEditBudgetMin] = useState(0);
     const [editBudgetMax, setEditBudgetMax] = useState(0);
     const [isEditing, setIsEditing] = useState(false);
+    const [rejectionReason, setRejectionReason] = useState('');
+    const [showRejectionPrompt, setShowRejectionPrompt] = useState(false);
 
     useEffect(() => {
         const getProjects = async () => {
@@ -80,6 +82,7 @@ const ProjectList = () => {
         setShowPollCreationForm(false);
         setOpen(false);
         setIsEditing(false);
+        setShowRejectionPrompt(false);
     };
 
     const handleClickCreatePoll = () => {
@@ -120,15 +123,7 @@ const ProjectList = () => {
                         project_state_id: event.target.value
                     }
                 }
-                const updateProject = async () => {
-                    const updateResponse = await update_project_by_id(selectedProjectInfo.id, payload);
-                    if (updateResponse.status === 200) {
-                        toast.success('Proyecto actualizado correctamente.', { autoClose: 3000, position: toast.POSITION.TOP_CENTER });
-                        setRefresh(!refresh);
-                        setOpen(false);
-                    }
-                }
-                updateProject();
+                updateProject(payload);
             } else {
                 const payload = {
                     project: {
@@ -139,18 +134,33 @@ const ProjectList = () => {
                         project_state_id: selectedProjectInfo.project_state_id,
                     },
                 }
-                const updateProject = async () => {
-                    const updateResponse = await update_project_by_id(selectedProjectInfo.id, payload);
-                    if (updateResponse.status === 200) {
-                        toast.success('Proyecto actualizado correctamente.', { autoClose: 3000, position: toast.POSITION.TOP_CENTER });
-                        setRefresh(!refresh);
-                        setOpen(false);
-                        setIsEditing(false);
-                    }
-                }
-                updateProject();
+                updateProject(payload);
             }
             
+        }
+    };
+
+    const updateProject = async (payload) => {
+        const updateResponse = await update_project_by_id(selectedProjectInfo.id, payload);
+        if (updateResponse.status === 200) {
+            toast.success('Proyecto actualizado correctamente.', { autoClose: 3000, position: toast.POSITION.TOP_CENTER });
+            setRefresh(!refresh);
+            setOpen(false);
+            setIsEditing(false);
+            setRejectionReason('');
+            setShowRejectionPrompt(false);
+        }
+    }
+
+    const handleRejection = () => {
+        if (rejectionReason) {
+            const payload = {
+                project: {
+                    project_state_id: 7,
+                    tag: rejectionReason
+                }
+            }
+            updateProject(payload);
         }
     };
 
@@ -176,7 +186,7 @@ const ProjectList = () => {
                             <h1>{proyecto.title}</h1>
                         </div>
                         
-                        <p>{projectStates[proyecto.project_state_id]}</p>
+                        <p>{proyecto.project_state_id === 7 ? "Rechazado" : projectStates[proyecto.project_state_id]}</p>
                         
                     </div>
                     <p>{proyecto.description}</p>
@@ -239,14 +249,38 @@ const ProjectList = () => {
                                 <p>{selectedProjectInfo?.description ? selectedProjectInfo.description: null}</p>
                             </div>
                             <div className='project-step-indicator-container'>
-                                <Stepper activeStep={selectedProjectInfo?.project_state_id - 1} alternativeLabel>
-                                    {steps.map((label, index) => (
-                                        <Step key={index}>
-                                            <StepLabel>{label}</StepLabel>
-                                        </Step>
-                                    ))}
-                                </Stepper>
+                                {selectedProjectInfo?.project_state_id !== 7 ?
+                                    <Stepper activeStep={selectedProjectInfo?.project_state_id - 1} alternativeLabel>
+                                        {steps.map((label, index) => (
+                                            <Step key={index}>
+                                                <StepLabel>{label}</StepLabel>
+                                            </Step>
+                                        ))}
+                                    </Stepper>
+                                : 
+                                <>
+                                    <h3 style={{color: 'red'}}>Proyecto Rechazado</h3>
+                                    <h4>Motivo del rechazo: </h4>
+                                    <p>{selectedProjectInfo.tag}</p>
+                                </>
+                                }
                             </div>
+                            {showRejectionPrompt ? 
+                                <div className='reject-prompt-message-container'>
+                                    <label htmlFor="motivo-rechazo"><strong>Motivo de Rechazo</strong></label>
+                                    <p>Indique de forma clara el motivo del rechazo de la propuesta. Este mensaje será envíado via email al usuario que realizó la publicación y publicado en el detalle del proyecto.</p>
+                                    <textarea
+                                        type="text"
+                                        id="motivo-rechazo"
+                                        value={rejectionReason}
+                                        onChange={(e) => setRejectionReason(e.target.value)}
+                                    />
+                                    <div>
+                                    <Button size='small' startIcon={<CloseRoundedIcon />} onClick={() => (setShowRejectionPrompt(false), setRejectionReason(''))}>Cancelar</Button>
+                                    <Button size='small' variant='contained' color='error' startIcon={<ThumbDownIcon />} onClick={handleRejection}>Confirmar rechazo</Button>
+                                    </div>
+                                </div>
+                            : null}
                             </>
                         : <>
                             <h2>Edición del proyecto: {selectedProjectInfo.title}</h2>
@@ -299,11 +333,14 @@ const ProjectList = () => {
                         {[2, 3, 4, 5].includes(userInfo.role.role_id) && selectedProjectInfo.project_state_id === 1 ? 
                             !isEditing ? 
                             <>
+                                {!showRejectionPrompt ? 
+                                <>
                                 <Button 
                                 variant='contained'
                                 color='error'
                                 disableElevation
                                 size='small'
+                                onClick={() => (setShowRejectionPrompt(true))}
                                 startIcon={<ThumbDownIcon />}
                                 >
                                     Rechazar
@@ -334,6 +371,8 @@ const ProjectList = () => {
                                 >
                                     Modificar
                                 </Button> 
+                                </>
+                                :null}
                             </>
                             :   
                                 <Button 

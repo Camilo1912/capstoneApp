@@ -217,28 +217,30 @@ const PollList = () => {
                                 <br />
                                 <strong>Total de votos: {poll.reject + poll.approve}</strong>
                                 <br />
-                                <PieChart
-                                    series={[
-                                        {
-                                        data: [
-                                            { id: 0, value: poll.approve, label: `A favor: ${poll.approve}`, color: '#02b2af'},
-                                            { id: 1, value: poll.reject, label: `En contra: ${poll.reject}`, color: 'red' },
-                                        ],
-                                        // arcLabel: (item) => `${item.value}`,
-                                        innerRadius: 25,
-                                        outerRadius: 50,
-                                        paddingAngle: 1,
-                                        cornerRadius: 3,
-                                        startAngle: 0,
-                                        endAngle: 360,
-                                        highlightScope: { faded: 'global', highlighted: 'item' },
-                                        faded: { innerRadius: 22, additionalRadius: -5, color: 'gray' },
-                                        cx: 70,
-                                        },
-                                    ]}
-                                    width={300}
-                                    height={150}
-                                />
+                                {poll.reject + poll.approve !== 0 ? 
+                                    <PieChart
+                                        series={[
+                                            {
+                                                data: [
+                                                    { id: 0, value: poll.approve, label: `A favor: ${poll.approve}`, color: '#02b2af'},
+                                                    { id: 1, value: poll.reject, label: `En contra: ${poll.reject}`, color: 'red' },
+                                                ],
+                                                // arcLabel: (item) => `${item.value}`,
+                                                innerRadius: 25,
+                                                outerRadius: 50,
+                                                paddingAngle: 1,
+                                                cornerRadius: 3,
+                                                startAngle: 0,
+                                                endAngle: 360,
+                                                highlightScope: { faded: 'global', highlighted: 'item' },
+                                                faded: { innerRadius: 22, additionalRadius: -5, color: 'gray' },
+                                                cx: 70,
+                                            },
+                                        ]}
+                                        width={300}
+                                        height={150}
+                                    />
+                                :null}
                             </>
                             : <><br /><br /><strong>Aún no se publican los resultados.</strong></> }
                             
