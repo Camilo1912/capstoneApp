@@ -24,7 +24,7 @@ const NewsCreationForm = () => {
         description: '',
         neighbor_id: userInfo.id,
         neighborhood_id: userInfo.neighborhood.neighborhood_id,
-        send_email: false,
+        sent_email: false,
         image_file: null,
     };
     const [characterCount, setCharacterCount] = useState(0);
@@ -77,7 +77,7 @@ const NewsCreationForm = () => {
     const handleSendEmailChange = (event) => {
         setNewAnnouncement({
             ...newAnnouncement,
-            send_email: event.target.checked,
+            sent_email: event.target.checked,
         });
     };
 

@@ -28,9 +28,9 @@ export const userRolsTypes = {
 
 export const projectStates = {
   1: 'Propuesto',
-  2: 'En Votación',
-  3: 'Votado',
-  4: 'Aprobado',
+  2: 'Aprobado por Directiva',
+  3: 'En votación',
+  4: 'Aprobado por Votación',
   5: 'En ejecución',
   6: 'Finalizado'
 }

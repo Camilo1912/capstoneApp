@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import { DialogActions } from '@mui/material';
 
-const PollCreationForm = ({projectId, updateShowParent}) => {
+const PollCreationForm = ({projectId, updateShowParent, isParentOpen}) => {
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
     const currentDateTime = new Date();
@@ -31,6 +31,7 @@ const PollCreationForm = ({projectId, updateShowParent}) => {
                     const poll_response = await poll_create(newPollPayload);
                     if (poll_response.status === 200) {
                         toast.success('La votación se creó correctamente', { autoClose: 3000, position: toast.POSITION.TOP_CENTER });
+                        isParentOpen(false);
                     }
                 } catch (error) {
                     if (error.response.status === 422) {
@@ -47,6 +48,7 @@ const PollCreationForm = ({projectId, updateShowParent}) => {
         setEndDate(null);
         setStartDate(null);
         updateShowParent(false);
+        
     };
 
     return (
