@@ -26,6 +26,6 @@ export const get_projects_by_neighborhood_id = async (neighborhood_id) => {
 };
 
 export const update_project_by_id = async (project_id, payload) => {
-    const response = await axiosClient.put();
+    const response = await axiosClient.put(`projects/${project_id}`, payload);
     return response;
 };

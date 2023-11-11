@@ -102,7 +102,7 @@ const RegisterPersonalFields = () => {
         </div>
         <div className='form-name-container'>
           <div>
-            <label htmlFor="lastname1">Apellido Paterno *</label>
+            <label htmlFor="lastname1">Primer Apellido *</label>
             <input
               id="filled-lastname1-input"
               name='lastname1'
@@ -113,7 +113,7 @@ const RegisterPersonalFields = () => {
             />
           </div>
           <div>
-            <label htmlFor="lastname2">Apellido Materno *</label>
+            <label htmlFor="lastname2">Segundo Apellido *</label>
             <input
               id="filled-lastname2-input"
               name='lastname2'
