@@ -6,19 +6,28 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import CachedRoundedIcon from '@mui/icons-material/CachedRounded';
+import { toast } from 'react-toastify';
 
 const RegisterVerificationFields = () => {
     const {registrationForm, handleRegistrationForm } = useContext(RegistrationContext);
 
     const handleFileChange = (e, field) => {
         const file = e.target.files[0];
-        if (file) {
+
+        if (isFileValid(file)) {
             handleRegistrationForm({
                 ...registrationForm,
                 [field]: file,
             });
+        } else {
+            toast.error('El tamaño del archivo excede el límite de 5 MB', { autoClose: 3000, position: toast.POSITION.TOP_CENTER });
+            console.error('El tamaño del archivo excede el límite de 5 MB');
         }
     };
+
+    const isFileValid = (file) => {
+        return file && file.size <= 5 * 1024 * 1024;
+      };
     
     return (
         <>  
@@ -35,7 +44,7 @@ const RegisterVerificationFields = () => {
                 </div>
             </div>
             <div className='register-combobox-container register-upload-file-container'>
-                <label htmlFor="image-back">Foto carnet parte trasera *</label>
+                <label htmlFor="image-back">Foto carnet parte posterior *</label>
                 <div>
                     <Button component="label" variant="contained" disableElevation color={ registrationForm.image_back ? 'success' : 'primary' } size='small' startIcon={registrationForm.image_back ? <CheckCircleIcon /> : <CloudUploadIcon />}>
                         {registrationForm.image_back ? 'Cargado' : 'Cargar imagen'}
@@ -57,6 +66,7 @@ const RegisterVerificationFields = () => {
                     <input type="file" accept=".png, .jpg, .jpeg" style={{ display: 'none' }} onChange={(e) => handleFileChange(e, 'image_face')} />
                 </Button>
             </div>
+            Formatos aceptados: JPG, JPEG o PNG
         </>
     )
 }

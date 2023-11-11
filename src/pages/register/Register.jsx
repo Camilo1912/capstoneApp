@@ -45,13 +45,13 @@ const Register = () => {
     } else if (activeStep === 1 && registrationForm["regionId"] && registrationForm["communeId"] && registrationForm["neighborhoodId"] && registrationForm['street'] && registrationForm['number']){
       setIsNextButtonDisabled(false);
     } else if (activeStep === 2 && registrationForm['image_front'] && registrationForm['image_back'] && registrationForm['image_invoice'] && registrationForm['image_face']) {
-      setIsNextButtonDisabled(false);
+        setIsNextButtonDisabled(false);
     } else if (activeStep === 3 && registrationForm["email"] && registrationForm["password"]) {
       setIsNextButtonDisabled(false);
     } else {
       setIsNextButtonDisabled(true);
     }
-  }, [registrationForm]);
+  }, [registrationForm, activeStep]);
 
   const handleSignIn = async (e) => {
     e.preventDefault();

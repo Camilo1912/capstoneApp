@@ -79,7 +79,7 @@ const RegisterResidentialFields = () => {
         <div className='registration-address-selection-container'>
             <strong>Busque la junta de vecinos a la que desee pertenecer.</strong>
             <div className='register-combobox-container'>
-                <label htmlFor="region">Seleccione su región:</label>
+                <label htmlFor="region">Seleccione su región *</label>
                 <select 
                 name="regionId" 
                 id="region" 
@@ -93,44 +93,46 @@ const RegisterResidentialFields = () => {
                 }
                 </select>
             </div>
-            { registrationForm.regionId ? 
-                <div className='register-combobox-container'>
-                    <label htmlFor="commune">Seleccione una comuna:</label>
-                    <select 
-                    name="communeId" 
-                    id="commune" 
-                    value={registrationForm.communeId} 
-                    onChange={handleSelectionChange}>
+
+            <div className='register-combobox-container'>
+                <label htmlFor="commune">Seleccione una comuna *</label>
+                <select 
+                name="communeId" 
+                id="commune" 
+                value={registrationForm.communeId} 
+                disabled={registrationForm.regionId ? false : true}
+                onChange={handleSelectionChange}>
                     <option value="">-- Seleccione comuna --</option>
-                    {communesList.map((commune, index) => (
-                        <option key={index} value={commune.id}>
-                            {commune.commune_name}
-                        </option>))
-                    }
-                    </select>
-                </div>
-                : 
-                <></>
-            }
-            { registrationForm.communeId ? 
-                <div className='register-combobox-container'>
-                    <label htmlFor="neighborhood">Seleccione tu Junta de Vecinos</label>
-                    <select 
-                    name="neighborhood" 
-                    id="neighborhood" 
-                    value={JSON.stringify(registrationForm.neighborhood)} 
-                    onChange={handleSelectedNeighborhood}>
+                    {registrationForm.regionId ? <>
+                        {communesList.map((commune, index) => (
+                            <option key={index} value={commune.id}>
+                                {commune.commune_name}
+                            </option>))
+                        }</>
+                    : null}
+                </select>
+            </div>
+
+            <div className='register-combobox-container'>
+                <label htmlFor="neighborhood">Seleccione tu Junta de Vecinos *</label>
+                <select 
+                name="neighborhood" 
+                id="neighborhood" 
+                disabled={registrationForm.communeId ? false : true}
+                value={JSON.stringify(registrationForm.neighborhood)} 
+                onChange={handleSelectedNeighborhood}>
                     <option value="">-- Seleccione Junta de Vecinos --</option>
-                    {neighborhoodsList.map((neighborhood, index) => (
-                        <option key={index} value={JSON.stringify(neighborhood)}>
+                    {registrationForm.communeId ? 
+                        <>
+                        {neighborhoodsList.map((neighborhood, index) => (
+                            <option key={index} value={JSON.stringify(neighborhood)}>
                             {neighborhood.name}
-                        </option>))
-                    }
-                    </select>
-                </div>
-                :
-                <></>
-            }
+                            </option>))
+                        }
+                        </>
+                    :null}
+                </select>
+            </div>
 
             {Object.keys(neighborhoodInfo).length && registrationForm.neighborhoodId ?
                 <>
@@ -176,7 +178,7 @@ const RegisterResidentialFields = () => {
                 />
             </div>
             <div className='register-combobox-container'>
-                <label htmlFor="streetNumber">Numero *</label>
+                <label htmlFor="streetNumber">Número *</label>
                 <input
                     id="filled-streetNumber-input"
                     name="number"
