@@ -80,7 +80,7 @@ const NewsCard = ({ cardData }) => {
             }
             const saveChanges = async () => {
                 const response = await update_announcement(selectedAnnouncement.id, payload);
-                if (response === 200) {
+                if (response.status === 200) {
                     toast.success('Anuncio editado correctamente', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
                     setIsEditing(false);
                     setEditedTitle('');

@@ -40,6 +40,11 @@ const ProjectList = () => {
     const [selectedProjectInfo, setSelectedProjectInfo] = useState({});
     const [selectedProjectUserInfo, setSelectedProjectUserInfo] = useState({});
     const [showPollCreationForm, setShowPollCreationForm] = useState(false);
+    const [editDescription, setEditDescription] = useState('');
+    const [editType, setEditType] = useState('');
+    const [editBudgetMin, setEditBudgetMin] = useState(0);
+    const [editBudgetMax, setEditBudgetMax] = useState(0);
+    const [isEditing, setIsEditing] = useState(false);
 
     useEffect(() => {
         const getProjects = async () => {
@@ -72,6 +77,7 @@ const ProjectList = () => {
     const handleClose = () => {
         setShowPollCreationForm(false);
         setOpen(false);
+        setIsEditing(false);
     };
 
     const handleClickCreatePoll = () => {
@@ -87,6 +93,21 @@ const ProjectList = () => {
         setOpen(data);
     };
 
+    const handleDescriptionChange = (event) => {
+        setEditDescription(event.target.value);
+    };
+    
+    const handleTypeChange = (event) => {
+        setEditType(event.target.value);
+    };
+    
+    const handleBudgetMinChange = (event) => {
+        setEditBudgetMin(event.target.value);
+    };
+    
+    const handleBudgetMaxChange = (event) => {
+        setEditBudgetMax(event.target.value);
+    };
 
     const handleUpdateClick = (event) => {
 
@@ -147,7 +168,10 @@ const ProjectList = () => {
                 <DialogContent >
                     {showPollCreationForm ? <PollCreationForm projectId={selectedProjectInfo.id} updateShowParent={updateShowPollCreationForm} isParentOpen={updateCloseParent}/> :
                     <div className='project-popup-card'>
+                        {!isEditing ? 
+                        <>
                         <div className='project-detail-wrapper'>
+                            
                             <div id='project-image-example'></div>
                             <div className='project-detail-info-wrapper'>
                                 <div className='project-detail-title-container'>
@@ -163,7 +187,7 @@ const ProjectList = () => {
                                         selectedProjectInfo.project_type === 'PV' ? <HomeWorkRoundedIcon fontSize='large'/> :
                                         selectedProjectInfo.project_type === 'PS' ? <LocalHospitalRoundedIcon fontSize='large'/> :
                                         <>na</>
-                                        }
+                                    }
                                     </div>
                                 </div>
                                 <div>
@@ -184,9 +208,9 @@ const ProjectList = () => {
                                 
                             </div>
                             
-                        </div>
-                        <label htmlFor="descripcion">Descripción</label>
-                        <div className='project-detail-description-container'>
+                            </div>
+                            <label htmlFor="descripcion">Descripción</label>
+                            <div className='project-detail-description-container'>
                             <p>{selectedProjectInfo?.description ? selectedProjectInfo.description: null}</p>
                         </div>
                         <div className='project-step-indicator-container'>
@@ -198,6 +222,8 @@ const ProjectList = () => {
                                 ))}
                             </Stepper>
                         </div>
+                        </>
+                        : null}
                     </div>
                     }
                 </DialogContent>
@@ -226,11 +252,18 @@ const ProjectList = () => {
                                 >
                                     Aprobar
                                 </Button> 
-                                <Button 
-                                variant='contained' 
+                                <Button
+                                variant='contained'
                                 disableElevation
                                 size='small'
                                 startIcon={<EditRoundedIcon />}
+                                onClick={() => {
+                                    setIsEditing(true);
+                                    setEditDescription(selectedProjectInfo.description);
+                                    setEditType(selectedProjectInfo.project_type);
+                                    setEditBudgetMin(selectedProjectInfo.budget_min);
+                                    setEditBudgetMax(selectedProjectInfo.budget_max);
+                                }}
                                 >
                                     Modificar
                                 </Button> 
