@@ -15,7 +15,7 @@ import Grid from '@mui/material/Grid';
 
 const GuestHome = () => {
     const navigate = useNavigate();
-    const { guestForm, handleGuestForm } = useContext(GuestContext);
+    const { guestForm, handleGuestForm, resetGuestForm } = useContext(GuestContext);
     const [value, setValue] = React.useState(0);
     const [regionsList, setRegionsList] = useState([]);
     const [communesList, setCommunesList] = useState([]);
@@ -96,77 +96,84 @@ const GuestHome = () => {
         navigate('/register');
     };
 
+    const handleBack = () => {
+        resetGuestForm()
+        navigate('/');
+    };
+
     return (
         <div className='guest-page-wrapper'>
-            <div className='guest-header-wrapper'>
-                <div>
-
+            <div>
+                <div className='guest-header-wrapper'>
                     <div>
-                        <IconButton aria-label="Volver al inicio" size='small' onClick={() => {navigate('/')}}>
-                            <ArrowBackIosNewRoundedIcon />
-                        </IconButton>
+
+                        <div>
+                            <IconButton aria-label="Volver al inicio" size='small' onClick={handleBack}>
+                                <ArrowBackIosNewRoundedIcon />
+                            </IconButton>
+                        </div>
+                        <select 
+                            name="regionId" 
+                            id="region"
+                            value={guestForm.regionId}
+                            onChange={handleSelectionChange}
+                        >
+                            <option value="">-- Seleccione Región --</option>
+                            {regionsList.map((region, index) => (
+                                <option key={index} value={region.id}>
+                                    {region.region_name}
+                                </option>))
+                            }
+                        </select>
+                        /
+                        <select
+                            name="communeId" 
+                            id="commune"
+                            onChange={handleSelectionChange}
+                            value={guestForm.communeId}
+                            disabled={guestForm.regionId ? false : true}
+                        >
+                            <option value="">-- Seleccione Comuna --</option>
+                            {guestForm.regionId ? 
+                            <>
+                            {communesList.map((commune, index) => (
+                                <option key={index} value={commune.id}>
+                                    {commune.commune_name}
+                                </option>))
+                            }
+                            </>
+                            : null}
+                        </select>
+                        /
+                        <select 
+                            name="neighborhood" 
+                            id="neighborhood"
+                            value={JSON.stringify(guestForm.neighborhood)} 
+                            onChange={handleSelectionChange}
+                            disabled={guestForm.communeId ? false : true}
+                        >
+                            <option value="">-- Seleccione su Junta --</option>
+                            {guestForm.communeId ? 
+                            <>
+                            {neighborhoodsList.map((neighborhood, index) => (
+                                <option key={index} value={JSON.stringify(neighborhood)}>
+                                    {neighborhood.name}
+                                </option>))
+                            }
+                            </> 
+                            :null}
+                        </select>
                     </div>
-                    <select 
-                        name="regionId" 
-                        id="region"
-                        value={guestForm.regionId}
-                        onChange={handleSelectionChange}
+                    <Button 
+                        type='submit'
+                        variant="outlined"
+                        size='small'
+                        onClick={handleRegisterRedirection}
+                        endIcon={<LoginIcon />}
                     >
-                        <option value="">-- Seleccione Región --</option>
-                        {regionsList.map((region, index) => (
-                            <option key={index} value={region.id}>
-                                {region.region_name}
-                            </option>))
-                        }
-                    </select>
-                    /
-                    <select
-                        name="communeId" 
-                        id="commune"
-                        onChange={handleSelectionChange}
-                        value={guestForm.communeId}
-                        disabled={guestForm.regionId ? false : true}
-                    >
-                        <option value="">-- Seleccione Comuna --</option>
-                        {guestForm.regionId ? 
-                        <>
-                        {communesList.map((commune, index) => (
-                            <option key={index} value={commune.id}>
-                                {commune.commune_name}
-                            </option>))
-                        }
-                        </>
-                        : null}
-                    </select>
-                    /
-                    <select 
-                        name="neighborhood" 
-                        id="neighborhood"
-                        value={JSON.stringify(guestForm.neighborhood)} 
-                        onChange={handleSelectionChange}
-                        disabled={guestForm.communeId ? false : true}
-                    >
-                        <option value="">-- Seleccione su Junta --</option>
-                        {guestForm.communeId ? 
-                        <>
-                        {neighborhoodsList.map((neighborhood, index) => (
-                            <option key={index} value={JSON.stringify(neighborhood)}>
-                                {neighborhood.name}
-                            </option>))
-                        }
-                        </> 
-                        :null}
-                    </select>
+                        Registrarse
+                    </Button>
                 </div>
-                <Button 
-                    type='submit'
-                    variant="outlined"
-                    size='small'
-                    onClick={handleRegisterRedirection}
-                    endIcon={<LoginIcon />}
-                >
-                    Registrarse
-                </Button>
             </div>
             <div className='guest-content-wrapper'>
                 <Container maxWidth="xl">

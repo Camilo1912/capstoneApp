@@ -89,3 +89,15 @@
         width: 100%;
     }
 }
+
+
+@media (prefers-color-scheme: dark) {
+
+    .user-card {
+        background-color: $background-color-dark;
+    }
+
+    .refresh-button-container {
+        background-color: $accent-color-light-n1;
+    }
+}
