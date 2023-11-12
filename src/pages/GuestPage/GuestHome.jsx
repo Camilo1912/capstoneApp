@@ -1,6 +1,5 @@
 import React from 'react'
 import { useEffect, useState, useContext } from 'react';
-import GuestContent from './GuestContent'
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
 import { Button, IconButton } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
