@@ -11,12 +11,17 @@ import { get_neighborhood_by_commune_id } from '../../requests/Neighborhood';
 import { get_announcements_by_neighborhood_id } from '../../requests/News';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-
+import { formatearFecha } from '../../utils/utils';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
 
 const GuestHome = () => {
     const navigate = useNavigate();
     const { guestForm, handleGuestForm, resetGuestForm } = useContext(GuestContext);
     const [value, setValue] = React.useState(0);
+    const [open, setOpen] = useState(false);
+    const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
     const [regionsList, setRegionsList] = useState([]);
     const [communesList, setCommunesList] = useState([]);
     const [neighborhoodsList, setNeighborhoodsList] = useState([]);
@@ -82,7 +87,7 @@ const GuestHome = () => {
         if (neighborhoodInfo.id) {
             const getNewsFromNeighborhood = async() => {
                 const response = await get_announcements_by_neighborhood_id(neighborhoodInfo.id);
-                setNewsList(response);
+                setNewsList(response.reverse());
             };
             getNewsFromNeighborhood();
         }
@@ -99,6 +104,16 @@ const GuestHome = () => {
     const handleBack = () => {
         resetGuestForm()
         navigate('/');
+    };
+
+    const handleDialogOpen = (announcementSelection) => {
+        setSelectedAnnouncement(announcementSelection)
+        setOpen(true);
+    };
+
+    const handleDialogClose = () => {
+        setOpen(false);
+        setSelectedAnnouncement(null);
     };
 
     return (
@@ -184,7 +199,7 @@ const GuestHome = () => {
                                 {newsList ? 
                                     <>
                                     {newsList.map((announcement) => (
-                                        <div key={announcement.id} className='news-card-guest' onClick={() => handleDialogOpen(news)}>
+                                        <div key={announcement.id} className='news-card-guest' onClick={() => handleDialogOpen(announcement)}>
                                             {announcement.image_url ? 
                                                 <img
                                                     src={announcement.image_url}
@@ -196,10 +211,11 @@ const GuestHome = () => {
                                             {announcement.title ? 
                                                 <div className='card-content'>
                         
-                                                <h2>{announcement.title}</h2>
+                                                    <h2>{announcement.title}</h2>
                                                     <div>
-                                                    <p className="news-card-guest-content-text">{announcement.description}</p>
-                                                    {/* <p className='date-value date-news-position'>Publicado el {formatearFecha(announcement.created_at)}</p> */}
+                                                        <p className="news-card-guest-content-text">{announcement.description}</p>
+                                                        <p className='date-value date-news-position'>Publicado el {formatearFecha(announcement.created_at)}</p>
+                                                    
                                                     </div>
                                                 </div>
                                                 : null
@@ -210,6 +226,21 @@ const GuestHome = () => {
                                     : <p className='guest-helper-text'>Los anuncios de la junta de vecinos que selecciones apareceran aquí.</p>
                                 }   
                             </div>
+                            <Dialog open={open} onClose={handleDialogClose}>
+                                <DialogContent >
+                                    <h1>{selectedAnnouncement?.title}</h1>
+                                    <p className='date-value'>Publicado el {formatearFecha(selectedAnnouncement?.created_at)}</p>
+                                    {selectedAnnouncement?.created_at !== selectedAnnouncement?.updated_at ? 
+                                    <p className='date-value'>Editado el {formatearFecha(selectedAnnouncement?.updated_at)}</p>
+                                    : null}
+                                    <p style={{ marginBottom: '15px', marginTop: '15px' }}>{selectedAnnouncement?.description}</p>
+                                    {selectedAnnouncement?.image_url ? <img src={selectedAnnouncement?.image_url} style={{ width: '100%'}} alt="imagen-de-anuncio" /> : null}   
+                                </DialogContent>
+
+                                <DialogActions>
+                                    <Button size='small' onClick={handleDialogClose}>Cerrar</Button>
+                                </DialogActions>
+                            </Dialog>
                         </Grid>
                         <Grid item xs={4}>
                             <div className='guest-card'>
