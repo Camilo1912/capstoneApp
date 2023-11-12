@@ -171,7 +171,7 @@ const PollList = () => {
                         {poll.userVoted}
                         {!poll.userVoted ? 
                         <>
-                            <Button onClick={() => handleOpenDialog(poll)}>Votar</Button>
+                            <Button variant='contained' onClick={() => handleOpenDialog(poll)}>Votar</Button>
                         </> : <>Voto envíado</>}
                         </div>
                     ))}

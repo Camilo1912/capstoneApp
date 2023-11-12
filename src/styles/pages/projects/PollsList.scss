@@ -102,3 +102,36 @@
     height: 70px;
     width: 150px;
 }
+
+
+@media (prefers-color-scheme: dark) {
+    .closed-poll {
+
+        background-color: rgba($color: #000000, $alpha: .3);
+    }
+    .create-project-card {
+        border: 1px solid #555555;
+
+        >h1 {
+            color: $accent-color-light-n1;
+        }
+    }
+
+    .project-creation-info-card {
+        background-color: $background-color-dark;
+    }
+
+    .project-state-indicator {
+        >p {
+            background-color: $text-color-accent-1;
+        }
+    }
+
+    .poll-info-card {
+        background-color: $background-color-dark;
+        >h1 {
+            color: $text-color-accent-1;
+            background-color: $background-color-dark-n1;
+        }
+    }
+}
