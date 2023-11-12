@@ -6,15 +6,13 @@ import LoginIcon from '@mui/icons-material/Login';
 import { InputAdornment  } from '@mui/material';
 import { UserContext } from '../contexts/UserContext';
 import { UserRols } from '../utils/UserRols';
-
-
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import IconButton from '@mui/material/IconButton';
 
 const Login = () => {
-    const navigate = useNavigate(); //remover 
+    const navigate = useNavigate();
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -91,7 +89,7 @@ const Login = () => {
                         onClick={handleGestRedirection}
                         endIcon={<LoginIcon />}
                     >
-                        Acceso de invitado
+                        Acceder como invitado
                     </Button>
                 </div>
             

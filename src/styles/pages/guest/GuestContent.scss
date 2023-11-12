@@ -1,0 +1,92 @@
+
+.guest-content-wrapper {
+    overflow-y: hidden;
+}
+
+.guest-card {
+    background-color: rgba($color: #ffffff, $alpha: .3);
+    backdrop-filter: blur(15px);
+    padding: 15px;
+    border-radius: 25px;
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    max-height: calc(100dvh - 7rem);
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    >h1 {
+        font-size: 1.2rem;
+    }
+
+}
+
+
+.news-card-guest {
+    display: flex;
+    background-color: rgba(255, 255, 255, 0.507);
+    border-radius: 15px;
+    padding: 5px;
+    position: relative;
+
+    img {
+        width: 100px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    .card-content {
+        padding: 0px 20px 20px 20px;
+
+        >h2 {
+            font-size: 1rem
+        }
+
+        >p {
+            font-size: 1rem;
+        }
+    }
+}
+
+.news-card-guest:hover {
+    cursor: pointer;
+    box-shadow: 0px 0px 5px rgba(0, 0, 255, 0.329);
+}
+
+.card-content>div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.news-card-guest-content-text {
+    text-align: justify;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    -webkit-line-clamp: 3;
+}
+
+.guest-helper-text {
+    color: rgba(0, 0, 0, 0.6);
+}
+
+
+
+@media (prefers-color-scheme: dark) {
+
+    .guest-card {
+        background-color: rgba($color: #000000, $alpha: .3);
+    }
+    .news-card-guest {
+        background-color: rgba($color: #000000, $alpha: .5);
+        border-top: $border-top-dark;
+        color: $text-color-normal-dark;
+    }
+
+    .guest-helper-text {
+        color: rgba(255, 255, 255, 0.6);
+    }
+}

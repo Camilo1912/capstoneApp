@@ -81,16 +81,17 @@ const RegisterResidentialFields = () => {
             <div className='register-combobox-container'>
                 <label htmlFor="region">Seleccione su región *</label>
                 <select 
-                name="regionId" 
-                id="region" 
-                value={registrationForm.regionId} 
-                onChange={handleSelectionChange}>
-                <option value="">-- Seleccione región --</option>
-                {regionsList.map((region, index) => (
-                    <option key={index} value={region.id}>
-                        {region.region_name}
-                    </option>))
-                }
+                    name="regionId" 
+                    id="region" 
+                    value={registrationForm.regionId} 
+                    onChange={handleSelectionChange}
+                >
+                    <option value="">-- Seleccione región --</option>
+                    {regionsList.map((region, index) => (
+                        <option key={index} value={region.id}>
+                            {region.region_name}
+                        </option>))
+                    }
                 </select>
             </div>
 
