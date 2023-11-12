@@ -178,7 +178,7 @@ const GuestHome = () => {
                             :null}
                         </select>
                     </div>
-                    <Button 
+                    {/* <Button 
                         type='submit'
                         variant="outlined"
                         size='small'
@@ -186,7 +186,7 @@ const GuestHome = () => {
                         endIcon={<LoginIcon />}
                     >
                         Registrarse
-                    </Button>
+                    </Button> */}
                 </div>
             </div>
             <div className='guest-content-wrapper'>
