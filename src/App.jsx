@@ -18,6 +18,7 @@ import "react-toastify/dist/ReactToastify.css";
 import GuestContextProvider from "./contexts/GuestContext";
 import { createTheme, useMediaQuery } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
+import DirectiveHome from "./pages/DirectivePage/DirectiveHome";
 
 const App = () => {
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark');
@@ -46,9 +47,7 @@ const App = () => {
                                     <Route path="/neighbor_home" element={<NeighborHome />} />
                                 </Route>
                                 <Route element={<PrivateRoute allowedRoles={[2 ,3 ,4]} />}>
-                                    <Route path="/president_home" element={<PresidentHome />} />
-                                    <Route path="/secretary_home" element={<SecretaryHome />} />
-                                    <Route path="/treasurer_home" element={<TreasurerLayout />} />
+                                    <Route path="/directive_home" element={<DirectiveHome />} />
                                 </Route>
                                 <Route element={<PrivateRoute allowedRoles={[5]} />}>
                                     <Route path="/admin_home" element={<AdminHome />} />
