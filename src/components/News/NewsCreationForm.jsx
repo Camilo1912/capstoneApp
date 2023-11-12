@@ -87,12 +87,13 @@ const NewsCreationForm = () => {
             'announcement[description]': newAnnouncement.description,
             'announcement[neighbor_id]': newAnnouncement.neighbor_id,
             'announcement[neighborhood_id]': newAnnouncement.neighborhood_id,
+            'announcement[sent_all]': newAnnouncement.sent_email,
             'image_1': newAnnouncement.image_file
         };
         const project_response = await submit_new_announcement(payload);
         if (project_response.status === 200) {
-          toast.success('El anuncio se publicó correctamente', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
-          setNewAnnouncement(defaultAnnouncement);
+            toast.success('El anuncio se publicó correctamente', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
+            setNewAnnouncement(defaultAnnouncement);
         }
     }
 
@@ -147,7 +148,7 @@ const NewsCreationForm = () => {
                 
                 <div>
                     <label><strong>Enviar por email</strong></label>
-                    <FormControlLabel control={<Checkbox checked={newAnnouncement.send_email} onChange={handleSendEmailChange} />} label='Enviar email' />
+                    <FormControlLabel control={<Checkbox checked={newAnnouncement.sent_email} onChange={handleSendEmailChange} />} label='Enviar email' />
                     <p>Al seleccionar esta opción se enviará el anuncio a todos los integrantes de su junta de vecinos via email.</p>
                 </div>
 

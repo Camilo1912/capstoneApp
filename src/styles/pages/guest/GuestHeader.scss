@@ -1,23 +1,31 @@
 .guest-header-wrapper {
     display: flex;
     align-items: center;
-    background-color: rgba($color: #000000, $alpha: .5);
+    width: 100%;
+    justify-content: space-between;
+    background-color: rgba($color: #ffffff, $alpha: .6);
     width: auto;
     height: 3rem;
     margin: 20px;
     border-radius: 1.5rem;
     padding: .5rem;
     backdrop-filter: blur(10px);
-    box-shadow: 0px 5px 10px rgba($color: #000000, $alpha: .3);
+    box-shadow: 0px 5px 10px rgba($color: rgb(0, 0, 0), $alpha: .3);
+    gap: 15px;
+    padding-right: 20px;
 
-    >div {
-        background-color: rgba(255, 255, 255, 0.5);
-        width: fit-content;
-        height: fit-content;
-        border-radius: 100px;
+    > div {
+        display: flex;
+        align-items: center;
+        gap: 15px;
     }
 }
 
-.custom-tabs .MuiTabs-scroller {
-    min-height: 30px !important; /* Adjust the height as needed */
+
+
+@media (prefers-color-scheme: dark) {
+    .guest-header-wrapper {
+
+        background-color: rgba($color: #000000, $alpha: .6);
+    }
 }

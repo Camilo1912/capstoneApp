@@ -1,6 +1,6 @@
 import React from 'react';
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
-import { IconButton } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 import Tabs from '@mui/material/Tabs';
@@ -18,21 +18,27 @@ const GuestHeader = () => {
     return (
         <div className='guest-header-wrapper'>
             <div>
-                <IconButton aria-label="Volver al inicio" size='small' onClick={() => {navigate('/')}}>
-                    <ArrowBackIosNewRoundedIcon />
-                </IconButton>
+                <div>
+                    <IconButton aria-label="Volver al inicio" size='small' onClick={() => {navigate('/')}}>
+                        <ArrowBackIosNewRoundedIcon />
+                    </IconButton>
+                </div>
+
+                <div className='guest-nav-container'>
+                    <Tabs
+                    value={value}
+                    onChange={handleChange}
+                    aria-label="icon position tabs example"
+                    centered
+                    >
+                        <Tab icon={<AnnouncementRoundedIcon />} iconPosition="start" label="start" className="custom-tab"/>
+                        <Tab icon={<AnnouncementRoundedIcon />} iconPosition="start" label="start" className="custom-tab"/>
+                        <Tab icon={<AnnouncementRoundedIcon />} iconPosition="start" label="start" className="custom-tab"/>
+                        <Tab icon={<AnnouncementRoundedIcon />} iconPosition="start" label="start" className="custom-tab"/>
+                    </Tabs>
+                </div>
             </div>
 
-            <div className='guest-nav-container'>
-            <Tabs
-            value={value}
-            onChange={handleChange}
-            aria-label="icon position tabs example"
-            classes={{ root: 'custom-tabs-root' }}
-            >
-                <Tab icon={<AnnouncementRoundedIcon />} iconPosition="start" label="start" className="custom-tab"/>
-            </Tabs>
-            </div>
         </div>
     )
 }

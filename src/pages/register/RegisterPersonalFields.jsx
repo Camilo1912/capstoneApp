@@ -156,6 +156,7 @@ const RegisterPersonalFields = () => {
             name="birthDate"
             value={selectedDate}
             maxDate={restrictionDate}
+            format="dd/MM/yyyy"
             onChange={handleDateChange}
             slotProps={{
               textField: {

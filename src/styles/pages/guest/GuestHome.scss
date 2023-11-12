@@ -1,6 +1,9 @@
+@import "../../variables/index.scss";
+
 .guest-page-wrapper {
     display: flex;
     flex-direction: column;
     width: 100%;
     height: 100dvh;
+    border: 1px solid blue;
 }

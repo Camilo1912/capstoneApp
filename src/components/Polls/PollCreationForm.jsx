@@ -63,6 +63,7 @@ const PollCreationForm = ({projectId, updateShowParent, isParentOpen}) => {
                 onChange={(newValue) => {setStartDate(newValue)}}
                 minDateTime={currentDateTime}
                 inputFormat="dd/mm/yyyy HH:mm"
+                ampm={false}
                 slotProps={{
                     textField: {
                       variant: 'outlined',
@@ -80,6 +81,7 @@ const PollCreationForm = ({projectId, updateShowParent, isParentOpen}) => {
                 onChange={(newValue) => setEndDate(newValue)}
                 minDateTime={startDate}
                 inputFormat="dd/mm/yyyy HH:mm"
+                ampm={false}
                 disabled={!startDate}
                 slotProps={{
                     textField: {

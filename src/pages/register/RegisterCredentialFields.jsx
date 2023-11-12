@@ -26,7 +26,7 @@ const RegisterCredentialFields = () => {
 
     useEffect(() => {
         const isPasswordMatch = password === confirmPassword;
-        if (password && isPasswordMatch) {
+        if (password && isPasswordMatch && strength === 'muy fuerte') {
             handleRegistrationForm({
                 ...registrationForm,
                 password: password
@@ -142,18 +142,20 @@ const RegisterCredentialFields = () => {
             />
             <OutlinedInput
                 id="outlined-adornment-password"
-                type={'password'}
+                type={showPassword ? 'text' : 'password'}
                 placeholder='Repetir contraseña'
                 size='small'
                 onChange={handleConfirmPasswordChange}
                 value={confirmPassword}
+ 
             />
             <div className={`bars ${ (strength == 'muy fuerte') ? 'stronger' : strength}`}>
                 <div></div>
             </div>
             <div className='password-strength'>
-                { (password != '') ?  <>Contraseña { strength ? strength : 'demaisado corta'} </> : 'Mínimo 8 caracteres'}  
+                <strong>{ (password != '') ?  <>Contraseña { strength ? strength : 'demaisado corta'} </> : null}</strong>  
             </div>
+            <p><strong>Su contraseña debe tener: </strong>Números, Letras mayusculas, Letras minusculas, Simbolos y al menos 8 caracteres</p>
         </div>
     )
 }
