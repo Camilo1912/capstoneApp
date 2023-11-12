@@ -11,7 +11,7 @@ const ApplicationContainer = () => {
         <div className='news-main-layout'>
                 {(selectedComponent.menu === 0)? 
                 <>
-                    <h1>Solicitudes / Inscripción</h1>
+                    <h1>Solicitudes / Certificados</h1>
                     <CertificateApplication />
                 </>
                 : 

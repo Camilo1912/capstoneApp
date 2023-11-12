@@ -134,4 +134,12 @@
             background-color: $background-color-dark-n1;
         }
     }
+
+    .poll-card {
+        background-color: $background-color-dark;
+        >h1 {
+            color: $text-color-accent-1;
+            background-color: $background-color-dark-n1;
+        }
+    }
 }

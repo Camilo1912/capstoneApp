@@ -258,9 +258,9 @@ const PollList = () => {
             <div className='poll-info-card'>
                 <h1>Sobre las votaciones</h1>
                 <ul>
-                <li><h2>Votaciones ACTIVAS</h2><p>Corresponden a las votaciones en curso, en ellas se indica el proyecto que se está votando, el horario de votación y si ya haz votado o no.</p></li>
-                <li><h2>Votaciones PROXIMAS</h2><p>Aquí se muestran las votaciones que aún no están activas pero que ya se encuentran programadas con fecha de inicio y termino.</p></li>
-                <li><h2>Votaciones CERRADAS</h2><p>Estas son votaciones que ya terminaron y por lo tanto se muestra el conteo de votos y el total de sufragios, además del resultado final.</p></li>
+                    <li><h2>Votaciones ACTIVAS</h2><p>Corresponden a las votaciones en curso, en ellas se indica el proyecto que se está votando, el horario de votación y si ya haz votado o no.</p></li>
+                    <li><h2>Votaciones PROXIMAS</h2><p>Aquí se muestran las votaciones que aún no están activas pero que ya se encuentran programadas con fecha de inicio y termino.</p></li>
+                    <li><h2>Votaciones CERRADAS</h2><p>Estas son votaciones que ya terminaron y por lo tanto se muestra el conteo de votos y el total de sufragios, además del resultado final.</p></li>
                 </ul>
             </div>
 
