@@ -1,14 +1,13 @@
-import ContextMenu from "../components/ContextMenu";
-import News from "../components/News/News";
-import PollsContainer from "../components/Polls/PollsContainer";
-import ProjectsContainer from "../components/ProjectsComp/ProjectsContainer";
-import CalendarContainer from "../components/CalendarContainer";
-import { useSelectedComponent } from '../contexts/SelectedComponentContext';
-import ActivitiesContainer from "../components/Activities/ActivitiesContainer";
-import SolicitudContainer from "../components/SolicitudContainer";
-import MembersContainer from "../components/Members/MembersContainer";
+import ContextMenu from "../../components/ContextMenu";
+import News from "../../components/News/News";
+import ProjectsContainer from "../../components/ProjectsComp/ProjectsContainer";
+import CalendarContainer from "../../components/CalendarContainer";
+import { useSelectedComponent } from '../../contexts/SelectedComponentContext';
+import ActivitiesContainer from "../../components/Activities/ActivitiesContainer";
+import MembersContainer from "../../components/Members/MembersContainer";
+import ApplicationContainer from "../../components/Applications/ApplicationContainer";
 
-const PresidentHome = () => {
+const DirectiveHome = () => {
     const { selectedComponent } = useSelectedComponent();
 
     const contextualMenuOptions = {
@@ -37,9 +36,9 @@ const PresidentHome = () => {
             'Crear actividad'
         ],
         "Solicitudes": [
-            'Solicitudes',
-            'Nueva solicitud',
-            'Solicitudes resueltas'
+            'Certificados',
+            'Recursos',
+            'Inscripción',
         ],
         "Nosotros": [
             'Información',
@@ -68,7 +67,7 @@ const PresidentHome = () => {
             contextualMenuOptionsForComponent = contextualMenuOptions["Actividades"];
             break;
         case 4:
-            contentComponent = <SolicitudContainer />;
+            contentComponent = <ApplicationContainer />;
             contextualMenuOptionsForComponent = contextualMenuOptions["Solicitudes"];
             break;
         case 5:
@@ -94,4 +93,4 @@ const PresidentHome = () => {
     );
 }
 
-export default PresidentHome
+export default DirectiveHome

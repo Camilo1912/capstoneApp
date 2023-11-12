@@ -4,24 +4,18 @@ import PublicLayout from "./layouts/PublicLayout";
 import { BrowserRouter, Routes, Route, HashRouter } from 'react-router-dom';
 import UserContextProvider from "./contexts/UserContext";
 import PrivateRoute from "./routes/PrivateRoute";
-import PresidentHome from "./pages/PresidentHome";
 import Login from "./pages/Login";
 import NeighborHome from "./pages/NeighborHome";
-import SecretaryHome from "./pages/SecretaryHome";
 import AdminHome from "./pages/adminPage/AdminHome";
-import TreasurerLayout from "./pages/TreasurerLayout";
 import { SelectedComponentProvider } from "./contexts/SelectedComponentContext";
-
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-
-// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import GuestContextProvider from "./contexts/GuestContext";
 import { createTheme, useMediaQuery } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
+import DirectiveHome from "./pages/DirectivePage/DirectiveHome";
 
 const App = () => {
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark');
@@ -50,9 +44,7 @@ const App = () => {
                                     <Route path="/neighbor_home" element={<NeighborHome />} />
                                 </Route>
                                 <Route element={<PrivateRoute allowedRoles={[2 ,3 ,4]} />}>
-                                    <Route path="/president_home" element={<PresidentHome />} />
-                                    <Route path="/secretary_home" element={<SecretaryHome />} />
-                                    <Route path="/treasurer_home" element={<TreasurerLayout />} />
+                                    <Route path="/directive_home" element={<DirectiveHome />} />
                                 </Route>
                                 <Route element={<PrivateRoute allowedRoles={[5]} />}>
                                     <Route path="/admin_home" element={<AdminHome />} />

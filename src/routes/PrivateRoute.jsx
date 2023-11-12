@@ -13,17 +13,29 @@ const PrivateRoute = ({allowedRoles=[], redirectPath = "/", children }) => {
         
     const userRole = userInfo.role && userInfo.role.role_id;
     
-    if (!allowedRoles.includes(userRole)) {
-        return <Navigate to={redirectPath} replace />;
-    }
+    // if (!allowedRoles.includes(userRole)) {
+    //     return <Navigate to={redirectPath} replace />;
+    // }
 
-    return children ? (
-        children
-    ) : (
-        <PrivateLayout>
-            <Outlet />
-        </PrivateLayout>
-    );
+    // return children ? (
+    //     children
+    // ) : (
+    //     <PrivateLayout>
+    //         <Outlet />
+    //     </PrivateLayout>
+    // );
+
+    if (allowedRoles.includes(userRole)) {
+        return children ? (
+            children
+            ) : (
+            <PrivateLayout>
+                <Outlet />
+            </PrivateLayout>
+        );
+    }
+        
+    return <Navigate to={redirectPath} replace />;
 };
 
 export default PrivateRoute;
