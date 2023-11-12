@@ -66,7 +66,7 @@ const RegisterVerificationFields = () => {
                     <input type="file" accept=".png, .jpg, .jpeg" style={{ display: 'none' }} onChange={(e) => handleFileChange(e, 'image_face')} />
                 </Button>
             </div>
-            Formatos aceptados: JPG, JPEG o PNG
+            Formatos aceptados: JPG, JPEG o PNG - Tamaño maximo 5mb
         </>
     )
 }
