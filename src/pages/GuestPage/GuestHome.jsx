@@ -14,6 +14,10 @@ import { formatearFecha } from '../../utils/utils';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
+import { activities_get_by_neighborhood_id } from '../../requests/Activities';
+import CampaignIcon from '@mui/icons-material/Campaign';
+import LocalActivityIcon from '@mui/icons-material/LocalActivity';
+import AssignmentIcon from '@mui/icons-material/Assignment';
 
 const GuestHome = () => {
     const navigate = useNavigate();
@@ -26,6 +30,8 @@ const GuestHome = () => {
     const [neighborhoodsList, setNeighborhoodsList] = useState([]);
     const [neighborhoodInfo, setNeighborhoodInfo] = useState({});
     const [newsList, setNewsList] = useState(null);
+    const [activitiesList, setActivitiesList] = useState(null);
+    const [refresh, setRefresh] = useState(true);
 
     useEffect(() => {
         const getRegions = async () => {
@@ -34,6 +40,12 @@ const GuestHome = () => {
         };
         getRegions();
     },[]);
+
+    useEffect(() => {
+        setActivitiesList(null);
+        setNewsList(null);
+        setNeighborhoodInfo({})
+    }, [refresh])
 
     useEffect(() => {
         if (guestForm.regionId) {
@@ -49,6 +61,7 @@ const GuestHome = () => {
             neighborhoodId: '',
         });
         setNeighborhoodsList([]);
+        setRefresh(!refresh);
     }, [guestForm.regionId]);
 
     useEffect(() => {
@@ -63,6 +76,7 @@ const GuestHome = () => {
             ...guestForm,
             neighborhoodId: '',
         });
+        setRefresh(!refresh);
     }, [guestForm.communeId]);
 
     const handleSelectionChange = (e) => {
@@ -86,9 +100,15 @@ const GuestHome = () => {
         if (neighborhoodInfo.id) {
             const getNewsFromNeighborhood = async() => {
                 const response = await get_announcements_by_neighborhood_id(neighborhoodInfo.id);
-                setNewsList(response.reverse());
+                setNewsList(response.data.reverse());
             };
+
+            const getActivitiesFromNeighborhood = async() => {
+                const response = await activities_get_by_neighborhood_id(neighborhoodInfo.id);
+                setActivitiesList(response.data.reverse());
+            }
             getNewsFromNeighborhood();
+            getActivitiesFromNeighborhood();
         }
     }, [neighborhoodInfo]);
     
@@ -120,73 +140,65 @@ const GuestHome = () => {
             <div>
                 <div className='guest-header-wrapper'>
                     <div>
-
-                        <div>
-                            <IconButton aria-label="Volver al inicio" size='small' onClick={handleBack}>
-                                <ArrowBackIosNewRoundedIcon />
-                            </IconButton>
-                        </div>
-                        <select 
-                            name="regionId" 
-                            id="region"
-                            value={guestForm.regionId}
-                            onChange={handleSelectionChange}
-                        >
-                            <option value="">-- Seleccione Región --</option>
-                            {regionsList.map((region, index) => (
-                                <option key={index} value={region.id}>
-                                    {region.region_name}
-                                </option>))
-                            }
-                        </select>
-                        /
-                        <select
-                            name="communeId" 
-                            id="commune"
-                            onChange={handleSelectionChange}
-                            value={guestForm.communeId}
-                            disabled={guestForm.regionId ? false : true}
-                        >
-                            <option value="">-- Seleccione Comuna --</option>
-                            {guestForm.regionId ? 
-                            <>
-                            {communesList.map((commune, index) => (
-                                <option key={index} value={commune.id}>
-                                    {commune.commune_name}
-                                </option>))
-                            }
-                            </>
-                            : null}
-                        </select>
-                        /
-                        <select 
-                            name="neighborhood" 
-                            id="neighborhood"
-                            value={JSON.stringify(guestForm.neighborhood)} 
-                            onChange={handleSelectionChange}
-                            disabled={guestForm.communeId ? false : true}
-                        >
-                            <option value="">-- Seleccione su Junta --</option>
-                            {guestForm.communeId ? 
-                            <>
-                            {neighborhoodsList.map((neighborhood, index) => (
-                                <option key={index} value={JSON.stringify(neighborhood)}>
-                                    {neighborhood.name}
-                                </option>))
-                            }
-                            </> 
-                            :null}
-                        </select>
+                        <IconButton aria-label="Volver al inicio" size='small' onClick={handleBack}>
+                            <ArrowBackIosNewRoundedIcon />
+                        </IconButton>
                     </div>
-                    {/* <Button 
-                        type='submit'
-                        variant="outlined"
-                        size='small'
-                        onClick={handleRegisterRedirection}
-                        endIcon={<LoginIcon />}
+                    <div>
+                    Region
+                    <select 
+                        name="regionId" 
+                        id="region"
+                        value={guestForm.regionId}
+                        onChange={handleSelectionChange}
                     >
-                        Registrarse
-                    </Button> */}
+                        <option value="">-- Seleccione Región --</option>
+                        {regionsList.map((region, index) => (
+                            <option key={index} value={region.id}>
+                                {region.region_name}
+                            </option>))
+                        }
+                    </select>
+                    Comuna
+                    <select
+                        name="communeId" 
+                        id="commune"
+                        onChange={handleSelectionChange}
+                        value={guestForm.communeId}
+                        disabled={guestForm.regionId ? false : true}
+                    >
+                        <option value="">-- Seleccione Comuna --</option>
+                        {guestForm.regionId ? 
+                        <>
+                        {communesList.map((commune, index) => (
+                            <option key={index} value={commune.id}>
+                                {commune.commune_name}
+                            </option>))
+                        }
+                        </>
+                        : null}
+                    </select>
+                    Junta
+                    <select 
+                        name="neighborhood" 
+                        id="neighborhood"
+                        value={JSON.stringify(guestForm.neighborhood)} 
+                        onChange={handleSelectionChange}
+                        disabled={guestForm.communeId ? false : true}
+                    >
+                        <option value="">-- Seleccione su Junta --</option>
+                        {guestForm.communeId ? 
+                        <>
+                        {neighborhoodsList.map((neighborhood, index) => (
+                            <option key={index} value={JSON.stringify(neighborhood)}>
+                                {neighborhood.name}
+                            </option>))
+                        }
+                        </> 
+                        :null}
+                    </select>
+                    </div>
+                    <div></div>
                 </div>
             </div>
             <div className='guest-content-wrapper'>
@@ -194,36 +206,46 @@ const GuestHome = () => {
                     <Grid container spacing={2}>
                         <Grid item xs={4}>
                             <div className='guest-card'>
-                                <h1>Anuncios</h1>
+                                <div className='guest-card-header'>
+                                    <h1>Anuncios</h1>
+                                    <CampaignIcon />
+                                </div>
+                                
+                                <div className='guest-card-content'>
+
+                                
                                 {newsList ? 
-                                    <>
-                                    {newsList.map((announcement) => (
-                                        <div key={announcement.id} className='news-card-guest' onClick={() => handleDialogOpen(announcement)}>
-                                            {announcement.image_url ? 
-                                                <img
-                                                    src={announcement.image_url}
-                                                    alt={`Image for ${announcement.title}`}
-                                                />
-                                                :
-                                                null
-                                            }
-                                            {announcement.title ? 
-                                                <div className='card-content'>
-                        
-                                                    <h2>{announcement.title}</h2>
-                                                    <div>
-                                                        <p className="news-card-guest-content-text">{announcement.description}</p>
-                                                        <p className='date-value date-news-position'>Publicado el {formatearFecha(announcement.created_at)}</p>
-                                                    
+                                    <> 
+                                    {newsList.length !== 0 && guestForm.neighborhoodId ? <>
+                                        {newsList.map((announcement) => (
+                                            <div key={announcement.id} className='news-card-guest' onClick={() => handleDialogOpen(announcement)}>
+                                                {announcement.image_url ? 
+                                                    <img
+                                                        src={announcement.image_url}
+                                                        alt={`Image for ${announcement.title}`}
+                                                    />
+                                                    :
+                                                    null
+                                                }
+                                                {announcement.title ? 
+                                                    <div className='card-content'>
+                            
+                                                        <h2>{announcement.title}</h2>
+                                                        <div>
+                                                            <p className="news-card-guest-content-text">{announcement.description}</p>
+                                                            <p className='date-value-guest date-news-position'>Publicado el {formatearFecha(announcement.created_at)}</p>
+                                                        
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                : null
-                                            }
-                                        </div>
-                                    ))}
+                                                    : null
+                                                }
+                                            </div>
+                                        ))}</>
+                                    : <p className='guest-helper-text'>No hay anuncios.</p>}
                                     </>
                                     : <p className='guest-helper-text'>Los anuncios de la junta de vecinos que selecciones apareceran aquí.</p>
-                                }   
+                                }
+                                </div>
                             </div>
                             <Dialog open={open} onClose={handleDialogClose}>
                                 <DialogContent >
@@ -243,12 +265,46 @@ const GuestHome = () => {
                         </Grid>
                         <Grid item xs={4}>
                             <div className='guest-card'>
-                                <h1>Actividades</h1>
+                                <div className='guest-card-header'>
+                                    <h1>Actividades</h1>
+                                    <LocalActivityIcon />
+                                </div>
+                                <div className='guest-card-content'>
+                                    {activitiesList ? 
+                                        <> 
+                                        {activitiesList.length !== 0 && guestForm.neighborhoodId ? <>
+                                            {activitiesList.map((activity) => (
+                                                <div key={activity.id} className='activities-card-guest' onClick={() => handleDialogOpen(activity)}>
+                                                    <h2>{activity.title}</h2>
+                                                    <div>
+                                                        <p className="news-card-guest-content-text">{activity.description}</p>
+                                                        <p className='date-value date-news-position'>Publicado el {formatearFecha(activity.created_at)}</p>
+                                                        <p>Actividad de {activity.activity_type}</p>
+                                                        <p>Cupos: {activity.occupancy}/{activity.quota}</p>
+                                                    </div>
+                                                </div>
+                                            ))}</>
+                                        : <p className='guest-helper-text'>No hay anuncios.</p>}
+                                        </>
+                                        : <p className='guest-helper-text'>Las actividades de la junta de vecinos que selecciones apareceran aquí.</p>
+                                    }
+                                </div>   
                             </div>
                         </Grid>
                         <Grid item xs={4}>
                             <div className='guest-card'>
-                                <h1>Solicitudes</h1>
+                                <div className='guest-card-header'>
+                                    <h1>Solicitudes</h1>
+                                    <AssignmentIcon />
+                                </div>
+                                <div className='guest-card-content'>
+                                    {guestForm.neighborhoodId ? 
+                                        <>
+                                            <Button variant='outlined'>Certificado de residencia</Button>
+                                            <Button variant='outlined'>Implemento publico</Button>
+                                        </>
+                                    :<p className='guest-helper-text'>Las solicitudes disponibles de la junta que selecciones aparecerán aquí.</p>}
+                                </div>
                             </div>
                         </Grid>
                     </Grid>

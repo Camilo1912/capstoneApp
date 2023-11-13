@@ -46,6 +46,15 @@ const UsInfo = () => {
                         <h2>Dirección</h2>
                         <p>{neighborhoodData.address} /Comuna {userInfo.commune.commune_name} / Región {userInfo.region.region_name}</p>
                     </div>
+                    <div>
+                        <h2>Datos Bancarios</h2>
+                        <strong>{neighborhoodData.quota}</strong>
+                        <p>Nombre: {neighborhoodData.bank_acc_name}</p>
+                        <p>Banco: {neighborhoodData.bank_name}</p>
+                        <p>Tipo de cuenta: {neighborhoodData.bank_acc_type}</p>
+                        <p>Numero de cuenta: {neighborhoodData.bank_acc_number}</p>
+                        <p>Email: {neighborhoodData.bank_acc_email}</p>
+                    </div>
                 </>
                 :
                 <>No se pudo cargar la información</>

@@ -82,6 +82,7 @@ const NewsCreationForm = () => {
     };
 
     const handleSubmit = async () => {
+        setIsSubmitDisabled(true);
         const payload = {
             'announcement[title]': newAnnouncement.title,
             'announcement[description]': newAnnouncement.description,
