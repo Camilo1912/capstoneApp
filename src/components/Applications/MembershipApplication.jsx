@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { UserContext } from '../../contexts/UserContext';
 import { application_update, applications_get_by_neighborhood_id } from '../../requests/Applications';
-import { formatearFecha } from '../../utils/utils';
+import { formatearFecha, convertirFormatoFecha } from '../../utils/utils';
 import RefreshRoundedIcon from '@mui/icons-material/RefreshRounded';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -12,10 +12,16 @@ import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
+import { initCap } from '../../utils/utils';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const MembershipApplication = () => {
     const { userInfo } = useContext(UserContext);
     const [open, setOpen] = useState(false);
+    const [expanded, setExpanded] = React.useState(false);
     const [refresh, setRefresh] = useState(true);
     const neighborhoodId = userInfo.neighborhood.neighborhood_id;
     const [memberApplicationList, setMemberAplicationList] = useState([]);
@@ -44,10 +50,11 @@ const MembershipApplication = () => {
                 const response = await application_update(selectedApplication.id, newPayload);
                 if (response.state === 200) {
                     console.log('correcto....');
-                    setRefresh(!refresh);
+                    
                 }
             }
             updateApplicationState();
+            setRefresh(!refresh);
         }
 
     }
@@ -60,6 +67,10 @@ const MembershipApplication = () => {
     const handleOpenDialog = (application) => {
         setSelectedApplication(application);
         setOpen(true);
+    };
+
+    const handleAccordioChange = (panel) => (event, isExpanded) => {
+        setExpanded(isExpanded ? panel : false);
     };
     
 
@@ -77,17 +88,19 @@ const MembershipApplication = () => {
                         <h2>Pendientes</h2>
                     </div>
                     <div className='polls-list-container'>
-                        {memberApplicationList.map((application) => (
-                            <>
-                            {application.application_type === 'registro' && memberApplicationList.length !== 0 && application.state === 'creada' ? 
-                                <div key={application.id} className='poll-card application-card' onClick={() => handleOpenDialog(application)}>
-                                    <p>{application.first_name} {application.second_name} {application.last_name} {application.last_name_2}</p>
-                                    <p className='date-value'>{formatearFecha(application.created_at)}</p>
-                                    <br />
-                                </div>
-                            :null}</>
-                        ))}
-                        {memberApplicationList.length === 0 ? <p>No hay solicitudes</p> : null}
+                        {memberApplicationList.filter(application => application.application_type === 'registro' && application.state === 'creada').length === 0 ? (
+                            <p>No hay solicitudes</p>
+                        ) : (
+                            memberApplicationList.filter(application => application.application_type === 'registro' && application.state === 'creada').map((application) => (
+                                    <div key={application.id} className='application-card' onClick={() => handleOpenDialog(application)}>
+                                        <div className='application-card-header'>Solicitante: <strong>{initCap(application.first_name)} {initCap(application.last_name)} {initCap(application.last_name_2)}</strong></div>
+                                        <div className='application-card-content'>
+                                            <p>Rut: {application.rut}</p>
+                                            <p>Creada el {formatearFecha(application.created_at)}</p>
+                                        </div>
+                                    </div>
+                                ))
+                            )}
                     </div>
 
                     <div className='poll-state-separator'>
@@ -98,11 +111,14 @@ const MembershipApplication = () => {
                         {memberApplicationList.map((application) => (
                             <>
                             {application.application_type === 'registro' && memberApplicationList.length !== 0  && application.state !== 'creada'? 
-                                <div key={application.id} className='poll-card application-card'>
-                                    <p>{application.first_name} {application.second_name} {application.last_name} {application.last_name_2}</p>
-                                    <p>{formatearFecha(application.created_at)}</p>
-                                    <p>{application.state}</p>
-                                    <br />
+                                <div key={application.id} className='application-card'>
+                                    <div className='application-card-header'>Solicitante: <strong>{initCap(application.first_name)} {initCap(application.last_name)} {initCap(application.last_name_2)}</strong></div>
+                                    <div className='application-card-content'>
+                                        <p>Rut: {application.rut}</p>
+                                        <p>Creada el {formatearFecha(application.created_at)}</p>
+                                        <p>Respondida el {formatearFecha(application.updated_at)}</p>
+                                        <p>Resolución: <strong>{initCap(application.state)}</strong></p>
+                                    </div>
                                 </div>
                             :null}</>
                         ))}
@@ -118,12 +134,67 @@ const MembershipApplication = () => {
                 </div>
                 <Dialog open={open} onClose={handleCloseDialog}>
                     <DialogContent>
-                        <p>{selectedApplication?.first_name}</p>
+                        {selectedApplication ? 
+                        <div className='application-info-container'>
+                            <h1>Solicitud de incripción</h1>
+                            <p className='date-value'>Creada el {formatearFecha(selectedApplication.created_at)}</p>
+                            <p>Solicitante: <strong>{initCap(selectedApplication.first_name)} {initCap(selectedApplication.last_name)} {initCap(selectedApplication.last_name_2)}</strong></p>
+                            <p>Rut: <strong>{selectedApplication.rut}</strong></p>
+                            <p>Fecha de nacimiento: <strong>{convertirFormatoFecha(selectedApplication.birth_date)}</strong></p>
+                            <p>Genero: <strong>{selectedApplication.gender}</strong></p>
+                            <p>Email: <strong>{selectedApplication.email}</strong></p>
+                            <p>Dirección:  <strong>{selectedApplication.street_address} {selectedApplication.number_address}</strong></p>
+                            
+                            <Accordion expanded={expanded === 'panel1'} onChange={handleAccordioChange('panel1')}>
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel1a-content"
+                                    id="panel1a-header"
+                                >Foto de carnet parte frontal</AccordionSummary>
+                                <AccordionDetails>
+                                    <img width={'100%'} src={selectedApplication.image_url_1} alt="" />
+                                </AccordionDetails>
+                            </Accordion>
 
+                            <Accordion expanded={expanded === 'panel2'} onChange={handleAccordioChange('panel2')}>
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel1a-content"
+                                    id="panel1a-header"
+                                >Foto de carnet parte posterior</AccordionSummary>
+                                <AccordionDetails>
+                                    <img width={'100%'} src={selectedApplication.image_url_2} alt="" />
+                                </AccordionDetails>
+                            </Accordion>
+
+                            <Accordion expanded={expanded === 'panel3'} onChange={handleAccordioChange('panel3')}>
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel1a-content"
+                                    id="panel1a-header"
+                                >Foto de cuenta o contrato de arriendo</AccordionSummary>
+                                <AccordionDetails>
+                                    <img width={'100%'} src={selectedApplication.image_url_3} alt="" />
+                                </AccordionDetails>
+                            </Accordion>
+
+                            <Accordion expanded={expanded === 'panel4'} onChange={handleAccordioChange('panel4')}>
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel1a-content"
+                                    id="panel1a-header"
+                                >Foto carnet posterior</AccordionSummary>
+                                <AccordionDetails>
+                                    <img width={'100%'} src={selectedApplication.image_url_4} alt="" />
+                                </AccordionDetails>
+                            </Accordion>
+
+                        </div> 
+                        : null}
                     </DialogContent>
                     <DialogActions>
-                        <Button variant='contained' color='success' value='aceptada' onClick={handleResolution} startIcon={<CheckCircleRoundedIcon />}>Aceptar</Button>
                         <Button variant='contained' color='error' value='rechazada' onClick={handleResolution} startIcon={<CancelRoundedIcon />}>Rechazar</Button>
+                        <Button variant='contained' color='success' value='aceptada' onClick={handleResolution} startIcon={<CheckCircleRoundedIcon />}>Aceptar</Button>
                         <Button onClick={handleCloseDialog}>Cerrar</Button>
                     </DialogActions>
                 </Dialog>
