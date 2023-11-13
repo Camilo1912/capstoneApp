@@ -45,3 +45,14 @@ export const projectTypes = {
   'PV': 'Proyectos de Vivienda',
   'PS': 'Proyectos de Salúd'
 };
+
+export const activityTypes = {
+    1: 'Cultural',
+    2: 'Evento Social',
+    3: 'Reunión Comunitaria',
+    4: 'Deporte y recreación',
+    5: 'Voluntariado',
+    6: 'Taller Educativo',
+    7: 'Para Niños y Familias',
+    8: 'Servicios Comunitarios'
+}

@@ -1,12 +1,12 @@
 import { axiosClient } from "./AxiosClient";
 
-export const get_activitie_by_id = async (activitie_id) => {
-    const response = await axiosClient.get(`activities/${activitie_id}`);
+export const get_activity_by_id = async (activity_id) => {
+    const response = await axiosClient.get(`activities/${activity_id}`);
     return response;
 };
 
-export const activitie_create = async (newActivitiePayload) => {
-    const response = await axiosClient.post("activities/", newActivitiePayload);
+export const activity_create = async (newActivityPayload) => {
+    const response = await axiosClient.post("activities/", newActivityPayload);
     return response;
 };
 
@@ -20,7 +20,7 @@ export const activities_get_by_neighborhood_id = async (neighborhood_id) => {
     return response;
 };
 
-export const activitie_update = async (activitie_id, updatePayload) => {
-    const response = await axiosClient.put(`activities/${activitie_id}`, updatePayload);
+export const activity_update = async (activity_id, updatePayload) => {
+    const response = await axiosClient.put(`activities/${activity_id}`, updatePayload);
     return response;
 };

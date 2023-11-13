@@ -18,6 +18,7 @@ import { activities_get_by_neighborhood_id } from '../../requests/Activities';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import LocalActivityIcon from '@mui/icons-material/LocalActivity';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import { activityTypes } from '../../utils/data';
 
 const GuestHome = () => {
     const navigate = useNavigate();
@@ -279,7 +280,7 @@ const GuestHome = () => {
                                                     <div>
                                                         <p className="news-card-guest-content-text">{activity.description}</p>
                                                         <p className='date-value date-news-position'>Publicado el {formatearFecha(activity.created_at)}</p>
-                                                        <p>Actividad de {activity.activity_type}</p>
+                                                        <p>Tipo: {activityTypes[activity.activity_type]}</p>
                                                         <p>Cupos: {activity.occupancy}/{activity.quota}</p>
                                                     </div>
                                                 </div>
