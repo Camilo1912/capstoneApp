@@ -17,6 +17,7 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { toast } from 'react-toastify';
 
 const MembershipApplication = () => {
     const { userInfo } = useContext(UserContext);
@@ -45,12 +46,11 @@ const MembershipApplication = () => {
                     state: event.target.value
                 }
             }
-            console.log(newPayload);
             const updateApplicationState = async () => {
                 const response = await application_update(selectedApplication.id, newPayload);
-                if (response.state === 200) {
-                    console.log('correcto....');
-                    
+                if (response.status === 200) {
+                    toast.success('Actividad publicada correctamente', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
+                    setOpen(false);
                 }
             }
             updateApplicationState();
@@ -173,7 +173,7 @@ const MembershipApplication = () => {
                                     expandIcon={<ExpandMoreIcon />}
                                     aria-controls="panel1a-content"
                                     id="panel1a-header"
-                                >Foto de cuenta o contrato de arriendo</AccordionSummary>
+                                >Foto de Rostro</AccordionSummary>
                                 <AccordionDetails>
                                     <img width={'100%'} src={selectedApplication.image_url_3} alt="" />
                                 </AccordionDetails>
@@ -184,7 +184,7 @@ const MembershipApplication = () => {
                                     expandIcon={<ExpandMoreIcon />}
                                     aria-controls="panel1a-content"
                                     id="panel1a-header"
-                                >Foto carnet posterior</AccordionSummary>
+                                >Foto de cuenta o contrato de arriendo</AccordionSummary>
                                 <AccordionDetails>
                                     <img width={'100%'} src={selectedApplication.image_url_4} alt="" />
                                 </AccordionDetails>

@@ -19,7 +19,7 @@ const ActivitiesCreationForm = () => {
         description: '',
         state: 'creada',
         activity_type: '',
-        quota: '',
+        quota: 0,
         occupancy: 0,
         neighborhood_id: userInfo.neighborhood.neighborhood_id,
         start_date: null,
@@ -32,9 +32,13 @@ const ActivitiesCreationForm = () => {
     const [refresh, setRefresh] = useState(true);
     const [selectedEndDate, setSelectedEndDate] = useState(null);
     const [selectedStartDate, setSelectedStartDate] = useState(null);
-
+ 
     useEffect(() => {
         setNewActivity(defaultActivity);
+        setSelectedEndDate(null);
+        setSelectedStartDate(null); //no resetéa la fecha
+        setCharacterCount(0);
+        setLimitCupos(false);
     }, [refresh])
 
     useEffect(() => {
@@ -43,7 +47,7 @@ const ActivitiesCreationForm = () => {
         } else {
             setIsSubmitDisabled(true);
         }
-    }, [newActivity]);
+    }, [newActivity][selectedStartDate]);
 
     const handleCheckboxChange = () => {
         setLimitCupos(!limitCupos);
@@ -82,11 +86,15 @@ const ActivitiesCreationForm = () => {
     };
 
     const handleQuotaChange = (event) => {
-        const newQuota = event.target.value;
-        setNewActivity({
-            ...newActivity,
-            quota: newQuota,
-        });
+        const newQuota = parseInt(event.target.value);
+
+        if (newQuota) {
+
+            setNewActivity({
+                ...newActivity,
+                quota: newQuota,
+            });
+        }
     };
 
     const handleSubmit = async () => {
@@ -152,8 +160,13 @@ const ActivitiesCreationForm = () => {
                         <FormControlLabel control={<Checkbox checked={limitCupos} onChange={handleCheckboxChange} />} label='Limitar Cupos' />
                         <input
                             type="number"
+                            onKeyDown={(e) => {
+                                if (!/[0-9]/.test(e.key) && !['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                                    e.preventDefault();
+                                }
+                            }}
                             onChange={handleQuotaChange}
-                            value={newActivity.quota || null}
+                            value={newActivity.quota || ''}
                             disabled={limitCupos ? false : true}
                             style={{ width: 69 }}
                             inputMode="numeric"
@@ -168,6 +181,7 @@ const ActivitiesCreationForm = () => {
                         <DateTimePicker
                             label="Seleccione inicio"
                             ampm={false}
+                            value={selectedStartDate || null}
                             minDateTime={currentDateTime}
                             onChange={handleStartDateChange}
                             format="dd/MM/yyyy HH:mm"
@@ -184,6 +198,7 @@ const ActivitiesCreationForm = () => {
                         <DateTimePicker
                             label="Seleccione termino"
                             ampm={false}
+                            value={selectedEndDate || null}
                             disabled={selectedStartDate ? false : true}
                             minDateTime={selectedStartDate ? selectedStartDate : currentDateTime}
                             onChange={handleEndDateChange}

@@ -62,7 +62,7 @@ const PollCreationForm = ({projectId, updateShowParent, isParentOpen}) => {
                 value={startDate}
                 onChange={(newValue) => {setStartDate(newValue)}}
                 minDateTime={currentDateTime}
-                inputFormat="dd/mm/yyyy HH:mm"
+                format="dd/MM/yyyy HH:mm"
                 ampm={false}
                 slotProps={{
                     textField: {
@@ -80,7 +80,7 @@ const PollCreationForm = ({projectId, updateShowParent, isParentOpen}) => {
                 value={endDate}
                 onChange={(newValue) => setEndDate(newValue)}
                 minDateTime={startDate}
-                inputFormat="dd/mm/yyyy HH:mm"
+                format="dd/MM/yyyy HH:mm"
                 ampm={false}
                 disabled={!startDate}
                 slotProps={{
