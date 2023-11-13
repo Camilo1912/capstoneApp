@@ -1,9 +1,215 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import { activityTypes } from '../../utils/data'
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import { Button } from '@mui/material';
+import SendRoundedIcon from '@mui/icons-material/SendRounded';
+import { DateTimePicker } from '@mui/x-date-pickers';
+import { UserContext } from '../../contexts/UserContext';
+import { activity_create } from '../../requests/Activities';
+import { toast } from 'react-toastify';
+import { format } from 'date-fns';
 
 const ActivitiesCreationForm = () => {
-  return (
-    <div>ActivitiesCreationForm</div>
-  )
+    const { userInfo, } = useContext(UserContext);
+    const currentDateTime = new Date();
+    const maxLengthDescription = 5000;
+    const defaultActivity = {
+        title: '',
+        description: '',
+        state: 'creada',
+        activity_type: '',
+        quota: '',
+        occupancy: 0,
+        neighborhood_id: userInfo.neighborhood.neighborhood_id,
+        start_date: null,
+        end_date: null
+    }
+    const [limitCupos, setLimitCupos] = useState(false);
+    const [newActivity, setNewActivity] = useState(defaultActivity);
+    const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
+    const [characterCount, setCharacterCount] = useState(0);
+    const [refresh, setRefresh] = useState(true);
+    const [selectedEndDate, setSelectedEndDate] = useState(null);
+    const [selectedStartDate, setSelectedStartDate] = useState(null);
+
+    useEffect(() => {
+        setNewActivity(defaultActivity);
+    }, [refresh])
+
+    useEffect(() => {
+        if (newActivity.title && newActivity.description && newActivity.neighborhood_id && selectedStartDate) {
+            setIsSubmitDisabled(false);
+        } else {
+            setIsSubmitDisabled(true);
+        }
+    }, [newActivity]);
+
+    const handleCheckboxChange = () => {
+        setLimitCupos(!limitCupos);
+    };
+
+    const handleTitleChange = (event) => {
+        setNewActivity({
+            ...newActivity,
+            title: event.target.value,
+        });
+    };
+
+    const handleDescriptionChange = (event) => {
+        setCharacterCount(maxLengthDescription - (maxLengthDescription - event.target.value.length));
+        setNewActivity({
+            ...newActivity,
+            description: event.target.value,
+        });
+    };
+
+    const handleStartDateChange = (selectedDate) => {
+        setSelectedStartDate(selectedDate);
+        setSelectedEndDate(null);
+    };
+
+    const handleEndDateChange = (selectedDate) => {
+        setSelectedEndDate(selectedDate);
+    };
+
+    const handleActivityTypeChange = (event) => {
+        const selectedType = event.target.value;
+        setNewActivity({
+            ...newActivity,
+            activity_type: selectedType,
+        });
+    };
+
+    const handleQuotaChange = (event) => {
+        const newQuota = event.target.value;
+        setNewActivity({
+            ...newActivity,
+            quota: newQuota,
+        });
+    };
+
+    const handleSubmit = async () => {
+        setIsSubmitDisabled(true);
+        const newStartDate = `${selectedStartDate.getFullYear()}-${(selectedStartDate.getMonth() + 1).toString().padStart(2, '0')}-${selectedStartDate.getDate().toString().padStart(2, '0')}T${selectedStartDate.getHours().toString().padStart(2, '0')}:${selectedStartDate.getMinutes().toString().padStart(2, '0')}`;
+        const newEndDate = `${selectedEndDate.getFullYear()}-${(selectedEndDate.getMonth() + 1).toString().padStart(2, '0')}-${selectedEndDate.getDate().toString().padStart(2, '0')}T${selectedEndDate.getHours().toString().padStart(2, '0')}:${selectedEndDate.getMinutes().toString().padStart(2, '0')}`;
+        console.log(newStartDate, ' ', newEndDate)
+        const payload = {
+            activity: {
+                ...newActivity,
+                start_date: newStartDate,
+                end_date: newEndDate
+            }
+        };
+        const activityResponse = await activity_create(payload);
+        if (activityResponse.status === 200) {
+            toast.success('Actividad publicada correctamente', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
+            setRefresh(!refresh);
+        }
+    }
+
+    return (
+        <div className='project-creation-layout'>
+            <div className='create-project-card'>
+
+                <h1>Formulario de creación de actividad</h1>
+                <div>
+                    <label><strong>Titulo *</strong></label>
+                    <input type="text" name="title" value={newActivity.title} maxLength={100} onChange={handleTitleChange}/>
+                </div>
+                <div>
+                    <label><strong>Tipo de actividad</strong></label>
+                    <select 
+                        name="tipo-actividad" 
+                        id="activity-type"
+                        value={newActivity.activity_type}
+                        onChange={handleActivityTypeChange}
+                    >
+                        <option value="">-- Seleccione --</option>
+                        {Object.entries(activityTypes).map(([key, value]) => (
+                            <option key={key} value={key}>
+                                {value}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div>
+                    <label><strong>Descripción</strong></label>
+                    <textarea 
+                        className='custom-text-area' 
+                        name="activity-description" 
+                        id="act-desc" 
+                        placeholder='Escriba descripción ...'
+                        maxLength={maxLengthDescription}
+                        value={newActivity.description}
+                        onChange={handleDescriptionChange}
+                    ></textarea>
+                    <p>{characterCount}/{maxLengthDescription}</p>
+                </div>
+                <div>
+                    <label><strong>Limite de cupos</strong></label>
+                    <div>
+                        <FormControlLabel control={<Checkbox checked={limitCupos} onChange={handleCheckboxChange} />} label='Limitar Cupos' />
+                        <input
+                            type="number"
+                            onChange={handleQuotaChange}
+                            value={newActivity.quota || null}
+                            disabled={limitCupos ? false : true}
+                            style={{ width: 69 }}
+                            inputMode="numeric"
+                            pattern="[0-9]*"
+                            min="1"
+                        />
+                    </div>
+                </div>
+                <div>
+                    <label><strong>Fecha y Hora</strong></label>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignContent: 'center', marginBottom: '15px', marginTop: '15px'}}>
+                        <DateTimePicker
+                            label="Seleccione inicio"
+                            ampm={false}
+                            minDateTime={currentDateTime}
+                            onChange={handleStartDateChange}
+                            format="dd/MM/yyyy HH:mm"
+                            slotProps={{
+                                textField: {
+                                variant: 'outlined',
+                                color: 'secondary',
+                                size: 'small',
+                                },
+                            }}
+                        />
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignContent: 'center'}}>
+                        <DateTimePicker
+                            label="Seleccione termino"
+                            ampm={false}
+                            disabled={selectedStartDate ? false : true}
+                            minDateTime={selectedStartDate ? selectedStartDate : currentDateTime}
+                            onChange={handleEndDateChange}
+                            format="dd/MM/yyyy HH:mm"
+                            slotProps={{
+                                textField: {
+                                variant: 'outlined',
+                                color: 'secondary',
+                                size: 'small',
+                                },
+                            }}
+                        />
+                    </div>
+                </div>
+                <div className='project-creation-button-container'>
+                    <Button variant='contained' color='success' onClick={handleSubmit} disabled={isSubmitDisabled} endIcon={<SendRoundedIcon />}>Publicar</Button>
+                </div>
+            </div>
+            <div className='project-creation-info-card'>
+                <h1>Sobre la creacón de actividades</h1>
+                <ul>
+                <li><h2>Tipo de Actividad</h2><p>El tipo de anuncio indica si se mostrará solo una imágen (tipo afiche) o </p></li>
+            </ul>
+            </div>
+        </div>
+    )
 }
 
 export default ActivitiesCreationForm

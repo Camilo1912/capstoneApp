@@ -258,11 +258,11 @@ const ProjectList = () => {
                                         ))}
                                     </Stepper>
                                 : 
-                                <>
+                                <div className='reject-prompt-message-container'>
                                     <h3 style={{color: 'red'}}>Proyecto Rechazado</h3>
-                                    <h4>Motivo del rechazo: </h4>
+                                    <label htmlFor="motivo-rechazo"><strong>Motivo de Rechazo</strong></label>
                                     <p>{selectedProjectInfo.tag}</p>
-                                </>
+                                </div>
                                 }
                             </div>
                             {showRejectionPrompt ? 
