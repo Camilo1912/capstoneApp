@@ -7,3 +7,11 @@
     border: 1px dashed #555555;
     border-radius: 10px;
 }
+
+.activities-card-content-text {
+    text-align: justify;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    -webkit-line-clamp: 3;
+}

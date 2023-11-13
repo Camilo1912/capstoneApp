@@ -76,11 +76,13 @@
 }
 
 .reject-prompt-message-container {
+    background-color: $accent-color-light-n1;
     display: flex;
     flex-direction: column;
     justify-content: start;
     gap: 15px;
-    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.3);
+    // box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+    width: 100%;
     padding: 15px;
     border-radius: 15px;
 
@@ -111,5 +113,9 @@
         >p {
             background-color: $accent-color-dark-n1;
         }
+    }
+    
+    .reject-prompt-message-container {
+        background-color: $accent-color-dark-n1;
     }
 }

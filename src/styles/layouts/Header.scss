@@ -116,4 +116,10 @@
             color: black;
         }
     }
+
+    .user-edit-form {
+        > div {
+            background-color: $background-color-dark;
+        }
+    }
 }

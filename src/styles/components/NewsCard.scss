@@ -67,7 +67,7 @@
 @media (prefers-color-scheme: dark) {
     .news-card {
         background-color: $background-color-dark;
-        border-top: $border-top-dark;
+        border: $border-top-dark;
         color: $text-color-normal-dark;
     }
 }
