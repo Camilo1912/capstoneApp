@@ -30,9 +30,7 @@ const DirectiveHome = () => {
             'Todo'
         ],
         "Actividades": [
-            'Proximas actividades',
-            'Activiades pasadas',
-            'Editar actividades',
+            'Todas',
             'Crear actividad'
         ],
         "Solicitudes": [

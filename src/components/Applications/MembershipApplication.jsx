@@ -60,6 +60,7 @@ const MembershipApplication = () => {
     }
 
     const handleCloseDialog = () => {
+        setRefresh(!refresh);
         setSelectedApplication(null);
         setOpen(false);
     };

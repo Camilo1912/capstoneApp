@@ -93,26 +93,26 @@ const PollList = () => {
     setOpen(true);
   };
 
-  const handleSubmitVote = async (e) => {
-    const payload = {
-      id: selectedPoll?.id,
-      vote_option: e.target.value,
-      neighbor_id: userInfo.id
-    }
-    try {
-      const vote_response = await poll_submit_vote(selectedPoll.id, payload);
-      if (vote_response.status === 201) {
+    const handleSubmitVote = async (e) => {
+        const payload = {
+            id: selectedPoll?.id,
+            vote_option: e.target.value,
+            neighbor_id: userInfo.id
+        }
+        try {
+            const vote_response = await poll_submit_vote(selectedPoll.id, payload);
+            if (vote_response.status === 201) {
 
-        toast.success('Su voto se envío correctamente', { autoClose: 3000, position: toast.POSITION.TOP_CENTER });
-      }
-    } catch (error) {
-      if (error?.response?.status === 422) {
-        toast.error('Error al votar. ¡Es posible que ya haya votado en este proyecto!', { autoClose: 3000, position: toast.POSITION.TOP_CENTER })
-      }
-    }
+                toast.success('Su voto se envío correctamente', { autoClose: 3000, position: toast.POSITION.TOP_CENTER });
+            }
+        } catch (error) {
+            if (error?.response?.status === 422) {
+                toast.error('Error al votar. ¡Es posible que ya haya votado en este proyecto!', { autoClose: 3000, position: toast.POSITION.TOP_CENTER })
+            }
+        }
 
-    setOpen(false);
-  };
+        setOpen(false);
+    };
 
     const handlePollStateUpdate = async (pollId) => {
         const payload = {

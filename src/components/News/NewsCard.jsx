@@ -28,7 +28,7 @@ const NewsCard = ({ cardData }) => {
     useEffect(() => {
         const getAnnouncements = async () => {
             const response = await get_announcements_by_neighborhood_id(userInfo.neighborhood.neighborhood_id);
-            setNewsList(response.reverse());
+            setNewsList(response.data.reverse());
         };
         getAnnouncements();
     }, [refresh])

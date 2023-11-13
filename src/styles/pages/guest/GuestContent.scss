@@ -6,19 +6,32 @@
 .guest-card {
     background-color: rgba($color: #ffffff, $alpha: .3);
     backdrop-filter: blur(15px);
-    padding: 15px;
     border-radius: 25px;
     border-top: 1px solid rgba(255, 255, 255, 0.3);
-    max-height: calc(100dvh - 7rem);
-    overflow: auto;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+}
 
+.guest-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    // border-bottom: 1px solid rgba(0, 0, 0, 0.6);
+    margin: 10px 15px 0px 15px;
     >h1 {
         font-size: 1.2rem;
     }
+}
 
+.guest-card-content {
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100dvh - 10rem);
+    overflow: auto;
+    gap: 10px;
+    border-radius: 15px;
+    padding: 10px 15px 5px 15px;
+    margin-bottom: 10px;
 }
 
 
@@ -35,6 +48,28 @@
         object-fit: cover;
         border-radius: 10px;
     }
+
+    .card-content {
+        padding: 0px 20px 20px 20px;
+
+        >h2 {
+            font-size: 1rem
+        }
+
+        >p {
+            font-size: 1rem;
+        }
+    }
+}
+
+
+.activities-card-guest {
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(255, 255, 255, 0.507);
+    border-radius: 15px;
+    padding: 10px;
+    position: relative;
 
     .card-content {
         padding: 0px 20px 20px 20px;
@@ -73,6 +108,12 @@
     color: rgba(0, 0, 0, 0.6);
 }
 
+.date-value-guest {
+    width: 100%;
+    text-align: end;
+    font-size: .7rem;
+    color: #555555;
+}
 
 
 @media (prefers-color-scheme: dark) {
@@ -88,5 +129,9 @@
 
     .guest-helper-text {
         color: rgba(255, 255, 255, 0.6);
+    }
+
+    .guest-card-header {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.6);
     }
 }
