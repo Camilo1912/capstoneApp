@@ -51,3 +51,22 @@ export const formatTextBr = (text) => {
     const formattedText = text.replace(/\n/g, "<br>");
     return formatTextBr;
 } 
+
+export const initCap = (str) => {
+    return str.toLowerCase().replace(/(?:^|\s)\w/g, function(match) {
+        return match.toUpperCase();
+    });
+}
+
+export const convertirFormatoFecha = (fechaEnFormatoISO) => {
+    const partes = fechaEnFormatoISO.split('-');
+    if (partes.length === 3) {
+        const [anio, mes, dia] = partes;
+        const nuevaFecha = `${dia}-${mes}-${anio}`;
+        return nuevaFecha;
+    } else {
+        // Manejo de error si el formato de entrada no es válido
+        console.error('Formato de fecha no válido');
+        return null;
+    }
+}
