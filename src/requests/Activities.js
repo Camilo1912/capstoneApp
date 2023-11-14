@@ -26,7 +26,7 @@ export const activity_update = async (activity_id, updatePayload) => {
 };
 
 export const activity_join = async (activity_id, updatePayload) => {
-    const response = await axiosClient.put(`activities/${activity_id}/sign_in`, updatePayload);
+    const response = await axiosClient.post(`activities/${activity_id}/sign_in`, updatePayload);
     return response;
 };
 
