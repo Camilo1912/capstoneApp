@@ -19,10 +19,15 @@
         background-color: $accent-color-light-n1;
         border-radius: 10px;
         padding: 5px 10px;
+        display: flex;
+        justify-content: space-between;
     }
 
     .application-card-content {
         padding: 5px 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
     }
 }
 

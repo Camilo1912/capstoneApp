@@ -70,17 +70,20 @@
     border-radius: 15px;
     padding: 10px;
     position: relative;
+    gap: 10px;
+    >h2 {
+        font-size: 1rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+    }
+    >div {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
 
     .card-content {
         padding: 0px 20px 20px 20px;
-
-        >h2 {
-            font-size: 1rem
-        }
-
-        >p {
-            font-size: 1rem;
-        }
+        
     }
 }
 
@@ -104,6 +107,7 @@
 .news-card-guest-content-text {
     text-align: justify;
     display: -webkit-box;
+    font-size: .9rem;
     -webkit-box-orient: vertical;
     overflow: hidden;
     -webkit-line-clamp: 3;
@@ -118,6 +122,14 @@
     text-align: end;
     font-size: .7rem;
     color: #555555;
+}
+
+.guest-directive-info {
+    border-top: 1px solid rgba(0, 0, 0, 0.4);
+    margin-bottom: 10px;
+    >p {
+        color: rgba(0, 0, 0, 0.69)
+    }
 }
 
 
@@ -137,12 +149,16 @@
         color: rgba(255, 255, 255, 0.6);
     }
 
-    // .guest-card-header {
-    //     border-bottom: 1px solid rgba(255, 255, 255, 0.6);
-    // }
-
     .activities-card-guest {
         background-color: $background-color-dark-blur;
         background-color: rgba($color: #000000, $alpha: .5);
+    }
+
+    .guest-directive-info {
+        border-top: 1px solid rgba(255, 255, 255, 0.3);
+
+        >p {
+            color: rgba(255, 255, 255, 0.69)
+        }
     }
 }
