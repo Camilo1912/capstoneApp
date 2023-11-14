@@ -14,12 +14,13 @@ import { formatearFecha } from '../../utils/utils';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import { activities_get_by_neighborhood_id } from '../../requests/Activities';
+import { activities_get_by_neighborhood_id, activity_join } from '../../requests/Activities';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import LocalActivityIcon from '@mui/icons-material/LocalActivity';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import { activityTypes } from '../../utils/data';
 import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
+import { validateRut } from '@fdograph/rut-utilities';
 
 const GuestHome = () => {
     const navigate = useNavigate();
@@ -46,6 +47,8 @@ const GuestHome = () => {
     const [activityOpen, setActivityOpen] = useState(false);
     const [guestInfo, setGuestInfo] = useState(defaultGuestInfo);
     const [showJoinActivityForm, setShowJoinActivityForm] = useState(false);
+    const [newRut, setNewRut] = useState('');
+    const [newEmail, setNewEmail] = useState('');
 
     useEffect(() => {
         const getRegions = async () => {
@@ -62,6 +65,9 @@ const GuestHome = () => {
         setSelectedActivity(null);
         setShowJoinActivityForm(false);
         setActivityOpen(false);
+        setNewRut('');
+        setNewEmail('');
+        setGuestInfo(defaultGuestInfo);
     }, [refresh])
 
     useEffect(() => {
@@ -131,10 +137,9 @@ const GuestHome = () => {
 
 
     const joinActivity = async () => {
-        if (guestInfo && selectedActivity) {
+        if (guestInfo.email && guestInfo.first_name && guestInfo.last_name && guestInfo.last_name_2 && guestInfo.rut && selectedActivity.id) {
             const payload = {
                 activity: {
-
                     activity_id: selectedActivity.id,
                     rut: guestInfo.rut,
                     email: guestInfo.email,
@@ -144,9 +149,50 @@ const GuestHome = () => {
             const joinResponse = await activity_join(selectedActivity.id, payload);
             if (joinResponse.status === 200) {
                 toast.success('Se ha inscrito correctamente', { autoClose: 3000, position: toast.POSITION.TOP_CENTER });
+                
             }
         }
     };
+
+    const handleRutChange = (event) => {
+        let rutValue = event.target.value;
+        rutValue = rutValue.replace(/[^0-9kK-]/g, '');
+        setNewRut(rutValue);
+    };
+
+    useEffect(() => {
+        if (validateRut(newRut)) {
+            setGuestInfo({
+                ...guestInfo,
+                rut: newRut
+            });
+        } else {
+            setGuestInfo({
+                ...guestInfo,
+                rut: ''
+            });
+        }
+    }, [newRut]);
+
+    const handleEmailChange = (event) => {
+        let emailValue = event.target.value;
+        setNewEmail(emailValue);
+    };
+
+    useEffect(() => {
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if(emailPattern.test(newEmail)) {
+            setGuestInfo({
+                ...guestInfo,
+                email: newEmail
+            });
+        } else {
+            setGuestInfo({
+                ...guestInfo,
+                email: ''
+            });
+        }
+    }, [newEmail]);
 
     const handleBack = () => {
         resetGuestForm()
@@ -169,10 +215,20 @@ const GuestHome = () => {
         setSelectedAnnouncement(null);
         setSelectedActivity(null);
         setShowJoinActivityForm(false);
+        setGuestInfo(defaultGuestInfo);
+        setNewEmail('');
+        setNewRut('');
     };
 
     const handleJoinActivity = () => {
         setShowJoinActivityForm(true);
+    };
+
+    const handleCancelJoin = () => {
+        setGuestInfo(defaultGuestInfo);
+        setNewEmail('');
+        setNewRut('');
+        setShowJoinActivityForm(false);
     };
 
     return (
@@ -357,17 +413,17 @@ const GuestHome = () => {
                                                 <h3>Formulario de inscripción</h3>
                                                 <p>Por favor ingrese los datos que se le indican a continuación:</p>
                                                 <strong>Primer Nombre *</strong>
-                                                <input type="text" />
+                                                <input type="text" maxLength={100} value={guestInfo.first_name} onChange={(e) => (setGuestInfo({...guestInfo, first_name: e.target.value}))} />
                                                 <strong>Segundo Nombre (opcional)</strong>
-                                                <input type="text" />
+                                                <input type="text" maxLength={100} value={guestInfo.second_name} onChange={(e) => (setGuestInfo({...guestInfo, second_name: e.target.value}))} />
                                                 <strong>Primer Apellido *</strong>
-                                                <input type="text" />
+                                                <input type="text" maxLength={100} value={guestInfo.last_name} onChange={(e) => (setGuestInfo({...guestInfo, last_name: e.target.value}))} />
                                                 <strong>Segundo Apellido *</strong>
-                                                <input type="text" />
-                                                <strong>Rut *</strong>
-                                                <input type="text" />
+                                                <input type="text" maxLength={100} value={guestInfo.last_name_2} onChange={(e) => (setGuestInfo({...guestInfo, last_name_2: e.target.value}))} />
+                                                <p><strong>Rut * </strong>(Sin puntos y con guión, ej: 12345678-9)</p>
+                                                <input type="text" value={newRut} onChange={handleRutChange} />
                                                 <strong>Email *</strong>
-                                                <input type="email" />
+                                                <input type="email" value={newEmail} onChange={handleEmailChange}/>
                                                 <p>Se te pedirá mostrar tu cedula de identidad al momento de acceder a la actividad</p>
                                             </div>
                                         </>
@@ -377,12 +433,23 @@ const GuestHome = () => {
                                 <DialogActions>
                                     {showJoinActivityForm ? 
                                         <>
-                                        <Button size='small' variant='outlined' >Cancelar</Button>
-                                        <Button size='small' variant='contained' color='success'>Enviar inscripción</Button>
+                                        <Button size='small' variant='outlined' onClick={handleCancelJoin}>Cancelar</Button>
+                                        <Button 
+                                            size='small' 
+                                            variant='contained' 
+                                            color='success'
+                                            onClick={joinActivity}
+                                            disabled={guestInfo.email && guestInfo.first_name && guestInfo.last_name && guestInfo.last_name_2 && guestInfo.rut ? false : true}
+                                        >Enviar inscripción</Button>
                                         </>
                                     : <>
-                                    <Button size='small' variant='contained' onClick={handleJoinActivity} color='success'>Inscribirse</Button>
-                                    <Button size='small' onClick={handleDialogClose}>Cancelar</Button>
+                                    {selectedActivity?.quota ? 
+                                        <>
+                                        {selectedActivity?.quota - selectedActivity?.occupancy > 0 ? <Button size='small' variant='contained' onClick={handleJoinActivity} color='success'>Inscribirse</Button>
+                                        :null}
+                                        </>
+                                    :<Button size='small' variant='contained' onClick={handleJoinActivity} color='success'>Inscribirse</Button>}
+                                    <Button size='small' onClick={handleDialogClose}>Cerrar</Button>
                                     </>}
                                 </DialogActions>
                             </Dialog>
