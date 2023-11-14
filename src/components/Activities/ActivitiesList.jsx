@@ -35,13 +35,10 @@ const ActivitiesList = () => {
     const joinActivity = async () => {
         if (userInfo && selectedActivity) {
             const payload = {
-                activity: {
-
-                    activity_id: selectedActivity.id,
-                    rut: userInfo.rut,
-                    email: userInfo.email,
-                    full_name: `${userInfo.first_name} ${userInfo.second_name} ${userInfo.last_name} ${userInfo.last_name_2}` 
-                }
+                activity_id: selectedActivity.id,
+                rut: userInfo.rut,
+                email: userInfo.email,
+                full_name: `${userInfo.first_name} ${userInfo.second_name} ${userInfo.last_name} ${userInfo.last_name_2}` 
             }
             const joinResponse = await activity_join(selectedActivity.id, payload);
             if (joinResponse.status === 200) {

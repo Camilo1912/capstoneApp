@@ -92,8 +92,8 @@ const MembershipApplication = () => {
                         {memberApplicationList.filter(application => application.application_type === 'registro' && application.state === 'creada').length === 0 ? (
                             <p>No hay solicitudes</p>
                         ) : (
-                            memberApplicationList.filter(application => application.application_type === 'registro' && application.state === 'creada').map((application) => (
-                                    <div key={application.id} className='application-card' onClick={() => handleOpenDialog(application)}>
+                            memberApplicationList.filter(application => application.application_type === 'registro' && application.state === 'creada').map((application, index) => (
+                                    <div key={index} className='application-card' onClick={() => handleOpenDialog(application)}>
                                         <div className='application-card-header'>Solicitante: <strong>{initCap(application.first_name)} {initCap(application.last_name)} {initCap(application.last_name_2)}</strong></div>
                                         <div className='application-card-content'>
                                             <p>Rut: {application.rut}</p>
@@ -109,10 +109,10 @@ const MembershipApplication = () => {
                         <h2>Resueltas</h2>
                     </div>
                     <div className='polls-list-container'>
-                        {memberApplicationList.map((application) => (
+                        {memberApplicationList.map((application, index) => (
                             <>
                             {application.application_type === 'registro' && memberApplicationList.length !== 0  && application.state !== 'creada'? 
-                                <div key={application.id} className='application-card'>
+                                <div key={index} className='application-card'>
                                     <div className='application-card-header'>Solicitante: <strong>{initCap(application.first_name)} {initCap(application.last_name)} {initCap(application.last_name_2)}</strong></div>
                                     <div className='application-card-content'>
                                         <p>Rut: {application.rut}</p>
