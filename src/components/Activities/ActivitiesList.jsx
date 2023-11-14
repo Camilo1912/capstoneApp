@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import RefreshRoundedIcon from '@mui/icons-material/RefreshRounded';
 import IconButton from '@mui/material/IconButton';
-import { activities_get_by_neighborhood_id, activity_delete, activity_join } from '../../requests/Activities';
+import { activities_get_by_neighborhood_id, activity_delete, activity_join, get_attendants_by_activity_id } from '../../requests/Activities';
 import { UserContext } from '../../contexts/UserContext';
 import { formatearFecha, initCap } from '../../utils/utils';
 import { activityTypes } from '../../utils/data';
@@ -10,6 +10,9 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import Button from '@mui/material/Button';
 import { toast } from 'react-toastify';
+import * as XLSX from 'xlsx/xlsx.mjs';
+import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
+import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 
 const ActivitiesList = () => {
     const { userInfo } = useContext(UserContext);
@@ -17,6 +20,7 @@ const ActivitiesList = () => {
     const [refresh, setRefresh] = useState(true);
     const [activitiesList, setActivitiesList] = useState([]);
     const [selectedActivity, setSelectedActivity] = useState(null);
+    const [attendantList, setAttendantList] = useState([]);
 
     useEffect(() => {
         if (userInfo.neighborhood.neighborhood_id) {
@@ -27,10 +31,27 @@ const ActivitiesList = () => {
 
     }, [refresh])
 
+    useEffect(() => {
+        if (selectedActivity) {
+
+            try {
+                getAttendantList();
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    }, [selectedActivity]);
+
+    const getAttendantList = async () => {
+        const response = await get_attendants_by_activity_id(selectedActivity.id)
+        setAttendantList(response.data);
+        console.log(response.data);
+    };
+
     const getAcitiviesList = async () => {
         const response = await activities_get_by_neighborhood_id(userInfo.neighborhood.neighborhood_id);
         setActivitiesList(response.data.reverse());
-    }
+    };
 
     const joinActivity = async () => {
         if (userInfo && selectedActivity) {
@@ -84,6 +105,28 @@ const ActivitiesList = () => {
         deleteActivity();
     }
 
+    const handleExport = () => {
+        if (attendantList) {
+            const selectedColumns = attendantList.map(({
+                rut,
+                full_name,
+                email,
+                created_at,
+            }) => ({
+                RUT: rut,
+                NOMBRE_COMPLETO: full_name,
+                EMAIL: email,
+                FECHA_INSCRIPCION: formatearFecha(created_at),
+            }));
+            const workbook = XLSX.utils.book_new();
+            const worksheet = XLSX.utils.json_to_sheet(selectedColumns);
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Listado");
+            XLSX.writeFile(workbook, "ListaDeInscritos.xlsx");
+          } else {
+            console.error('No hay datos para exportar.');
+          }
+    };
+
     return (
         <>
             <div className='refresh-button-container'>
@@ -127,7 +170,7 @@ const ActivitiesList = () => {
                 </div>
             </div>
 
-            <Dialog open={open} onClose={handleCloseDialog}>
+            <Dialog open={open} maxWidth={'md'} onClose={handleCloseDialog}>
                 {selectedActivity ? 
                 <DialogContent>
                     <h1>{selectedActivity.title}</h1>
@@ -140,6 +183,7 @@ const ActivitiesList = () => {
                         {selectedActivity.end_date ? 
                         <p>Termino: <strong>{formatearFecha(selectedActivity.end_date)}</strong></p>
                         : null}
+                        <p>Lugar: <strong>{selectedActivity.address}</strong></p>
                         {selectedActivity.quota ? 
                             <>
                                 <p>Cupos disponibles: <strong>{selectedActivity.quota - selectedActivity.occupancy}</strong></p>
@@ -156,8 +200,9 @@ const ActivitiesList = () => {
                 <DialogActions>
                     {[2, 3, 4].includes(userInfo.role.role_id) ? 
                         <>
-                        <Button size='small' variant='contained' >Editar</Button>
-                        <Button size='small' variant='contained' onClick={handleDeleteActivity} color='error'>Eliminar</Button>
+                        <Button size='small' variant='outlined' onClick={handleExport} startIcon={<DownloadRoundedIcon />}>Descargar listado de inscritos</Button>
+                        {/* <Button size='small' variant='contained' >Editar</Button> */}
+                        <Button size='small' variant='outlined' onClick={handleDeleteActivity} startIcon={<DeleteForeverRoundedIcon />} color='error'>Eliminar</Button>
                         </>
                     : null}
                     {selectedActivity?.quota ? 
