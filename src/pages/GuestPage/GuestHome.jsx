@@ -14,14 +14,24 @@ import { formatearFecha } from '../../utils/utils';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import { activities_get_by_neighborhood_id } from '../../requests/Activities';
+import { activities_get_by_neighborhood_id, activity_join } from '../../requests/Activities';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import LocalActivityIcon from '@mui/icons-material/LocalActivity';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import { activityTypes } from '../../utils/data';
+import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
+import { validateRut } from '@fdograph/rut-utilities';
 
 const GuestHome = () => {
     const navigate = useNavigate();
+    const defaultGuestInfo = {
+        first_name: '',
+        second_name: '',
+        last_name: '',
+        last_name_2: '',
+        email: '',
+        rut: ''
+    }
     const { guestForm, handleGuestForm, resetGuestForm } = useContext(GuestContext);
     const [value, setValue] = React.useState(0);
     const [open, setOpen] = useState(false);
@@ -33,6 +43,12 @@ const GuestHome = () => {
     const [newsList, setNewsList] = useState(null);
     const [activitiesList, setActivitiesList] = useState(null);
     const [refresh, setRefresh] = useState(true);
+    const [selectedActivity, setSelectedActivity] = useState(null);
+    const [activityOpen, setActivityOpen] = useState(false);
+    const [guestInfo, setGuestInfo] = useState(defaultGuestInfo);
+    const [showJoinActivityForm, setShowJoinActivityForm] = useState(false);
+    const [newRut, setNewRut] = useState('');
+    const [newEmail, setNewEmail] = useState('');
 
     useEffect(() => {
         const getRegions = async () => {
@@ -46,6 +62,12 @@ const GuestHome = () => {
         setActivitiesList(null);
         setNewsList(null);
         setNeighborhoodInfo({})
+        setSelectedActivity(null);
+        setShowJoinActivityForm(false);
+        setActivityOpen(false);
+        setNewRut('');
+        setNewEmail('');
+        setGuestInfo(defaultGuestInfo);
     }, [refresh])
 
     useEffect(() => {
@@ -112,14 +134,65 @@ const GuestHome = () => {
             getActivitiesFromNeighborhood();
         }
     }, [neighborhoodInfo]);
-    
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
+
+
+    const joinActivity = async () => {
+        if (guestInfo.email && guestInfo.first_name && guestInfo.last_name && guestInfo.last_name_2 && guestInfo.rut && selectedActivity.id) {
+            const payload = {
+                activity: {
+                    activity_id: selectedActivity.id,
+                    rut: guestInfo.rut,
+                    email: guestInfo.email,
+                    full_name: `${guestInfo.first_name} ${guestInfo.second_name} ${guestInfo.last_name} ${guestInfo.last_name_2}` 
+                }
+            }
+            const joinResponse = await activity_join(selectedActivity.id, payload);
+            if (joinResponse.status === 200) {
+                toast.success('Se ha inscrito correctamente', { autoClose: 3000, position: toast.POSITION.TOP_CENTER });
+                
+            }
+        }
     };
 
-    const handleRegisterRedirection = () => {
-        navigate('/register');
+    const handleRutChange = (event) => {
+        let rutValue = event.target.value;
+        rutValue = rutValue.replace(/[^0-9kK-]/g, '');
+        setNewRut(rutValue);
     };
+
+    useEffect(() => {
+        if (validateRut(newRut)) {
+            setGuestInfo({
+                ...guestInfo,
+                rut: newRut
+            });
+        } else {
+            setGuestInfo({
+                ...guestInfo,
+                rut: ''
+            });
+        }
+    }, [newRut]);
+
+    const handleEmailChange = (event) => {
+        let emailValue = event.target.value;
+        setNewEmail(emailValue);
+    };
+
+    useEffect(() => {
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if(emailPattern.test(newEmail)) {
+            setGuestInfo({
+                ...guestInfo,
+                email: newEmail
+            });
+        } else {
+            setGuestInfo({
+                ...guestInfo,
+                email: ''
+            });
+        }
+    }, [newEmail]);
 
     const handleBack = () => {
         resetGuestForm()
@@ -131,9 +204,31 @@ const GuestHome = () => {
         setOpen(true);
     };
 
+    const handleActivityOpen = (activitySelection) => {
+        setActivityOpen(true);
+        setSelectedActivity(activitySelection);
+    };
+
     const handleDialogClose = () => {
         setOpen(false);
+        setActivityOpen(false);
         setSelectedAnnouncement(null);
+        setSelectedActivity(null);
+        setShowJoinActivityForm(false);
+        setGuestInfo(defaultGuestInfo);
+        setNewEmail('');
+        setNewRut('');
+    };
+
+    const handleJoinActivity = () => {
+        setShowJoinActivityForm(true);
+    };
+
+    const handleCancelJoin = () => {
+        setGuestInfo(defaultGuestInfo);
+        setNewEmail('');
+        setNewRut('');
+        setShowJoinActivityForm(false);
     };
 
     return (
@@ -251,9 +346,9 @@ const GuestHome = () => {
                             <Dialog open={open} onClose={handleDialogClose}>
                                 <DialogContent >
                                     <h1>{selectedAnnouncement?.title}</h1>
-                                    <p className='date-value'>Publicado el {formatearFecha(selectedAnnouncement?.created_at)}</p>
+                                    <p className='date-value-guest'>Publicado el {formatearFecha(selectedAnnouncement?.created_at)}</p>
                                     {selectedAnnouncement?.created_at !== selectedAnnouncement?.updated_at ? 
-                                    <p className='date-value'>Editado el {formatearFecha(selectedAnnouncement?.updated_at)}</p>
+                                    <p className='date-value-guest'>Editado el {formatearFecha(selectedAnnouncement?.updated_at)}</p>
                                     : null}
                                     <p style={{ marginBottom: '15px', marginTop: '15px' }}>{selectedAnnouncement?.description}</p>
                                     {selectedAnnouncement?.image_url ? <img src={selectedAnnouncement?.image_url} style={{ width: '100%'}} alt="imagen-de-anuncio" /> : null}   
@@ -275,13 +370,15 @@ const GuestHome = () => {
                                         <> 
                                         {activitiesList.length !== 0 && guestForm.neighborhoodId ? <>
                                             {activitiesList.map((activity) => (
-                                                <div key={activity.id} className='activities-card-guest' onClick={() => handleDialogOpen(activity)}>
+                                                <div key={activity.id} className='activities-card-guest' onClick={() => handleActivityOpen(activity)}>
                                                     <h2>{activity.title}</h2>
                                                     <div>
-                                                        <p className="news-card-guest-content-text">{activity.description}</p>
-                                                        <p className='date-value date-news-position'>Publicado el {formatearFecha(activity.created_at)}</p>
+                                                        <p className="news-card-guest-content-text ">{activity.description}</p>
+                                                        <p className='date-value-guest date-news-position'>Publicado el {formatearFecha(activity.created_at)}</p>
                                                         <p>Tipo: {activityTypes[activity.activity_type]}</p>
-                                                        <p>Cupos: {activity.occupancy}/{activity.quota}</p>
+                                                        {activity.quota ?
+                                                            <p><strong>Cupos disponibles: {activity.quota - activity.occupancy }</strong></p>
+                                                        : <p><strong>Sin límite de cupos</strong></p>}
                                                     </div>
                                                 </div>
                                             ))}</>
@@ -291,6 +388,71 @@ const GuestHome = () => {
                                     }
                                 </div>   
                             </div>
+                            <Dialog open={activityOpen} onClose={handleDialogClose}>
+                                {selectedActivity ? 
+                                <DialogContent>
+                                    <h1>{selectedActivity.title}</h1>
+                                    <h2>Tipo: {activityTypes[selectedActivity.activity_type]}</h2>
+                                    <p className='date-value'>Publicada el {formatearFecha(selectedActivity.created_at)}</p>
+                                    <strong>Descripción</strong>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                                        <p>{selectedActivity.description}</p>
+                                        <p>Inicio: <strong>{formatearFecha(selectedActivity.start_date)}</strong></p>
+                                        {selectedActivity.end_date ? 
+                                        <p>Termino: <strong>{formatearFecha(selectedActivity.end_date)}</strong></p>
+                                        : null}
+                                        {selectedActivity.quota ? 
+                                            <>
+                                                <p>Cupos disponibles: <strong>{selectedActivity.quota - selectedActivity.occupancy}</strong></p>
+                                            </>
+                                        : null}
+                                    </div>
+                                    {showJoinActivityForm ? 
+                                        <>
+                                            <div className='reject-prompt-message-container'>
+                                                <h3>Formulario de inscripción</h3>
+                                                <p>Por favor ingrese los datos que se le indican a continuación:</p>
+                                                <strong>Primer Nombre *</strong>
+                                                <input type="text" maxLength={100} value={guestInfo.first_name} onChange={(e) => (setGuestInfo({...guestInfo, first_name: e.target.value}))} />
+                                                <strong>Segundo Nombre (opcional)</strong>
+                                                <input type="text" maxLength={100} value={guestInfo.second_name} onChange={(e) => (setGuestInfo({...guestInfo, second_name: e.target.value}))} />
+                                                <strong>Primer Apellido *</strong>
+                                                <input type="text" maxLength={100} value={guestInfo.last_name} onChange={(e) => (setGuestInfo({...guestInfo, last_name: e.target.value}))} />
+                                                <strong>Segundo Apellido *</strong>
+                                                <input type="text" maxLength={100} value={guestInfo.last_name_2} onChange={(e) => (setGuestInfo({...guestInfo, last_name_2: e.target.value}))} />
+                                                <p><strong>Rut * </strong>(Sin puntos y con guión, ej: 12345678-9)</p>
+                                                <input type="text" value={newRut} onChange={handleRutChange} />
+                                                <strong>Email *</strong>
+                                                <input type="email" value={newEmail} onChange={handleEmailChange}/>
+                                                <p>Se te pedirá mostrar tu cedula de identidad al momento de acceder a la actividad</p>
+                                            </div>
+                                        </>
+                                    :null}
+                                </DialogContent>
+                                :null}
+                                <DialogActions>
+                                    {showJoinActivityForm ? 
+                                        <>
+                                        <Button size='small' variant='outlined' onClick={handleCancelJoin}>Cancelar</Button>
+                                        <Button 
+                                            size='small' 
+                                            variant='contained' 
+                                            color='success'
+                                            onClick={joinActivity}
+                                            disabled={guestInfo.email && guestInfo.first_name && guestInfo.last_name && guestInfo.last_name_2 && guestInfo.rut ? false : true}
+                                        >Enviar inscripción</Button>
+                                        </>
+                                    : <>
+                                    {selectedActivity?.quota ? 
+                                        <>
+                                        {selectedActivity?.quota - selectedActivity?.occupancy > 0 ? <Button size='small' variant='contained' onClick={handleJoinActivity} color='success'>Inscribirse</Button>
+                                        :null}
+                                        </>
+                                    :<Button size='small' variant='contained' onClick={handleJoinActivity} color='success'>Inscribirse</Button>}
+                                    <Button size='small' onClick={handleDialogClose}>Cerrar</Button>
+                                    </>}
+                                </DialogActions>
+                            </Dialog>
                         </Grid>
                         <Grid item xs={4}>
                             <div className='guest-card'>
@@ -305,6 +467,41 @@ const GuestHome = () => {
                                             <Button variant='outlined'>Implemento publico</Button>
                                         </>
                                     :<p className='guest-helper-text'>Las solicitudes disponibles de la junta que selecciones aparecerán aquí.</p>}
+                                </div>
+                            </div>
+                            <div className='guest-card' style={{ marginTop: '15px'}}>
+                                <div className='guest-card-header'>
+                                    <h1>Información de la junta</h1>
+                                    <InfoRoundedIcon />
+                                </div>
+                                <div className='guest-card-content'>
+                                    {neighborhoodInfo.id ? 
+                                        <div>
+                                            <p>Junta de vecinos {neighborhoodInfo.name}</p>
+                                            <p>Integrantes: {neighborhoodInfo.membership}</p>
+                                            <strong>Directiva</strong>
+                                            <div className='guest-directive-info'>
+                                                <p>Presidente: {neighborhoodInfo.president}</p>
+                                                <p>Secretario: {neighborhoodInfo.secretary}</p>
+                                                <p>Tesorero: {neighborhoodInfo.treasurer}</p>
+                                            </div>
+                                            <strong>Dirección</strong>
+                                            <div className='guest-directive-info'>
+                                                <p>{neighborhoodInfo.address}</p>
+                                            </div>
+                                            <strong>Contacto</strong>
+                                            <div className='guest-directive-info'>
+                                                <p>{neighborhoodInfo.bank_acc_email}</p>
+                                            </div>
+                                            {neighborhoodInfo.quota ? 
+                                            <>
+                                                <strong>Cuota</strong>
+                                                <div className='guest-directive-info'>
+                                                    <p>${neighborhoodInfo.quota}/mes</p>
+                                                </div>
+                                            </>: null}
+                                        </div>
+                                    :<p className='guest-helper-text'>La información de la junta que selecciones aparecerá aquí.</p>}
                                 </div>
                             </div>
                         </Grid>

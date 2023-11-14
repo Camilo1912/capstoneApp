@@ -24,3 +24,13 @@ export const activity_update = async (activity_id, updatePayload) => {
     const response = await axiosClient.put(`activities/${activity_id}`, updatePayload);
     return response;
 };
+
+export const activity_join = async (activity_id, updatePayload) => {
+    const response = await axiosClient.put(`activities/${activity_id}/sign_in`, updatePayload);
+    return response;
+};
+
+export const activity_delete = async (activity_id) => {
+    const response = await axiosClient.delete(`activities/${activity_id}`);
+    return response;
+};
