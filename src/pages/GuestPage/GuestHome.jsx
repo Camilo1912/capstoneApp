@@ -21,6 +21,7 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import { activityTypes } from '../../utils/data';
 import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
 import { validateRut } from '@fdograph/rut-utilities';
+import { toast } from 'react-toastify';
 
 const GuestHome = () => {
     const navigate = useNavigate();
@@ -49,6 +50,7 @@ const GuestHome = () => {
     const [showJoinActivityForm, setShowJoinActivityForm] = useState(false);
     const [newRut, setNewRut] = useState('');
     const [newEmail, setNewEmail] = useState('');
+    const [refreshInformation, setRefreshInformation] = useState(false);
 
     useEffect(() => {
         const getRegions = async () => {
@@ -125,31 +127,39 @@ const GuestHome = () => {
                 const response = await get_announcements_by_neighborhood_id(neighborhoodInfo.id);
                 setNewsList(response.data.reverse());
             };
-
-            const getActivitiesFromNeighborhood = async() => {
-                const response = await activities_get_by_neighborhood_id(neighborhoodInfo.id);
-                setActivitiesList(response.data.reverse());
-            }
             getNewsFromNeighborhood();
             getActivitiesFromNeighborhood();
         }
     }, [neighborhoodInfo]);
 
 
+    const getActivitiesFromNeighborhood = async() => {
+        const response = await activities_get_by_neighborhood_id(neighborhoodInfo.id);
+        setActivitiesList(response.data.reverse());
+    }
+
+
     const joinActivity = async () => {
         if (guestInfo.email && guestInfo.first_name && guestInfo.last_name && guestInfo.last_name_2 && guestInfo.rut && selectedActivity.id) {
             const payload = {
-                activity: {
-                    activity_id: selectedActivity.id,
-                    rut: guestInfo.rut,
-                    email: guestInfo.email,
-                    full_name: `${guestInfo.first_name} ${guestInfo.second_name} ${guestInfo.last_name} ${guestInfo.last_name_2}` 
-                }
+                activity_id: selectedActivity.id,
+                rut: guestInfo.rut,
+                email: guestInfo.email,
+                full_name: `${guestInfo.first_name} ${guestInfo.second_name} ${guestInfo.last_name} ${guestInfo.last_name_2}` 
             }
-            const joinResponse = await activity_join(selectedActivity.id, payload);
-            if (joinResponse.status === 200) {
-                toast.success('Se ha inscrito correctamente', { autoClose: 3000, position: toast.POSITION.TOP_CENTER });
-                
+            try {
+
+                const joinResponse = await activity_join(selectedActivity.id, payload);
+                if (joinResponse.status === 201) {
+                    toast.success('Se ha inscrito correctamente', { autoClose: 3000, position: toast.POSITION.TOP_CENTER });
+                    getActivitiesFromNeighborhood();
+                    handleCancelJoin();
+                    handleDialogClose();
+                }
+            } catch (error) {
+                if (error?.response?.status === 422) {
+                    toast.error('¡Usted ya está inscrito en esta actividad!', { autoClose: 3000, position: toast.POSITION.TOP_CENTER })
+                }
             }
         }
     };
@@ -220,7 +230,7 @@ const GuestHome = () => {
         setNewRut('');
     };
 
-    const handleJoinActivity = () => {
+    const handleActivityForm = () => {
         setShowJoinActivityForm(true);
     };
 
@@ -445,10 +455,10 @@ const GuestHome = () => {
                                     : <>
                                     {selectedActivity?.quota ? 
                                         <>
-                                        {selectedActivity?.quota - selectedActivity?.occupancy > 0 ? <Button size='small' variant='contained' onClick={handleJoinActivity} color='success'>Inscribirse</Button>
+                                        {selectedActivity?.quota - selectedActivity?.occupancy > 0 ? <Button size='small' variant='contained' onClick={handleActivityForm} color='success'>Formulario de inscripción</Button>
                                         :null}
                                         </>
-                                    :<Button size='small' variant='contained' onClick={handleJoinActivity} color='success'>Inscribirse</Button>}
+                                    :<Button size='small' variant='contained' onClick={handleActivityForm} color='success'>Formulario de inscripción</Button>}
                                     <Button size='small' onClick={handleDialogClose}>Cerrar</Button>
                                     </>}
                                 </DialogActions>

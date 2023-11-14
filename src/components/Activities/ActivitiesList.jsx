@@ -40,9 +40,18 @@ const ActivitiesList = () => {
                 email: userInfo.email,
                 full_name: `${userInfo.first_name} ${userInfo.second_name} ${userInfo.last_name} ${userInfo.last_name_2}` 
             }
-            const joinResponse = await activity_join(selectedActivity.id, payload);
-            if (joinResponse.status === 200) {
-                toast.success('Se ha inscrito correctamente', { autoClose: 3000, position: toast.POSITION.TOP_CENTER });
+
+            try {
+
+                const joinResponse = await activity_join(selectedActivity.id, payload);
+                if (joinResponse.status === 201) {
+                    toast.success('Se ha inscrito correctamente', { autoClose: 3000, position: toast.POSITION.TOP_CENTER });
+                    setRefresh(!refresh);
+                }
+            }  catch (error) {
+                if (error?.response?.status === 422) {
+                    toast.error('¡Usted ya está inscrito en esta actividad!', { autoClose: 3000, position: toast.POSITION.TOP_CENTER })
+                }
             }
         }
     };
@@ -151,7 +160,16 @@ const ActivitiesList = () => {
                         <Button size='small' variant='contained' onClick={handleDeleteActivity} color='error'>Eliminar</Button>
                         </>
                     : null}
-                    <Button size='small' variant='contained' onClick={handleJoinActivity} color='success'>Inscribirse</Button>
+                    {selectedActivity?.quota ? 
+                        <>
+                            {selectedActivity.quota - selectedActivity.occupancy > 0 ?
+                                <>
+                                    <Button size='small' variant='contained' onClick={handleJoinActivity} color='success'>Inscribirse</Button>
+                                </>
+                            : null}
+                        </>
+                    : <Button size='small' variant='contained' onClick={handleJoinActivity} color='success'>Inscribirse</Button>}
+
                     <Button size='small' variant='contained' color='error'>Desinscribirse</Button>
                     <Button size='small' onClick={handleCloseDialog}>Cancelar</Button>
                 </DialogActions>
