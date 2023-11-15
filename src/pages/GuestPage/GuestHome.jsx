@@ -22,6 +22,7 @@ import { activityTypes } from '../../utils/data';
 import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
 import { validateRut } from '@fdograph/rut-utilities';
 import { toast } from 'react-toastify';
+import { RefreshRounded } from '@mui/icons-material';
 
 const GuestHome = () => {
     const navigate = useNavigate();
@@ -51,6 +52,7 @@ const GuestHome = () => {
     const [newRut, setNewRut] = useState('');
     const [newEmail, setNewEmail] = useState('');
     const [refreshInformation, setRefreshInformation] = useState(false);
+    const [showRefreshButton, setShowRefreshButton] = useState(false);
 
     useEffect(() => {
         const getRegions = async () => {
@@ -70,6 +72,7 @@ const GuestHome = () => {
         setNewRut('');
         setNewEmail('');
         setGuestInfo(defaultGuestInfo);
+        setShowRefreshButton(false);
     }, [refresh])
 
     useEffect(() => {
@@ -112,6 +115,7 @@ const GuestHome = () => {
                 neighborhoodId: selectedNeighborhood.id,
             })
             setNeighborhoodInfo(selectedNeighborhood);
+            setRefreshInformation(!refreshInformation);
         } else {
             const { name, value } = e.target;
             handleGuestForm({
@@ -129,8 +133,9 @@ const GuestHome = () => {
             };
             getNewsFromNeighborhood();
             getActivitiesFromNeighborhood();
+            setShowRefreshButton(true);
         }
-    }, [neighborhoodInfo]);
+    }, [refreshInformation]);
 
 
     const getActivitiesFromNeighborhood = async() => {
@@ -303,6 +308,9 @@ const GuestHome = () => {
                         </> 
                         :null}
                     </select>
+                    <IconButton disabled={!showRefreshButton} onClick={() => (setRefreshInformation(!refreshInformation))}>
+                        <RefreshRounded />
+                    </IconButton>
                     </div>
                     <div></div>
                 </div>
