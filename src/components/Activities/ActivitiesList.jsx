@@ -54,7 +54,7 @@ const ActivitiesList = () => {
             const isRegistered = await get_is_user_registered_in_activity_id(activity.id, userInfo.rut);
             return {
               ...activity,
-              isRegistered,
+              isRegistered: isRegistered.data.has_enrollment_lists,
             };
         }));
         setActivitiesList(updatedActivitiesList.reverse());
@@ -68,7 +68,6 @@ const ActivitiesList = () => {
                 email: userInfo.email,
                 full_name: `${userInfo.first_name} ${userInfo.second_name} ${userInfo.last_name} ${userInfo.last_name_2}` 
             }
-
             try {
 
                 const joinResponse = await activity_join(selectedActivity.id, payload);
@@ -159,6 +158,7 @@ const ActivitiesList = () => {
                                                 <p>Inscritos: {activity.occupancy}/{activity.quota}</p>
                                                 :<p>Cupos: <strong>{activity.quota - activity.occupancy }</strong></p>}</>
                                             : <p>Cupos: <strong>Sin límite</strong></p>}
+                                            <p>{activity.isRegistered ? <strong>Estas inscrito</strong>: null}</p>
                                         </div>
                                     </div>
                                 ))}
@@ -212,6 +212,10 @@ const ActivitiesList = () => {
                         <Button size='small' variant='outlined' onClick={handleDeleteActivity} startIcon={<DeleteForeverRoundedIcon />} color='error'>Eliminar</Button>
                         </>
                     : null}
+                    
+                    {selectedActivity?.isRegistered ? <Button size='small' variant='contained' color='error'>Desinscribirse</Button> 
+                    : 
+                    <>
                     {selectedActivity?.quota ? 
                         <>
                             {selectedActivity.quota - selectedActivity.occupancy > 0 ?
@@ -221,8 +225,8 @@ const ActivitiesList = () => {
                             : null}
                         </>
                     : <Button size='small' variant='contained' onClick={handleJoinActivity} color='success'>Inscribirse</Button>}
-
-                    <Button size='small' variant='contained' color='error'>Desinscribirse</Button>
+                    </>
+                    }
                     <Button size='small' onClick={handleCloseDialog}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
