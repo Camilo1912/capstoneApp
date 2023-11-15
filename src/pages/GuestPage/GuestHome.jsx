@@ -330,6 +330,7 @@ const GuestHome = () => {
             }
         }
     };
+    
 
     return (
         <div className='guest-page-wrapper'>
