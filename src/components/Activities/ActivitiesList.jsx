@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import RefreshRoundedIcon from '@mui/icons-material/RefreshRounded';
 import IconButton from '@mui/material/IconButton';
-import { activities_get_by_neighborhood_id, activity_delete, activity_join } from '../../requests/Activities';
+import { activities_get_by_neighborhood_id, activity_delete, activity_join, get_attendants_by_activity_id, get_is_user_registered_in_activity_id } from '../../requests/Activities';
 import { UserContext } from '../../contexts/UserContext';
 import { formatearFecha, initCap } from '../../utils/utils';
 import { activityTypes } from '../../utils/data';
@@ -10,6 +10,9 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import Button from '@mui/material/Button';
 import { toast } from 'react-toastify';
+import * as XLSX from 'xlsx/xlsx.mjs';
+import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
+import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 
 const ActivitiesList = () => {
     const { userInfo } = useContext(UserContext);
@@ -17,6 +20,7 @@ const ActivitiesList = () => {
     const [refresh, setRefresh] = useState(true);
     const [activitiesList, setActivitiesList] = useState([]);
     const [selectedActivity, setSelectedActivity] = useState(null);
+    const [attendantList, setAttendantList] = useState([]);
 
     useEffect(() => {
         if (userInfo.neighborhood.neighborhood_id) {
@@ -27,10 +31,34 @@ const ActivitiesList = () => {
 
     }, [refresh])
 
+    useEffect(() => {
+        if (selectedActivity) {
+
+            try {
+                getAttendantList();
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    }, [selectedActivity]);
+
+    const getAttendantList = async () => {
+        const response = await get_attendants_by_activity_id(selectedActivity.id)
+        setAttendantList(response.data);
+        console.log(response.data);
+    };
+
     const getAcitiviesList = async () => {
         const response = await activities_get_by_neighborhood_id(userInfo.neighborhood.neighborhood_id);
-        setActivitiesList(response.data.reverse());
-    }
+        const updatedActivitiesList = await Promise.all(response.data.map(async (activity) => {
+            const isRegistered = await get_is_user_registered_in_activity_id(activity.id, userInfo.rut);
+            return {
+              ...activity,
+              isRegistered: isRegistered.data.has_enrollment_lists,
+            };
+        }));
+        setActivitiesList(updatedActivitiesList.reverse());
+    };
 
     const joinActivity = async () => {
         if (userInfo && selectedActivity) {
@@ -40,9 +68,17 @@ const ActivitiesList = () => {
                 email: userInfo.email,
                 full_name: `${userInfo.first_name} ${userInfo.second_name} ${userInfo.last_name} ${userInfo.last_name_2}` 
             }
-            const joinResponse = await activity_join(selectedActivity.id, payload);
-            if (joinResponse.status === 200) {
-                toast.success('Se ha inscrito correctamente', { autoClose: 3000, position: toast.POSITION.TOP_CENTER });
+            try {
+
+                const joinResponse = await activity_join(selectedActivity.id, payload);
+                if (joinResponse.status === 201) {
+                    toast.success('Se ha inscrito correctamente', { autoClose: 3000, position: toast.POSITION.TOP_CENTER });
+                    setRefresh(!refresh);
+                }
+            }  catch (error) {
+                if (error?.response?.status === 422) {
+                    toast.error('¡Usted ya está inscrito en esta actividad!', { autoClose: 3000, position: toast.POSITION.TOP_CENTER })
+                }
             }
         }
     };
@@ -75,6 +111,28 @@ const ActivitiesList = () => {
         deleteActivity();
     }
 
+    const handleExport = () => {
+        if (attendantList) {
+            const selectedColumns = attendantList.map(({
+                rut,
+                full_name,
+                email,
+                created_at,
+            }) => ({
+                RUT: rut,
+                NOMBRE_COMPLETO: full_name,
+                EMAIL: email,
+                FECHA_INSCRIPCION: formatearFecha(created_at),
+            }));
+            const workbook = XLSX.utils.book_new();
+            const worksheet = XLSX.utils.json_to_sheet(selectedColumns);
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Listado");
+            XLSX.writeFile(workbook, "ListaDeInscritos.xlsx");
+          } else {
+            console.error('No hay datos para exportar.');
+          }
+    };
+
     return (
         <>
             <div className='refresh-button-container'>
@@ -100,6 +158,7 @@ const ActivitiesList = () => {
                                                 <p>Inscritos: {activity.occupancy}/{activity.quota}</p>
                                                 :<p>Cupos: <strong>{activity.quota - activity.occupancy }</strong></p>}</>
                                             : <p>Cupos: <strong>Sin límite</strong></p>}
+                                            <p>{activity.isRegistered ? <strong>Estas inscrito</strong>: null}</p>
                                         </div>
                                     </div>
                                 ))}
@@ -118,7 +177,7 @@ const ActivitiesList = () => {
                 </div>
             </div>
 
-            <Dialog open={open} onClose={handleCloseDialog}>
+            <Dialog open={open} maxWidth={'md'} onClose={handleCloseDialog}>
                 {selectedActivity ? 
                 <DialogContent>
                     <h1>{selectedActivity.title}</h1>
@@ -131,6 +190,7 @@ const ActivitiesList = () => {
                         {selectedActivity.end_date ? 
                         <p>Termino: <strong>{formatearFecha(selectedActivity.end_date)}</strong></p>
                         : null}
+                        <p>Lugar: <strong>{selectedActivity.address}</strong></p>
                         {selectedActivity.quota ? 
                             <>
                                 <p>Cupos disponibles: <strong>{selectedActivity.quota - selectedActivity.occupancy}</strong></p>
@@ -147,12 +207,26 @@ const ActivitiesList = () => {
                 <DialogActions>
                     {[2, 3, 4].includes(userInfo.role.role_id) ? 
                         <>
-                        <Button size='small' variant='contained' >Editar</Button>
-                        <Button size='small' variant='contained' onClick={handleDeleteActivity} color='error'>Eliminar</Button>
+                        <Button size='small' variant='outlined' onClick={handleExport} startIcon={<DownloadRoundedIcon />}>Descargar listado de inscritos</Button>
+                        {/* <Button size='small' variant='contained' >Editar</Button> */}
+                        <Button size='small' variant='outlined' onClick={handleDeleteActivity} startIcon={<DeleteForeverRoundedIcon />} color='error'>Eliminar</Button>
                         </>
                     : null}
-                    <Button size='small' variant='contained' onClick={handleJoinActivity} color='success'>Inscribirse</Button>
-                    <Button size='small' variant='contained' color='error'>Desinscribirse</Button>
+                    
+                    {selectedActivity?.isRegistered ? <Button size='small' variant='contained' color='error'>Desinscribirse</Button> 
+                    : 
+                    <>
+                    {selectedActivity?.quota ? 
+                        <>
+                            {selectedActivity.quota - selectedActivity.occupancy > 0 ?
+                                <>
+                                    <Button size='small' variant='contained' onClick={handleJoinActivity} color='success'>Inscribirse</Button>
+                                </>
+                            : null}
+                        </>
+                    : <Button size='small' variant='contained' onClick={handleJoinActivity} color='success'>Inscribirse</Button>}
+                    </>
+                    }
                     <Button size='small' onClick={handleCloseDialog}>Cancelar</Button>
                 </DialogActions>
             </Dialog>

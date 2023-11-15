@@ -23,7 +23,8 @@ const ActivitiesCreationForm = () => {
         occupancy: 0,
         neighborhood_id: userInfo.neighborhood.neighborhood_id,
         start_date: null,
-        end_date: null
+        end_date: null,
+        address: '',
     }
     const [limitCupos, setLimitCupos] = useState(false);
     const [newActivity, setNewActivity] = useState(defaultActivity);
@@ -42,7 +43,7 @@ const ActivitiesCreationForm = () => {
     }, [refresh])
 
     useEffect(() => {
-        if (newActivity.title && newActivity.description && newActivity.neighborhood_id && selectedStartDate) {
+        if (newActivity.title && newActivity.description && newActivity.neighborhood_id && newActivity.address && selectedStartDate) {
             setIsSubmitDisabled(false);
         } else {
             setIsSubmitDisabled(true);
@@ -57,6 +58,13 @@ const ActivitiesCreationForm = () => {
         setNewActivity({
             ...newActivity,
             title: event.target.value,
+        });
+    };
+
+    const handleAddressName = (event) => {
+        setNewActivity({
+            ...newActivity,
+            address: event.target.value,
         });
     };
 
@@ -89,7 +97,6 @@ const ActivitiesCreationForm = () => {
         const newQuota = parseInt(event.target.value);
 
         if (newQuota) {
-
             setNewActivity({
                 ...newActivity,
                 quota: newQuota,
@@ -101,7 +108,7 @@ const ActivitiesCreationForm = () => {
         setIsSubmitDisabled(true);
         const newStartDate = `${selectedStartDate.getFullYear()}-${(selectedStartDate.getMonth() + 1).toString().padStart(2, '0')}-${selectedStartDate.getDate().toString().padStart(2, '0')}T${selectedStartDate.getHours().toString().padStart(2, '0')}:${selectedStartDate.getMinutes().toString().padStart(2, '0')}`;
         const newEndDate = `${selectedEndDate.getFullYear()}-${(selectedEndDate.getMonth() + 1).toString().padStart(2, '0')}-${selectedEndDate.getDate().toString().padStart(2, '0')}T${selectedEndDate.getHours().toString().padStart(2, '0')}:${selectedEndDate.getMinutes().toString().padStart(2, '0')}`;
-        console.log(newStartDate, ' ', newEndDate)
+
         const payload = {
             activity: {
                 ...newActivity,
@@ -142,7 +149,7 @@ const ActivitiesCreationForm = () => {
                     </select>
                 </div>
                 <div>
-                    <label><strong>Descripción</strong></label>
+                    <label><strong>Descripción *</strong></label>
                     <textarea 
                         className='custom-text-area' 
                         name="activity-description" 
@@ -153,6 +160,10 @@ const ActivitiesCreationForm = () => {
                         onChange={handleDescriptionChange}
                     ></textarea>
                     <p>{characterCount}/{maxLengthDescription}</p>
+                </div>
+                <div>
+                    <label><strong>Lugar *</strong></label>
+                    <input type="text" name="address" value={newActivity.address} maxLength={100} onChange={handleAddressName}/>
                 </div>
                 <div>
                     <label><strong>Limite de cupos</strong></label>
@@ -176,7 +187,7 @@ const ActivitiesCreationForm = () => {
                     </div>
                 </div>
                 <div>
-                    <label><strong>Fecha y Hora</strong></label>
+                    <label><strong>Fecha y Hora *</strong></label>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignContent: 'center', marginBottom: '15px', marginTop: '15px'}}>
                         <DateTimePicker
                             label="Seleccione inicio"
