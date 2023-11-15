@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import RefreshRoundedIcon from '@mui/icons-material/RefreshRounded';
 import IconButton from '@mui/material/IconButton';
-import { activities_get_by_neighborhood_id, activity_delete, activity_join, get_attendants_by_activity_id } from '../../requests/Activities';
+import { activities_get_by_neighborhood_id, activity_delete, activity_join, get_attendants_by_activity_id, get_is_user_registered_in_activity_id } from '../../requests/Activities';
 import { UserContext } from '../../contexts/UserContext';
 import { formatearFecha, initCap } from '../../utils/utils';
 import { activityTypes } from '../../utils/data';
@@ -50,7 +50,14 @@ const ActivitiesList = () => {
 
     const getAcitiviesList = async () => {
         const response = await activities_get_by_neighborhood_id(userInfo.neighborhood.neighborhood_id);
-        setActivitiesList(response.data.reverse());
+        const updatedActivitiesList = await Promise.all(response.data.map(async (activity) => {
+            const isRegistered = await get_is_user_registered_in_activity_id(activity.id, userInfo.rut);
+            return {
+              ...activity,
+              isRegistered,
+            };
+        }));
+        setActivitiesList(updatedActivitiesList.reverse());
     };
 
     const joinActivity = async () => {

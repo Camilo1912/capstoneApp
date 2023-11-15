@@ -39,3 +39,8 @@ export const get_attendants_by_activity_id = async (activity_id) => {
     const response = await axiosClient.get(`activities/${activity_id}/enrollment_list`);
     return response;
 };
+
+export const get_is_user_registered_in_activity_id = async (activity_id, rut) => {
+    const response = await axiosClient.get(`activities/${activity_id}/${rut}`);
+    return response;
+};
