@@ -45,3 +45,23 @@ export const submit_certificate_application = async (payload) => {
     const response = await axiosClient.post('applications/', formData);
     return response;
 };
+
+export const applications_guest_create_cert = async (userData) => {
+    const formData = new FormData();
+    formData.append("image_url_1", userData.image_front);
+    formData.append("image_url_2", userData.image_back);
+    formData.append("image_url_3", userData.image_face);
+    formData.append("image_url_4", userData.image_invoice);
+
+    delete userData.image_front;
+    delete userData.image_back;
+    delete userData.image_invoice;
+    delete userData.image_face;
+  
+
+    for (const key in userData) {
+      formData.append(key, userData[key]);
+    }
+    const response = await axiosClient.post("applications/certificate", formData);
+    return response;
+};

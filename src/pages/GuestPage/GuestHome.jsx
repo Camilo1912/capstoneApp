@@ -1,7 +1,7 @@
 import React from 'react'
 import { useEffect, useState, useContext } from 'react';
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
-import { Button, IconButton } from '@mui/material';
+import { Button, IconButton, Input } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import LoginIcon from '@mui/icons-material/Login';
 import { GuestContext } from '../../contexts/GuestContext';
@@ -22,9 +22,17 @@ import { activityTypes } from '../../utils/data';
 import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
 import { validateRut } from '@fdograph/rut-utilities';
 import { toast } from 'react-toastify';
+import { RefreshRounded } from '@mui/icons-material';
+import FeedRoundedIcon from '@mui/icons-material/FeedRounded';
+import GuestNeighborhoodInfo from './GuestNeighborhoodInfo';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import SendRoundedIcon from '@mui/icons-material/SendRounded';
+import { applications_guest_create_cert } from '../../requests/Applications';
 
 const GuestHome = () => {
     const navigate = useNavigate();
+    const currentDate = new Date();
     const defaultGuestInfo = {
         first_name: '',
         second_name: '',
@@ -32,6 +40,15 @@ const GuestHome = () => {
         last_name_2: '',
         email: '',
         rut: ''
+    } 
+    const defaultAddressInfo = {
+        street_address: '',
+        number_address: '',
+        numero_dpto: '',
+        image_front: null,
+        image_back: null,
+        image_invoice: null,
+        image_face: null
     }
     const { guestForm, handleGuestForm, resetGuestForm } = useContext(GuestContext);
     const [value, setValue] = React.useState(0);
@@ -51,6 +68,9 @@ const GuestHome = () => {
     const [newRut, setNewRut] = useState('');
     const [newEmail, setNewEmail] = useState('');
     const [refreshInformation, setRefreshInformation] = useState(false);
+    const [showRefreshButton, setShowRefreshButton] = useState(false);
+    const [selectedContent, setSelectedContent] = useState(1);
+    const [addressForm, setAddressForm] = useState(defaultAddressInfo)
 
     useEffect(() => {
         const getRegions = async () => {
@@ -70,6 +90,8 @@ const GuestHome = () => {
         setNewRut('');
         setNewEmail('');
         setGuestInfo(defaultGuestInfo);
+        setShowRefreshButton(false);
+        setAddressForm(defaultAddressInfo);
     }, [refresh])
 
     useEffect(() => {
@@ -112,6 +134,7 @@ const GuestHome = () => {
                 neighborhoodId: selectedNeighborhood.id,
             })
             setNeighborhoodInfo(selectedNeighborhood);
+            setRefreshInformation(!refreshInformation);
         } else {
             const { name, value } = e.target;
             handleGuestForm({
@@ -129,8 +152,9 @@ const GuestHome = () => {
             };
             getNewsFromNeighborhood();
             getActivitiesFromNeighborhood();
+            setShowRefreshButton(true);
         }
-    }, [neighborhoodInfo]);
+    }, [refreshInformation]);
 
 
     const getActivitiesFromNeighborhood = async() => {
@@ -241,6 +265,73 @@ const GuestHome = () => {
         setShowJoinActivityForm(false);
     };
 
+    const handleCancelCertificate = () => {
+        setSelectedContent(1);
+        setGuestInfo(defaultGuestInfo);
+        setAddressForm(defaultAddressInfo);
+    };
+
+    const handleFileChange = (e, field) => {
+        const file = e.target.files[0];
+
+        if (isFileValid(file)) {
+            setAddressForm({
+                ...addressForm,
+                [field]: file,
+            });
+        } else {
+            toast.error('El tamaño del archivo excede el límite de 5 MB', { autoClose: 3000, position: toast.POSITION.TOP_CENTER });
+            console.error('El tamaño del archivo excede el límite de 5 MB');
+        }
+    };
+
+    const isFileValid = (file) => {
+        return file && file.size <= 5 * 1024 * 1024;
+    };
+
+    const handleCertificateSubmit = async (e) => {
+        e.preventDefault();
+
+        if (guestInfo.first_name && guestInfo.last_name && guestInfo.last_name_2 && guestInfo.rut && guestInfo.email 
+            && addressForm.image_back && addressForm.image_face && addressForm.image_front && addressForm.image_invoice
+            && addressForm.number_address && addressForm.numero_dpto && addressForm.street_address && guestForm.neighborhoodId && 
+            guestForm.communeId) {
+
+            console.log(guestInfo);
+            const payload = {
+                'application[rut]': guestInfo['rut'],
+                'application[first_name]': guestInfo.first_name,
+                'application[second_name]': guestInfo.second_name,
+                'application[last_name]': guestInfo.last_name,
+                'application[last_name_2]': guestInfo.last_name_2,
+                'application[number_address]': `${addressForm['number_address']}, dpto./casa ${addressForm['numero_dpto']}`,
+                'application[street_address]': addressForm['street_address'],
+                'application[state]': 'creada',
+                'image_url_1': addressForm['image_front'],
+                'image_url_2': addressForm['image_back'],
+                'image_url_3': addressForm['image_face'],
+                'image_url_4': addressForm['image_invoice'],
+                'application[commune_id]': guestForm['communeId'],
+                'application[neighborhood_id]': guestForm.neighborhoodId,
+                'application[email]': guestInfo['email'],
+            }
+
+            try {
+                const response = await applications_guest_create_cert(payload);
+                if (response.status === 201) {
+                    toast.success('Solicitud de certificado enviada correctamente', { autoClose: 3000, position: toast.POSITION.TOP_CENTER });
+                    handleCancelCertificate();
+                } else {
+                    console.log("Hubo un problema al crear el usuario. Código de estado: " + response.status);
+                }
+            
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    };
+    
+
     return (
         <div className='guest-page-wrapper'>
             <div>
@@ -303,12 +394,16 @@ const GuestHome = () => {
                         </> 
                         :null}
                     </select>
+                    
                     </div>
-                    <div></div>
+                    <IconButton disabled={!showRefreshButton} onClick={() => (setRefreshInformation(!refreshInformation))}>
+                        <RefreshRounded />
+                    </IconButton>
                 </div>
             </div>
             <div className='guest-content-wrapper'>
                 <Container maxWidth="xl">
+                    {selectedContent === 1 ?
                     <Grid container spacing={2}>
                         <Grid item xs={4}>
                             <div className='guest-card'>
@@ -379,7 +474,7 @@ const GuestHome = () => {
                                     {activitiesList ? 
                                         <> 
                                         {activitiesList.length !== 0 && guestForm.neighborhoodId ? <>
-                                            {activitiesList.map((activity) => (
+                                            {activitiesList.filter(activity => new Date(activity.start_date.slice(0, -1)) > currentDate).map((activity) => (
                                                 <div key={activity.id} className='activities-card-guest' onClick={() => handleActivityOpen(activity)}>
                                                     <h2>{activity.title}</h2>
                                                     <div>
@@ -473,49 +568,133 @@ const GuestHome = () => {
                                 <div className='guest-card-content'>
                                     {guestForm.neighborhoodId ? 
                                         <>
-                                            <Button variant='outlined'>Certificado de residencia</Button>
+                                            <Button variant='outlined' onClick={() => (setSelectedContent(2))}>Certificado de residencia</Button>
                                             <Button variant='outlined'>Implemento publico</Button>
                                         </>
                                     :<p className='guest-helper-text'>Las solicitudes disponibles de la junta que selecciones aparecerán aquí.</p>}
                                 </div>
                             </div>
-                            <div className='guest-card' style={{ marginTop: '15px'}}>
-                                <div className='guest-card-header'>
-                                    <h1>Información de la junta</h1>
-                                    <InfoRoundedIcon />
-                                </div>
-                                <div className='guest-card-content'>
-                                    {neighborhoodInfo.id ? 
-                                        <div>
-                                            <p>Junta de vecinos {neighborhoodInfo.name}</p>
-                                            <p>Integrantes: {neighborhoodInfo.membership}</p>
-                                            <strong>Directiva</strong>
-                                            <div className='guest-directive-info'>
-                                                <p>Presidente: {neighborhoodInfo.president}</p>
-                                                <p>Secretario: {neighborhoodInfo.secretary}</p>
-                                                <p>Tesorero: {neighborhoodInfo.treasurer}</p>
-                                            </div>
-                                            <strong>Dirección</strong>
-                                            <div className='guest-directive-info'>
-                                                <p>{neighborhoodInfo.address}</p>
-                                            </div>
-                                            <strong>Contacto</strong>
-                                            <div className='guest-directive-info'>
-                                                <p>{neighborhoodInfo.bank_acc_email}</p>
-                                            </div>
-                                            {neighborhoodInfo.quota ? 
-                                            <>
-                                                <strong>Cuota</strong>
-                                                <div className='guest-directive-info'>
-                                                    <p>${neighborhoodInfo.quota}/mes</p>
-                                                </div>
-                                            </>: null}
-                                        </div>
-                                    :<p className='guest-helper-text'>La información de la junta que selecciones aparecerá aquí.</p>}
-                                </div>
-                            </div>
+                            <GuestNeighborhoodInfo neighborhoodInfo={neighborhoodInfo} />
                         </Grid>
                     </Grid>
+                    : 
+                    <Grid container spacing={2} columns={{ xs: 3, sm: 5, md: 12 }}>
+
+                        <Grid item xs={2} sm={3} md={8}>
+
+                            <div className='guest-card' style={{ marginTop: '15px'}}>
+                                <div className='guest-card-header'>
+                                    <h1>Formulario de Solicitud de Certificado de Residencia</h1>
+                                    <AssignmentIcon />
+                                </div>
+                                <div className='guest-card-content'>
+                                    <div style={{ display: 'flex', justifyContent: 'space-evenly', gap: '10%', margin: '5px 15px'}}>
+                                        <p>Por favor rellene el siguiente formulario con sus datos correspondientes, luego de envíar su solicitud, esta será resuelta por la directiva de su Junta de Vecinos y recibirá un correo con la respuesta pertinente al caso.</p>
+                                    </div>
+                                    <div style={{ display: 'flex', justifyContent: 'space-evenly', gap: '10%', margin: '5px 15px'}}>
+                                        <div style={{ display: 'flex', flexDirection: 'column', width: '100%'}}>
+                                            <strong>Primer Nombre *</strong>
+                                            {/* <input type="text" /> */}
+                                            <Input placeholder='Escriba aquí' type="text" maxLength={100} value={guestInfo.first_name} onChange={(e) => (setGuestInfo({...guestInfo, first_name: e.target.value}))}></Input>
+                                        </div>
+                                        <div style={{ display: 'flex', flexDirection: 'column', width: '100%'}}>
+                                            <strong>Segundo Nombre (opcional)</strong>
+                                            <Input placeholder='Escriba aquí' type="text" maxLength={100} value={guestInfo.second_name} onChange={(e) => (setGuestInfo({...guestInfo, second_name: e.target.value}))}></Input>
+                                        </div>
+                                    </div>
+                                    <div style={{ display: 'flex', justifyContent: 'space-evenly', gap: '10%', margin: '5px 15px'}}>
+                                        <div style={{ display: 'flex', flexDirection: 'column', width: '100%'}}>
+                                            <strong>Primer Apellido *</strong>
+                                            {/* <input type="text" /> */}
+                                            <Input placeholder='Escriba aquí' type="text" maxLength={100} value={guestInfo.last_name} onChange={(e) => (setGuestInfo({...guestInfo, last_name: e.target.value}))}></Input>
+                                        </div>
+                                        <div style={{ display: 'flex', flexDirection: 'column', width: '100%'}}>
+                                            <strong>Segundo Apellido *</strong>
+                                            <Input placeholder='Escriba aquí' type="text" maxLength={100} value={guestInfo.last_name_2} onChange={(e) => (setGuestInfo({...guestInfo, last_name_2: e.target.value}))}></Input>
+                                        </div>
+                                    </div>
+
+                                    <div style={{ display: 'flex', justifyContent: 'space-evenly', gap: '10%', margin: '5px 15px'}}>
+                                        <div style={{ display: 'flex', flexDirection: 'column', width: '100%'}}>
+
+                                            <strong>Rut *</strong>
+                                            <div style={{ display: 'flex', gap: '15px'}}>
+                                                <Input placeholder='Ej: 12345678-9' value={newRut} onChange={handleRutChange}></Input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div style={{ display: 'flex', justifyContent: 'space-evenly', gap: '10%', margin: '5px 15px'}}>
+                                        <div style={{ display: 'flex', flexDirection: 'column', width: '100%'}}>
+
+                                            <strong>Dirección *</strong>
+                                            <div style={{ display: 'flex', gap: '15px'}}>
+                                                <Input placeholder='Calle' type="text" maxLength={200} value={addressForm.street_address} onChange={(e) => (setAddressForm({...addressForm, street_address: e.target.value}))}></Input>
+                                                <Input placeholder='Número' type="text" maxLength={100} value={addressForm.number_address} onChange={(e) => (setAddressForm({...addressForm, number_address: e.target.value}))}></Input>
+                                                <Input placeholder='Nro. Dpto./Casa' type="text" maxLength={100} value={addressForm.numero_dpto} onChange={(e) => (setAddressForm({...addressForm, numero_dpto: e.target.value}))}></Input>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div style={{ display: 'flex', justifyContent: 'space-evenly', gap: '10%', margin: '5px 15px'}}>
+                                        <div style={{ display: 'flex', flexDirection: 'column', width: '100%'}}>
+
+                                            <strong>Email *</strong>
+                                            <div style={{ display: 'flex', gap: '15px'}}>
+                                                <Input type="email" value={newEmail} onChange={handleEmailChange} placeholder='ejemplo@mail.com'></Input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', gap: '10%', margin: '5px 15px'}}>
+                                        
+                                        <strong>Para poder verificarte frente a tu junta de vecinos necesitamos los siguientes documentos: </strong>
+                                        <div className='register-combobox-container register-upload-file-container'>
+                                            <label htmlFor="image-front">Foto carnet fontal *</label>
+                                            <div>
+                                                <Button component="label" variant="contained" disableElevation color={ addressForm.image_front ? 'success' : 'primary' } size='small' startIcon={addressForm.image_front ? <CheckCircleIcon /> : <CloudUploadIcon />}>
+                                                    {addressForm.image_front ? 'Cargado' : 'Cargar imagen'}
+                                                    <input type="file" accept=".png, .jpg, .jpeg" style={{ display: 'none' }} onChange={(e) => handleFileChange(e, 'image_front')} />
+                                                </Button>
+                                            </div>
+                                        </div>
+                                        <div className='register-combobox-container register-upload-file-container'>
+                                            <label htmlFor="image-back">Foto carnet parte posterior *</label>
+                                            <div>
+                                                <Button component="label" variant="contained" disableElevation color={ addressForm.image_back ? 'success' : 'primary' } size='small' startIcon={addressForm.image_back ? <CheckCircleIcon /> : <CloudUploadIcon />}>
+                                                    {addressForm.image_back ? 'Cargado' : 'Cargar imagen'}
+                                                    <input type="file" accept=".png, .jpg, .jpeg" style={{ display: 'none' }} onChange={(e) => handleFileChange(e, 'image_back')} />
+                                                </Button>
+                                            </div>
+                                        </div>
+                                        <div className='register-combobox-container register-upload-file-container'>
+                                            <label htmlFor="image-invoice">Foto de una cuenta o contrato que muestre su dirección y Rut. *</label>
+                                            <Button component="label" variant="contained" disableElevation color={ addressForm.image_invoice ? 'success' : 'primary' } size='small' startIcon={addressForm.image_invoice ? <CheckCircleIcon /> : <CloudUploadIcon />}>
+                                                {addressForm.image_invoice ? 'Cargado' : 'Cargar imagen'}
+                                                <input type="file" accept=".png, .jpg, .jpeg" style={{ display: 'none' }} onChange={(e) => handleFileChange(e, 'image_invoice')} />
+                                            </Button>
+                                        </div>
+                                        <div className='register-combobox-container register-upload-file-container'>
+                                            <label htmlFor="image-face">Foto de su rostro *</label>
+                                            <Button component="label" variant="contained" disableElevation color={ addressForm.image_face ? 'success' : 'primary' } size='small' startIcon={addressForm.image_face ? <CheckCircleIcon /> : <CloudUploadIcon />}>
+                                                {addressForm.image_face ? 'Cargado' : 'Cargar imagen'}
+                                                <input type="file" accept=".png, .jpg, .jpeg" style={{ display: 'none' }} onChange={(e) => handleFileChange(e, 'image_face')} />
+                                            </Button>
+                                        </div>
+                                        Formatos aceptados: JPG, JPEG o PNG - Tamaño maximo 5mb
+                                    </div> 
+                                    <div style={{ display: 'flex', justifyContent: 'end', gap: '10px'}}>
+                                        <Button variant='contained' onClick={handleCancelCertificate} color='error'>Cancelar</Button>  
+                                        <Button variant='contained' onClick={handleCertificateSubmit} endIcon={<SendRoundedIcon />}>Envíar Solicitud</Button>                           
+                                    </div>
+                                </div>
+                               
+                            </div>
+                        </Grid>
+                        <Grid item xs={1} sm={2} md={4} >
+                            <GuestNeighborhoodInfo neighborhoodInfo={neighborhoodInfo} />
+                        </Grid>
+
+                    </Grid>}
                 </Container>
             </div>
 

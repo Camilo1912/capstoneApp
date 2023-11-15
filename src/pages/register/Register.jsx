@@ -12,90 +12,90 @@ import RegisterResidentialFields from './RegisterResidentialFields';
 import RegisterCredentialFields from './RegisterCredentialFields';
 import { RegistrationContext } from '../../contexts/RegitrationContext';
 import { register } from '../../requests/Register';
-import { useNavigate } from 'react-router-dom';
+import { useAsyncError, useNavigate } from 'react-router-dom';
 import SendIcon from '@mui/icons-material/Send';
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
 import RegisterVerificationFields from './RegisterVerificationFields';
 import { toast } from 'react-toastify';
 
 const Register = () => {
-  const navigate = useNavigate();
-  const { 
-    registrationForm,
-    resetRegistrationForm } = useContext(RegistrationContext);
-  const [activeStep, setActiveStep] = useState(0);
-  const [isNextButtonDisabled, setIsNextButtonDisabled] = useState(true);
+    const navigate = useNavigate();
+    const { 
+        registrationForm,
+        resetRegistrationForm } = useContext(RegistrationContext);
+    const [activeStep, setActiveStep] = useState(0);
+    const [isNextButtonDisabled, setIsNextButtonDisabled] = useState(true);
 
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    const handleNext = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
 
-  };
+    };
 
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
+    const handleBack = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    };
 
-  const handleReset = () => {
-    setActiveStep(0);
-  };
+    const handleReset = () => {
+        setActiveStep(0);
+    };
 
-  useEffect(() => {
-    if (activeStep === 0 && registrationForm['firstname'] && registrationForm['lastname1'] && registrationForm['lastname2'] && registrationForm['rut'] && registrationForm['birthDate']) {
-      setIsNextButtonDisabled(false);
-    } else if (activeStep === 1 && registrationForm["regionId"] && registrationForm["communeId"] && registrationForm["neighborhoodId"] && registrationForm['street'] && registrationForm['number']){
-      setIsNextButtonDisabled(false);
-    } else if (activeStep === 2 && registrationForm['image_front'] && registrationForm['image_back'] && registrationForm['image_invoice'] && registrationForm['image_face']) {
+    useEffect(() => {
+        if (activeStep === 0 && registrationForm['firstname'] && registrationForm['lastname1'] && registrationForm['lastname2'] && registrationForm['rut'] && registrationForm['birthDate']) {
         setIsNextButtonDisabled(false);
-    } else if (activeStep === 3 && registrationForm["email"] && registrationForm["password"]) {
-      setIsNextButtonDisabled(false);
-    } else {
-      setIsNextButtonDisabled(true);
-    }
-  }, [registrationForm, activeStep]);
+        } else if (activeStep === 1 && registrationForm["regionId"] && registrationForm["communeId"] && registrationForm["neighborhoodId"] && registrationForm['street'] && registrationForm['number']){
+        setIsNextButtonDisabled(false);
+        } else if (activeStep === 2 && registrationForm['image_front'] && registrationForm['image_back'] && registrationForm['image_invoice'] && registrationForm['image_face']) {
+            setIsNextButtonDisabled(false);
+        } else if (activeStep === 3 && registrationForm["email"] && registrationForm["password"]) {
+        setIsNextButtonDisabled(false);
+        } else {
+        setIsNextButtonDisabled(true);
+        }
+    }, [registrationForm, activeStep]);
 
-  const handleSignIn = async (e) => {
-    e.preventDefault();
+    const handleSignIn = async (e) => {
+        e.preventDefault();
 
-    const newUserData = {
-        'neighbor[first_name]': registrationForm['firstname'],
-        'neighbor[second_name]': registrationForm['middlename'],
-        'neighbor[last_name]': registrationForm['lastname1'],
-        'neighbor[last_name_2]': registrationForm['lastname2'],
-        'neighbor[birth_date]': registrationForm['birthDate'],
-        'neighbor[email]': registrationForm['email'],
-        'neighbor[street_address]': registrationForm['street'],
-        'neighbor[number_address]': registrationForm['number'],
-        'neighbor[rut]': registrationForm['rut'],
-        'neighbor[password]': registrationForm['password'],
-        'neighbor[neighborhood_id]': registrationForm['neighborhoodId'],
-        'neighbor[commune_id]': registrationForm['communeId'],
-        'neighbor[gender]': registrationForm['gender'],
-        'image_front': registrationForm['image_front'],
-        'image_back': registrationForm['image_back'],
-        'image_face': registrationForm['image_face'],
-        'image_invoice': registrationForm['image_invoice']
-    }
+        const newUserData = {
+            'neighbor[first_name]': registrationForm['firstname'],
+            'neighbor[second_name]': registrationForm['middlename'],
+            'neighbor[last_name]': registrationForm['lastname1'],
+            'neighbor[last_name_2]': registrationForm['lastname2'],
+            'neighbor[birth_date]': registrationForm['birthDate'],
+            'neighbor[email]': registrationForm['email'],
+            'neighbor[street_address]': registrationForm['street'],
+            'neighbor[number_address]': registrationForm['number'],
+            'neighbor[rut]': registrationForm['rut'],
+            'neighbor[password]': registrationForm['password'],
+            'neighbor[neighborhood_id]': registrationForm['neighborhoodId'],
+            'neighbor[commune_id]': registrationForm['communeId'],
+            'neighbor[gender]': registrationForm['gender'],
+            'image_front': registrationForm['image_front'],
+            'image_back': registrationForm['image_back'],
+            'image_face': registrationForm['image_face'],
+            'image_invoice': registrationForm['image_invoice']
+        }
 
-    try {
-      const response = await register(newUserData);
-      if (response.status === 200) {
-        toast.success('Solicitud de registro enviada correctamente', { autoClose: 3000, position: toast.POSITION.TOP_CENTER });
-        handleReset();
-        resetRegistrationForm();
-        navigate("/");
-      } else {
-        console.log("Hubo un problema al crear el usuario. Código de estado: " + response.status);
-      }
-      
-    } catch (error) {
-      console.log(error);
+        try {
+            const response = await register(newUserData);
+            if (response.status === 200) {
+                toast.success('Solicitud de registro enviada correctamente', { autoClose: 3000, position: toast.POSITION.TOP_CENTER });
+                handleReset();
+                resetRegistrationForm();
+                navigate("/");
+            } else {
+                console.log("Hubo un problema al crear el usuario. Código de estado: " + response.status);
+            }
+        
+        } catch (error) {
+            console.log(error);
+        }
     }
-  }
   
-  const handleBackToLogin = () => {
-    resetRegistrationForm();
-    navigate('/');
-  }
+    const handleBackToLogin = () => {
+        resetRegistrationForm();
+        navigate('/');
+    }
 
   return (
 

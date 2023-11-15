@@ -59,14 +59,17 @@ export const initCap = (str) => {
 }
 
 export const convertirFormatoFecha = (fechaEnFormatoISO) => {
-    const partes = fechaEnFormatoISO.split('-');
-    if (partes.length === 3) {
-        const [anio, mes, dia] = partes;
-        const nuevaFecha = `${dia}-${mes}-${anio}`;
-        return nuevaFecha;
-    } else {
-        // Manejo de error si el formato de entrada no es válido
-        console.error('Formato de fecha no válido');
-        return null;
+    if (fechaEnFormatoISO) {
+
+        const partes = fechaEnFormatoISO.split('-');
+        if (partes.length === 3) {
+            const [anio, mes, dia] = partes;
+            const nuevaFecha = `${dia}-${mes}-${anio}`;
+            return nuevaFecha;
+        } else {
+            // Manejo de error si el formato de entrada no es válido
+            console.error('Formato de fecha no válido');
+            return null;
+        }
     }
 }
