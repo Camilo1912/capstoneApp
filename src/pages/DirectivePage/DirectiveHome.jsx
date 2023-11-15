@@ -34,8 +34,9 @@ const DirectiveHome = () => {
             'Crear actividad'
         ],
         "Solicitudes": [
-            'Certificados',
-            'Recursos',
+            'Solicitudes de Certificados',
+            'Solicitar Certificado',
+            'Solicitudes de Recursos',
             'Inscripción',
         ],
         "Nosotros": [

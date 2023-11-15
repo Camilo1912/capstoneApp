@@ -104,6 +104,7 @@ const PollList = () => {
             if (vote_response.status === 201) {
 
                 toast.success('Su voto se envío correctamente', { autoClose: 3000, position: toast.POSITION.TOP_CENTER });
+                setRefresh(!refresh);
             }
         } catch (error) {
             if (error?.response?.status === 422) {

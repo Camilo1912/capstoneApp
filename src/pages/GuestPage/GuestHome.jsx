@@ -407,9 +407,9 @@ const GuestHome = () => {
                                     <strong>Descripción</strong>
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
                                         <p>{selectedActivity.description}</p>
-                                        <p>Inicio: <strong>{formatearFecha(selectedActivity.start_date)}</strong></p>
+                                        <p>Inicio: <strong>{formatearFecha(selectedActivity.start_date.slice(0, -1))}</strong></p>
                                         {selectedActivity.end_date ? 
-                                        <p>Termino: <strong>{formatearFecha(selectedActivity.end_date)}</strong></p>
+                                        <p>Termino: <strong>{formatearFecha(selectedActivity.end_date.slice(0, -1))}</strong></p>
                                         : null}
                                         {selectedActivity.quota ? 
                                             <>

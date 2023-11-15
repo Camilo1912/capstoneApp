@@ -83,7 +83,7 @@ const Header = () => {
                 
             </div>
             <div className="header-iconset">
-                <Avatar className='profile-avatar' alt={`${userInfo.first_name} ${userInfo.last_name}`} src={userInfo.avatar_url} />
+                <Avatar className='profile-avatar' alt={`${userInfo.first_name} ${userInfo.last_name}`} src={userInfo.face_photo_url} />
                 <div className='profile-button-set'>
                     <IconButton onClick={handleClickOpen} style={{ color: '#333333'}}>
                         <SettingsIcon fontSize='medium' />

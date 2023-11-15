@@ -16,6 +16,7 @@ import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 
 const ActivitiesList = () => {
     const { userInfo } = useContext(UserContext);
+    const currentDate = new Date();
     const [open, setOpen] = useState(false);
     const [refresh, setRefresh] = useState(true);
     const [activitiesList, setActivitiesList] = useState([]);
@@ -45,7 +46,6 @@ const ActivitiesList = () => {
     const getAttendantList = async () => {
         const response = await get_attendants_by_activity_id(selectedActivity.id)
         setAttendantList(response.data);
-        console.log(response.data);
     };
 
     const getAcitiviesList = async () => {
@@ -112,7 +112,7 @@ const ActivitiesList = () => {
     }
 
     const handleExport = () => {
-        if (attendantList) {
+        if (Array.isArray(attendantList) && attendantList.length > 0) {
             const selectedColumns = attendantList.map(({
                 rut,
                 full_name,
@@ -128,9 +128,9 @@ const ActivitiesList = () => {
             const worksheet = XLSX.utils.json_to_sheet(selectedColumns);
             XLSX.utils.book_append_sheet(workbook, worksheet, "Listado");
             XLSX.writeFile(workbook, "ListaDeInscritos.xlsx");
-          } else {
+        } else {
             console.error('No hay datos para exportar.');
-          }
+        }
     };
 
     return (
@@ -147,9 +147,9 @@ const ActivitiesList = () => {
                         <h2>Proximas</h2>
                     </div>
                     <div className='polls-list-container'>
-                                {activitiesList?.map((activity) => (
+                                {activitiesList?.filter(activity => new Date(activity.start_date.slice(0, -1)) > currentDate).map((activity) => (
                                     <div key={activity.id} className='application-card' onClick={() => handleOpenDialog(activity)}>
-                                        <div className='application-card-header'><strong>{initCap(activity.title)}</strong> {formatearFecha(activity.start_date)}</div>
+                                        <div className='application-card-header'><strong>{initCap(activity.title)}</strong> {formatearFecha(activity.start_date.slice(0, -1))}</div>
                                         <div className='application-card-content'>
                                             <p className='activities-card-content-text'>{activity.description}</p>
                                             <p>Tipo de actividad: <strong>{activity.activity_type ? activityTypes[activity.activity_type] : <>No especificado</>}</strong></p>
@@ -167,6 +167,23 @@ const ActivitiesList = () => {
                         {/* <AssignmentTurnedInIcon /> */}
                         <h2>Pasadas</h2>
                     </div>
+                    <div className='polls-list-container'>
+                                {activitiesList?.filter(activity => new Date(activity.start_date.slice(0, -1)) < currentDate).map((activity) => (
+                                    <div key={activity.id} className='application-card' onClick={() => handleOpenDialog(activity)}>
+                                        <div className='application-card-header'><strong>{initCap(activity.title)}</strong> {formatearFecha(activity.start_date.slice(0, -1))}</div>
+                                        <div className='application-card-content'>
+                                            <p className='activities-card-content-text'>{activity.description}</p>
+                                            <p>Tipo de actividad: <strong>{activity.activity_type ? activityTypes[activity.activity_type] : <>No especificado</>}</strong></p>
+                                            {activity.quota ? 
+                                            <>{[2, 3, 4].includes(userInfo.role.role_id) ? 
+                                                <p>Inscritos: {activity.occupancy}/{activity.quota}</p>
+                                                :<p>Cupos: <strong>{activity.quota - activity.occupancy }</strong></p>}</>
+                                            : <p>Cupos: <strong>Sin límite</strong></p>}
+                                            <p>{activity.isRegistered ? <strong>Estas inscrito</strong>: null}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                    </div>
                 </div>
                     
                 <div className='poll-info-card'>
@@ -178,57 +195,65 @@ const ActivitiesList = () => {
             </div>
 
             <Dialog open={open} maxWidth={'md'} onClose={handleCloseDialog}>
-                {selectedActivity ? 
-                <DialogContent>
-                    <h1>{selectedActivity.title}</h1>
-                    <h2>Tipo: {activityTypes[selectedActivity.activity_type]}</h2>
-                    <p className='date-value'>Publicada el {formatearFecha(selectedActivity.created_at)}</p>
-                    <strong>Descripción</strong>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                        <p>{selectedActivity.description}</p>
-                        <p>Inicio: <strong>{formatearFecha(selectedActivity.start_date)}</strong></p>
-                        {selectedActivity.end_date ? 
-                        <p>Termino: <strong>{formatearFecha(selectedActivity.end_date)}</strong></p>
-                        : null}
-                        <p>Lugar: <strong>{selectedActivity.address}</strong></p>
-                        {selectedActivity.quota ? 
-                            <>
-                                <p>Cupos disponibles: <strong>{selectedActivity.quota - selectedActivity.occupancy}</strong></p>
-                                {[2, 3, 4].includes(userInfo.role.role_id) ? 
-                                    <p>Inscritos: {selectedActivity.occupancy}</p>
-                                :null}
-                            </>
-                        : null}
-                    </div>
-                    
-                </DialogContent>
-                : null}
-
-                <DialogActions>
-                    {[2, 3, 4].includes(userInfo.role.role_id) ? 
-                        <>
-                        <Button size='small' variant='outlined' onClick={handleExport} startIcon={<DownloadRoundedIcon />}>Descargar listado de inscritos</Button>
-                        {/* <Button size='small' variant='contained' >Editar</Button> */}
-                        <Button size='small' variant='outlined' onClick={handleDeleteActivity} startIcon={<DeleteForeverRoundedIcon />} color='error'>Eliminar</Button>
-                        </>
-                    : null}
-                    
-                    {selectedActivity?.isRegistered ? <Button size='small' variant='contained' color='error'>Desinscribirse</Button> 
-                    : 
+                {selectedActivity ?
                     <>
-                    {selectedActivity?.quota ? 
-                        <>
-                            {selectedActivity.quota - selectedActivity.occupancy > 0 ?
+                        <DialogContent>
+                            <h1>{selectedActivity.title}</h1>
+                            <h2>Tipo: {activityTypes[selectedActivity.activity_type]}</h2>
+                            <p className='date-value'>Publicada el {formatearFecha(selectedActivity.created_at)}</p>
+                            <strong>Descripción</strong>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                                <p>{selectedActivity.description}</p>
+                                <p>Inicio: <strong>{formatearFecha(selectedActivity.start_date.slice(0, -1))}</strong></p>
+                                {selectedActivity.end_date ? 
+                                <p>Termino: <strong>{formatearFecha(selectedActivity.end_date.slice(0, -1))}</strong></p>
+                                : null}
+                                <p>Lugar: <strong>{selectedActivity.address}</strong></p>
+                                {selectedActivity.quota ? 
+                                    <>
+                                        <p>Cupos disponibles: <strong>{selectedActivity.quota - selectedActivity.occupancy}</strong></p>
+                                        {[2, 3, 4].includes(userInfo.role.role_id) ? 
+                                            <p>Inscritos: {selectedActivity.occupancy}</p>
+                                        :null}
+                                    </>
+                                : null}
+                            </div>
+                            
+                        </DialogContent>
+                        
+
+                        <DialogActions>
+                            {[2, 3, 4].includes(userInfo.role.role_id) ? 
                                 <>
-                                    <Button size='small' variant='contained' onClick={handleJoinActivity} color='success'>Inscribirse</Button>
+                                {(new Date(selectedActivity.start_date.slice(0, -1)) > currentDate) ? 
+                                    <Button size='small' variant='outlined' onClick={handleDeleteActivity} startIcon={<DeleteForeverRoundedIcon />} color='error'>Eliminar</Button>
+                                :null}
+                                <Button size='small' variant='outlined' onClick={handleExport} startIcon={<DownloadRoundedIcon />}>Descargar listado de inscritos</Button>
                                 </>
                             : null}
-                        </>
-                    : <Button size='small' variant='contained' onClick={handleJoinActivity} color='success'>Inscribirse</Button>}
-                    </>
-                    }
-                    <Button size='small' onClick={handleCloseDialog}>Cancelar</Button>
-                </DialogActions>
+                            {(new Date(selectedActivity.start_date.slice(0, -1)) > currentDate) ? 
+                                <>
+                                    {selectedActivity?.isRegistered ? <Button size='small' variant='contained' color='error'>Desinscribirse</Button> 
+                                    : 
+                                    <>
+                                    {selectedActivity?.quota ? 
+                                        <>
+                                            {selectedActivity.quota - selectedActivity.occupancy > 0 ?
+                                                <>
+                                                    <Button size='small' variant='contained' onClick={handleJoinActivity} color='success'>Inscribirse</Button>
+                                                </>
+                                            : null}
+                                        </>
+                                    : <Button size='small' variant='contained' onClick={handleJoinActivity} color='success'>Inscribirse</Button>}
+                                    </>
+                                    }
+                                </>
+                            : null}
+                            <Button size='small' onClick={handleCloseDialog}>Cancelar</Button>
+                        </DialogActions>
+                    </>      
+                : null}
+                
             </Dialog>
         </>
     )
