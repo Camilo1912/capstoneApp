@@ -27,7 +27,7 @@ const RegisterVerificationFields = () => {
 
     const isFileValid = (file) => {
         return file && file.size <= 5 * 1024 * 1024;
-      };
+    };
     
     return (
         <>  
