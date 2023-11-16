@@ -4,7 +4,7 @@ import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
 const GuestNeighborhoodInfo = ({neighborhoodInfo}) => {
 
   return (
-    <div className='guest-card' style={{ marginTop: '15px'}}>
+    <div className='guest-card'>
         <div className='guest-card-header'>
             <h1>Información de la junta</h1>
             <InfoRoundedIcon />

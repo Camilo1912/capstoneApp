@@ -6,6 +6,7 @@ import CertificateApplication from './CertificateApplication';
 import CreateCertificateApplication from './CreateCertificateApplication';
 import NeighborApplications from './NeighborApplications';
 import { UserContext } from '../../contexts/UserContext';
+import CreateResourceApplication from './CreateResourceApplication';
 
 const ApplicationContainer = () => {
     const { selectedComponent } = useSelectedComponent();
@@ -13,40 +14,67 @@ const ApplicationContainer = () => {
 
     return (
         <div className='news-main-layout'>
-                {(selectedComponent.menu === 0)? 
+            {[2, 3, 4].includes(userInfo?.role.role_id) ? 
                 <>
-                    <h1>Solicitudes / Certificados</h1>
-                    {[2, 3, 4].includes(userInfo?.role.role_id) ? 
-                        <CertificateApplication />
-                    : <NeighborApplications />
-                    }
-                    
-                </>
-                : 
-                <>
+                    { selectedComponent.menu === 0 ? 
+                        <>
+                            <h1>Solicitudes / Certificados</h1>
+                            <CertificateApplication />
+                        </>
+                    :null}
+
                     {selectedComponent.menu === 1 ? 
                         <>
-                            <h1>Solicitudes / Nueva solicitud de certificado</h1>
+                            <h1>Solicitudes / Nueva solicitud de Certificado</h1>
                             <CreateCertificateApplication />
                         </>
-                        : 
+                    :null}
+
+                    {selectedComponent.menu === 2 ? 
                         <>
-                            {selectedComponent.menu === 2 ?
-                                <>
-                                    <h1>Solicitudes / Recurso</h1>
-                                    <ResourceApplication />
-                                </>
-                            : 
-                                <>
-                                    <h1>Solicitudes / Inscripción</h1>
-                                    <MembershipApplication />
-                                </>
-                            }
+                            <h1>Solicitudes / Recurso</h1>
+                            <ResourceApplication />
                         </>
-                    } 
+                    :null}
+
+                    {selectedComponent.menu === 3 ? 
+                        <>
+                            <h1>Solicitudes / Nueva solicitud de Recurso</h1>
+                            <CreateResourceApplication />
+                        </>
+                    :null}
+
+                    {selectedComponent.menu === 4 ? 
+                        <>
+                            <h1>Solicitudes / Inscripción</h1>
+                            <MembershipApplication />
+                        </>
+                    :null}
                 </>
-                }
-            </div>
+                :               
+                <>
+                    { selectedComponent.menu === 0 ? 
+                        <>
+                            <h1>Solicitudes / Certificados</h1>
+                            <NeighborApplications />
+                        </>
+                    :null}
+
+                    { selectedComponent.menu === 1 ? 
+                        <>
+                            <h1>Solicitudes / Nueva solicitud de Certificado</h1>
+                            <CreateCertificateApplication />
+                        </>
+                    :null}
+
+                    { selectedComponent.menu === 2 ? 
+                        <>
+                            <h1>Solicitudes / Nueva solicitud de Recurso</h1>
+                            <CreateResourceApplication />
+                        </>
+                    :null}
+                </>}
+            </div> 
     )
 }
 

@@ -493,7 +493,7 @@ const GuestHome = () => {
                                     }
                                 </div>   
                             </div>
-                            <Dialog open={activityOpen} onClose={handleDialogClose}>
+                            <Dialog open={activityOpen} onClose={handleDialogClose} >
                                 {selectedActivity ? 
                                 <DialogContent>
                                     <h1>{selectedActivity.title}</h1>
@@ -560,7 +560,7 @@ const GuestHome = () => {
                             </Dialog>
                         </Grid>
                         <Grid item xs={4}>
-                            <div className='guest-card'>
+                            <div className='guest-card' style={{ marginBottom: '15px'}}>
                                 <div className='guest-card-header'>
                                     <h1>Solicitudes</h1>
                                     <AssignmentIcon />
@@ -582,7 +582,7 @@ const GuestHome = () => {
 
                         <Grid item xs={2} sm={3} md={8}>
 
-                            <div className='guest-card' style={{ marginTop: '15px'}}>
+                            <div className='guest-card'>
                                 <div className='guest-card-header'>
                                     <h1>Formulario de Solicitud de Certificado de Residencia</h1>
                                     <AssignmentIcon />

@@ -30,6 +30,7 @@ const NeighborHome = () => {
         "Solicitudes": [
             'Mis solicitudes',
             'Solicitar Certificado',
+            'Solicitar Recurso'
         ],
         "Nosotros": [
             'Información'

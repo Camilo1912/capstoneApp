@@ -35,8 +35,9 @@ const DirectiveHome = () => {
         ],
         "Solicitudes": [
             'Solicitudes de Certificados',
-            'Solicitar Certificado',
+            'Crear solicitud de Certificado',
             'Solicitudes de Recursos',
+            'Crear solicitud de Recurso',
             'Inscripción',
         ],
         "Nosotros": [
