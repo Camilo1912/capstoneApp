@@ -17,6 +17,7 @@ import AssignmentIndRoundedIcon from '@mui/icons-material/AssignmentIndRounded';
 import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
 import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
 import FilePresentRoundedIcon from '@mui/icons-material/FilePresentRounded';
+import CategoryRoundedIcon from '@mui/icons-material/CategoryRounded';
 
 const DirectiveHome = () => {
     const { selectedComponent } = useSelectedComponent();
@@ -48,6 +49,7 @@ const DirectiveHome = () => {
         "Nosotros": [
             { label:'Información', icon: <InfoRoundedIcon />},
             { label:'Integrantes', icon: <PeopleRoundedIcon />},
+            { label:'Recursos', icon: <CategoryRoundedIcon /> },
         ]
     };
 

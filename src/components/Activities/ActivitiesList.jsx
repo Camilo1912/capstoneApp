@@ -13,6 +13,7 @@ import { toast } from 'react-toastify';
 import * as XLSX from 'xlsx/xlsx.mjs';
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
+import ActivityCard from './ActivityCard';
 
 const ActivitiesList = () => {
     const { userInfo } = useContext(UserContext);
@@ -149,17 +150,7 @@ const ActivitiesList = () => {
                     <div className='polls-list-container'>
                                 {activitiesList?.filter(activity => new Date(activity.start_date.slice(0, -1)) > currentDate).map((activity) => (
                                     <div key={activity.id} className='application-card' onClick={() => handleOpenDialog(activity)}>
-                                        <div className='application-card-header'><strong>{initCap(activity.title)}</strong> {formatearFecha(activity.start_date.slice(0, -1))}</div>
-                                        <div className='application-card-content'>
-                                            <p className='activities-card-content-text'>{activity.description}</p>
-                                            <p>Tipo de actividad: <strong>{activity.activity_type ? activityTypes[activity.activity_type] : <>No especificado</>}</strong></p>
-                                            {activity.quota ? 
-                                            <>{[2, 3, 4].includes(userInfo.role.role_id) ? 
-                                                <p>Inscritos: {activity.occupancy}/{activity.quota}</p>
-                                                :<p>Cupos: <strong>{activity.quota - activity.occupancy }</strong></p>}</>
-                                            : <p>Cupos: <strong>Sin límite</strong></p>}
-                                            <p>{activity.isRegistered ? <strong>Estas inscrito</strong>: null}</p>
-                                        </div>
+                                        <ActivityCard activity={activity} userInfo={userInfo}/>
                                     </div>
                                 ))}
                     </div>
@@ -170,17 +161,7 @@ const ActivitiesList = () => {
                     <div className='polls-list-container'>
                                 {activitiesList?.filter(activity => new Date(activity.start_date.slice(0, -1)) < currentDate).map((activity) => (
                                     <div key={activity.id} className='application-card' onClick={() => handleOpenDialog(activity)}>
-                                        <div className='application-card-header'><strong>{initCap(activity.title)}</strong> {formatearFecha(activity.start_date.slice(0, -1))}</div>
-                                        <div className='application-card-content'>
-                                            <p className='activities-card-content-text'>{activity.description}</p>
-                                            <p>Tipo de actividad: <strong>{activity.activity_type ? activityTypes[activity.activity_type] : <>No especificado</>}</strong></p>
-                                            {activity.quota ? 
-                                            <>{[2, 3, 4].includes(userInfo.role.role_id) ? 
-                                                <p>Inscritos: {activity.occupancy}/{activity.quota}</p>
-                                                :<p>Cupos: <strong>{activity.quota - activity.occupancy }</strong></p>}</>
-                                            : <p>Cupos: <strong>Sin límite</strong></p>}
-                                            <p>{activity.isRegistered ? <strong>Estas inscrito</strong>: null}</p>
-                                        </div>
+                                        <ActivityCard activity={activity} userInfo={userInfo}/>
                                     </div>
                                 ))}
                     </div>
@@ -213,7 +194,7 @@ const ActivitiesList = () => {
                                     <>
                                         <p>Cupos disponibles: <strong>{selectedActivity.quota - selectedActivity.occupancy}</strong></p>
                                         {[2, 3, 4].includes(userInfo.role.role_id) ? 
-                                            <p>Inscritos: {selectedActivity.occupancy}</p>
+                                            <p>Inscritos: <strong>{selectedActivity.occupancy}</strong></p>
                                         :null}
                                     </>
                                 : null}

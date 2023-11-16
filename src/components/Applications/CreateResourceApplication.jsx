@@ -7,13 +7,26 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from "@fullcalendar/interaction";
 import esLocale from '@fullcalendar/core/locales/es';
 import { convertirDiasANumeros } from '../../utils/utils';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import Button from '@mui/material/Button';
+import { toast } from 'react-toastify';
+import { DialogTitle } from '@mui/material';
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 
 const CreateResourceApplication = () => {
     // const currentDate = new Date();
+    const defaultTimeSpan = {
+        startTime: '',
+        endTime: '',
+    }
+    const [open, setOpen] = useState(false);
     const { userInfo } = useContext(UserContext);
     const [refeshResources, setRefreshResources] = useState(true);
     const [resourcesList, setResourcesList] = useState([]);
     const [selectedResource, setSelectedResource] = useState(null);
+    const [selectedTimeSpan, setSelectedTimeSpan] = useState(defaultTimeSpan);
  
     useEffect(() => {
         getNeighborhoodResources(1);
@@ -43,8 +56,13 @@ const CreateResourceApplication = () => {
         setSelectedResource(selected || null);
     };
 
-
-
+    const handleCloseDialog = () => {
+        setOpen(false);
+    };
+    
+    const handleOpenDialog = () => {
+        setOpen(true);
+    };
 
     return (
         <div className='project-creation-layout'>
@@ -69,15 +87,46 @@ const CreateResourceApplication = () => {
                     {/* <p>{initCap(userInfo.first_name)} {initCap(userInfo.last_name)} {initCap(userInfo.last_name_2)}</p> */}
                 </div>
 
-                <div>
-                    <label><strong>Descripción</strong></label>
-                    <p>{selectedResource?.description}</p>
+                {selectedResource ? 
+                    <>
+                        <div>
+                            <label><strong>Descripción</strong></label>
+                            <p>{selectedResource?.description}</p>
+                        </div>
+                        <div>
+                            <label><strong>Reglamento</strong></label>
+                            <p>{selectedResource?.comment}</p>
+                        </div>
+                        <div>
+                            <label><strong>Cuota Solidaria</strong></label>
+                            <p>{parseFloat(selectedResource?.cost).toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })} pesos</p>
+                        </div>
+                        <div className='project-creation-button-container' style={{ alignItems: 'start'}}>
+                            <Button onClick={handleOpenDialog} variant='outlined'>Ver horarios</Button>
+                        </div>
+                    </>
+                : null}
+                <div style={{ color: '#555555', fontSize: '.8rem'}}>
+                    <p>Cualquier pago por la solicitud del recurso debe ser coordinado con el tesorero a cargo. Cuando un integrante de la directiva de tu junta de vecinos resuelva tu solicitud, recibiarás
+                         un <strong>correo electronico</strong> con la respuesta a corde.</p>
+                </div>
+                <div className='project-creation-button-container'>
+                    {/* <Button variant='contained' color='success' disabled={isSubmitDisabled} onClick={handleSubmit} endIcon={<SendRoundedIcon />}>Solicitar</Button> */}
                 </div>
                 
-                {selectedResource ? 
                 
-                <div>
-                    <label><strong>Horarios Disponibles</strong></label>
+            </div>
+            <div className='project-creation-info-card'>
+                <h1>Sobre la creacón de actividades</h1>
+                <ul>
+                    <li><h2>Tipo de Actividad</h2><p>El tipo de anuncio indica si se mostrará solo una imágen (tipo afiche) o </p></li>
+                </ul>
+            </div>
+
+            <Dialog open={open} maxWidth={'md'} onClose={handleCloseDialog}>
+                <DialogTitle>Horarios Disponibles</DialogTitle>
+                <DialogContent>
+                {selectedResource ? 
                     <FullCalendar 
                         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
                         initialView={'timeGridFourDay'}
@@ -97,8 +146,8 @@ const CreateResourceApplication = () => {
                         views={ {
                             timeGridFourDay: {
                                 type: 'timeGrid',
-                                duration: { days: 3 },
-                                buttonText: '3 Días',
+                                duration: { days: 5 },
+                                buttonText: '5 Días',
                             }
                         }}
                         selectable= {true}
@@ -115,26 +164,14 @@ const CreateResourceApplication = () => {
                             start: '2023-11-16',
                             end: '2023-11-22'
                           }}
-                        />
-                </div>
+                    />
                 :null}
-
-                <div style={{ color: '#555555', fontSize: '.8rem'}}>
-                    <p>Cualquier pago por la solicitud del recurso debe ser coordinado con el tesorero a cargo. Cuando un integrante de la directiva de tu junta de vecinos resuelva tu solicitud, recibiarás
-                         un <strong>correo electronico</strong> con la respuesta a corde.</p>
-                </div>
-                <div className='project-creation-button-container'>
-                    {/* <Button variant='contained' color='success' disabled={isSubmitDisabled} onClick={handleSubmit} endIcon={<SendRoundedIcon />}>Solicitar</Button> */}
-                </div>
-
-                
-            </div>
-            <div className='project-creation-info-card'>
-                <h1>Sobre la creacón de actividades</h1>
-                <ul>
-                    <li><h2>Tipo de Actividad</h2><p>El tipo de anuncio indica si se mostrará solo una imágen (tipo afiche) o </p></li>
-                </ul>
-            </div>
+                </DialogContent>
+                <DialogActions>
+                    <Button variant='outlined' onClick={handleCloseDialog}>Cancelar</Button>
+                    <Button variant='contained' startIcon={<CheckCircleRoundedIcon />}>Confirmar Selección</Button>
+                </DialogActions>
+            </Dialog>
         </div>
     )
 }
