@@ -49,7 +49,7 @@ const Header = () => {
 
     const handleClickLogout = async () => {
         handleUserInfo({});
-        // const response = await logout(getUserId());
+        const response = await logout(getUserId());
         setSelectedComponent({'nav': 0, 'menu': 0});
 
         navigate('/');
