@@ -6,43 +6,48 @@ import { useSelectedComponent } from '../../contexts/SelectedComponentContext';
 import ActivitiesContainer from "../../components/Activities/ActivitiesContainer";
 import MembersContainer from "../../components/Members/MembersContainer";
 import ApplicationContainer from "../../components/Applications/ApplicationContainer";
+import CampaignRoundedIcon from '@mui/icons-material/CampaignRounded';
+import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
+import ConstructionRoundedIcon from '@mui/icons-material/ConstructionRounded';
+import HowToVoteRoundedIcon from '@mui/icons-material/HowToVoteRounded';
+import CalendarMonthRoundedIcon from '@mui/icons-material/CalendarMonthRounded';
+import LocalActivityRoundedIcon from '@mui/icons-material/LocalActivityRounded';
+import FactCheckRoundedIcon from '@mui/icons-material/FactCheckRounded';
+import AssignmentIndRoundedIcon from '@mui/icons-material/AssignmentIndRounded';
+import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
+import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
+import FilePresentRoundedIcon from '@mui/icons-material/FilePresentRounded';
 
 const DirectiveHome = () => {
     const { selectedComponent } = useSelectedComponent();
 
     const contextualMenuOptions = {
         "Anuncios": [
-            'Ver anuncios',
-            'Crear anuncio'
+            { label:'Ver anuncios', icon: <CampaignRoundedIcon />},
+            { label:'Crear anuncio', icon: <AddCircleRoundedIcon />},
         ],
         "Proyectos": [
-            'Ver proyectos',
-            'Crear propuesta',
-            'Votaciones'
-        ],
-        "Encuestas": [
-            'Activas',
-            'Finalizadas',
-            'Respondidas',
-            'Resultados'
+            { label:'Ver proyectos', icon: <ConstructionRoundedIcon />},
+            { label:'Crear propuesta', icon: <AddCircleRoundedIcon />},
+            { label:'Votaciones', icon: <HowToVoteRoundedIcon />},
         ],
         "Calendario": [
-            'Todo'
+            { label:'Todo', icon: <CalendarMonthRoundedIcon />},
         ],
         "Actividades": [
-            'Todas',
-            'Crear actividad'
+            { label:'Todas', icon: <LocalActivityRoundedIcon />},
+            { label:'Crear actividad', icon: <AddCircleRoundedIcon />},
         ],
         "Solicitudes": [
-            'Solicitudes de Certificados',
-            'Crear solicitud de Certificado',
-            'Solicitudes de Recursos',
-            'Crear solicitud de Recurso',
-            'Inscripción',
+            { label:'Solicitudes de Certificados', icon: <FilePresentRoundedIcon />},
+            { label:'Crear solicitud de Certificado', icon: <AddCircleRoundedIcon />},
+            { label:'Solicitudes de Recursos', icon: <FactCheckRoundedIcon />},
+            { label:'Crear solicitud de Recurso', icon: <AddCircleRoundedIcon />},
+            { label:'Solicitudes de Inscripción', icon: <AssignmentIndRoundedIcon />},
         ],
         "Nosotros": [
-            'Información',
-            'Integrantes'
+            { label:'Información', icon: <InfoRoundedIcon />},
+            { label:'Integrantes', icon: <PeopleRoundedIcon />},
         ]
     };
 

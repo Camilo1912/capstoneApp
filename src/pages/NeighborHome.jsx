@@ -7,33 +7,42 @@ import { useSelectedComponent } from '../contexts/SelectedComponentContext';
 import ActivitiesContainer from "../components/Activities/ActivitiesContainer";
 import MembersContainer from "../components/Members/MembersContainer";
 import ApplicationContainer from "../components/Applications/ApplicationContainer";
+import CampaignRoundedIcon from '@mui/icons-material/CampaignRounded';
+import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
+import ConstructionRoundedIcon from '@mui/icons-material/ConstructionRounded';
+import HowToVoteRoundedIcon from '@mui/icons-material/HowToVoteRounded';
+import CalendarMonthRoundedIcon from '@mui/icons-material/CalendarMonthRounded';
+import LocalActivityRoundedIcon from '@mui/icons-material/LocalActivityRounded';
+import FactCheckRoundedIcon from '@mui/icons-material/FactCheckRounded';
+import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
+
+
 
 const NeighborHome = () => {
     const { selectedComponent } = useSelectedComponent();
 
     const contextualMenuOptions = {
         "Anuncios": [
-            'Ver anuncios'
+            { label:'Ver anuncios', icon: <CampaignRoundedIcon />},
         ],
         "Proyectos": [
-            'Ver proyectos',
-            'Crear propuesta',
-            'Votaciones'
+            { label:'Ver proyectos', icon: <ConstructionRoundedIcon />},
+            { label:'Crear propuesta', icon: <AddCircleRoundedIcon />},
+            { label:'Votaciones', icon: <HowToVoteRoundedIcon />},
         ],
         "Calendario": [
-            'Todo'
+            { label:'Todo', icon: <CalendarMonthRoundedIcon />},
         ],
         "Actividades": [
-            'Proximas actividades',
-            'Activiades pasadas'
+            { label:'Todas', icon: <LocalActivityRoundedIcon />},
         ],
         "Solicitudes": [
-            'Mis solicitudes',
-            'Solicitar Certificado',
-            'Solicitar Recurso'
+            { label:'Mis solicitudes', icon: <FactCheckRoundedIcon />},
+            { label:'Solicitar Certificado', icon: <AddCircleRoundedIcon />},
+            { label:'Solicitar Recurso', icon: <AddCircleRoundedIcon />},
         ],
         "Nosotros": [
-            'Información'
+            { label:'Información', icon: <InfoRoundedIcon />},
         ]
     };
 

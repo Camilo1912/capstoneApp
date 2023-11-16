@@ -73,3 +73,29 @@ export const convertirFormatoFecha = (fechaEnFormatoISO) => {
         }
     }
 }
+
+export const convertirDiasANumeros = (diasString) => {
+    const dias = diasString.split(',').map((dia) => dia.trim());
+    const diasMapeados = dias.map((dia) => {
+        switch (dia.toLowerCase()) {
+            case 'l':
+                return 1;
+            case 'm':
+                return 2;
+            case 'x':
+                return 3;
+            case 'j':
+                return 4;
+            case 'v':
+                return 5;
+            case 's':
+                return 6;
+            case 'd':
+                return 7;
+            default:
+                return null;
+        }
+    });
+
+    return diasMapeados;
+} 
