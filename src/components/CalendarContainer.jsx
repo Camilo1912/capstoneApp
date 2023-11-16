@@ -26,14 +26,14 @@ const CalendarContainer = () => {
 
     const events = activitiesList.map((activity) => ({
         title: activity.title,
-        start: activity.start_date.slice(0, -1), // Remueve la 'Z'
+        start: activity.start_date.slice(0, -1),
         end: activity.end_date.slice(0, -1),
         description: activity.description,
     }));
 
-    const handleDateClick = (arg) => { // bind with an arrow function
+    const handleDateClick = (arg) => {
         alert(arg.dateStr)
-      }
+    }
 
     return (
         <div className='news-main-layout'>

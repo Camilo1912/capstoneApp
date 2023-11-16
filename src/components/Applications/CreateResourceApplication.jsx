@@ -16,6 +16,7 @@ import { DialogTitle } from '@mui/material';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import { addDays, format } from 'date-fns';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
+import { application_resource_create, get_resource_applications_by_neighborhood } from '../../requests/Applications';
 
 
 const CreateResourceApplication = () => {
@@ -34,9 +35,11 @@ const CreateResourceApplication = () => {
     const [selectedTimeSpan, setSelectedTimeSpan] = useState(defaultTimeSpan);
     const [isConfirmButtonDisabled, setIsConfirmButtonDisabled] = useState(true);
     const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
+    const [existingApplicationsList, setExistingApplictionsList] = useState([]);
  
     useEffect(() => {
         getNeighborhoodResources(userInfo.neighborhood.neighborhood_id);
+        getNeighborhoodResourcesApplications(userInfo.neighborhood.neighborhood_id)
     }, [refeshResources]);
 
     useEffect(() => {
@@ -60,6 +63,16 @@ const CreateResourceApplication = () => {
             console.log(resourcesResponse.data);
             if (resourcesResponse.data) {
                 setResourcesList(resourcesResponse.data);
+            }
+        }
+    };
+
+    const getNeighborhoodResourcesApplications = async (neighborhoodId) => {
+        if (neighborhoodId) {
+            const resourcesResponse = await get_resource_applications_by_neighborhood(neighborhoodId);
+            console.log('jflksjf',resourcesResponse.data);
+            if (resourcesResponse.data) {
+                setExistingApplictionsList(resourcesResponse.data);
             }
         }
     };
@@ -108,10 +121,20 @@ const CreateResourceApplication = () => {
         return durationInHours <= selectedResource.max_time;
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (selectedTimeSpan.endTime && selectedTimeSpan.startTime) {
             const payload = {
-                start_time: ''
+                application: {
+                    start_use: selectedTimeSpan.startTime,
+                    end_use: selectedTimeSpan.endTime,
+                    resource_id: selectedResource.id,
+                    neighborhood_id: userInfo.neighborhood.neighborhood_id
+                }
+            }
+
+            const response = await application_resource_create(userInfo.id, payload);
+            if (response.status === 200 || response.status === 201) {
+                toast.success('Solicitud enviada correctamente', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
             }
         }
     };

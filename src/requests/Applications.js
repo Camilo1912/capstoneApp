@@ -16,6 +16,11 @@ export const application_verified_create = async (user_id) => {
     return response;
 };
 
+export const application_resource_create = async (user_id, payload) => {
+    const response = await axiosClient.post(`applications/resource_application/${user_id}`, payload);
+    return response;
+};
+
 export const applications_get = async () => {
     const response = await axiosClient.get("applications/");
     return response.data;
@@ -73,5 +78,12 @@ export const applications_guest_create_cert = async (userData) => {
       formData.append(key, userData[key]);
     }
     const response = await axiosClient.post("applications/certificate", formData);
+    return response;
+};
+
+
+
+export const get_resource_applications_by_neighborhood = async (neighborhood_id) => {
+    const response = await axiosClient.get(`neighborhoods/${neighborhood_id}/resources`);
     return response;
 };
