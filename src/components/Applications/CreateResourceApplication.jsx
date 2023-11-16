@@ -14,6 +14,9 @@ import Button from '@mui/material/Button';
 import { toast } from 'react-toastify';
 import { DialogTitle } from '@mui/material';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import { addDays, format } from 'date-fns';
+import SendRoundedIcon from '@mui/icons-material/SendRounded';
+
 
 const CreateResourceApplication = () => {
     // const currentDate = new Date();
@@ -21,23 +24,34 @@ const CreateResourceApplication = () => {
         startTime: '',
         endTime: '',
     }
+    const today = new Date();
+    const maxEndDate = addDays(today, 14); 
     const [open, setOpen] = useState(false);
     const { userInfo } = useContext(UserContext);
     const [refeshResources, setRefreshResources] = useState(true);
     const [resourcesList, setResourcesList] = useState([]);
     const [selectedResource, setSelectedResource] = useState(null);
     const [selectedTimeSpan, setSelectedTimeSpan] = useState(defaultTimeSpan);
+    const [isConfirmButtonDisabled, setIsConfirmButtonDisabled] = useState(true);
+    const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
  
     useEffect(() => {
-        getNeighborhoodResources(1);
+        getNeighborhoodResources(userInfo.neighborhood.neighborhood_id);
     }, [refeshResources]);
 
     useEffect(() => {
         if (selectedResource) {
-
             console.log(convertirDiasANumeros(selectedResource.available_day));
         }
     }, [selectedResource]);
+
+    useEffect(() => {
+        if (selectedTimeSpan.endTime && selectedTimeSpan.startTime) {
+            setIsSubmitDisabled(false);
+        } else {
+            setIsSubmitDisabled(true);
+        }
+    }, [selectedTimeSpan])
 
 
     const getNeighborhoodResources = async (neighborhoodId) => {
@@ -56,12 +70,50 @@ const CreateResourceApplication = () => {
         setSelectedResource(selected || null);
     };
 
+
+    const handleSelect = (selectInfo) => {
+        const { startStr, endStr } = selectInfo;
+        setSelectedTimeSpan({
+            startTime: startStr,
+            endTime: endStr,
+        });
+    };
+
     const handleCloseDialog = () => {
         setOpen(false);
+        setSelectedTimeSpan(defaultTimeSpan);
     };
     
     const handleOpenDialog = () => {
+        setSelectedTimeSpan(defaultTimeSpan);
         setOpen(true);
+    };
+
+    const handleConfirmSelection = () => {
+        setOpen(false);
+    };
+
+    const handleSelectAllow = (selectInfo) => {
+        const { startStr, endStr } = selectInfo;
+        const startTime = new Date(startStr);
+        const endTime = new Date(endStr);
+        const durationInHours = (endTime - startTime) / (60 * 60 * 1000);
+        if (!(durationInHours <= selectedResource.max_time)) {
+            setSelectedTimeSpan(defaultTimeSpan);
+            setIsConfirmButtonDisabled(true);
+        } else {
+
+            setIsConfirmButtonDisabled(false);
+        }
+        return durationInHours <= selectedResource.max_time;
+    };
+
+    const handleSubmit = () => {
+        if (selectedTimeSpan.endTime && selectedTimeSpan.startTime) {
+            const payload = {
+                start_time: ''
+            }
+        }
     };
 
     return (
@@ -101,17 +153,28 @@ const CreateResourceApplication = () => {
                             <label><strong>Cuota Solidaria</strong></label>
                             <p>{parseFloat(selectedResource?.cost).toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })} pesos</p>
                         </div>
-                        <div className='project-creation-button-container' style={{ alignItems: 'start'}}>
-                            <Button onClick={handleOpenDialog} variant='outlined'>Ver horarios</Button>
+                        <div style={{ color: '#555555', fontSize: '.8rem'}}>
+                            <p>Cualquier pago por la solicitud del recurso debe ser coordinado con el tesorero a cargo. Cuando un integrante de la directiva de tu junta de vecinos resuelva tu solicitud, recibiarás
+                            un <strong>correo electronico</strong> con la respuesta a corde.</p>
                         </div>
+                        <div>   
+                            <label><strong>Seleccione Horario</strong></label>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px'}}>
+                                <div className='project-creation-button-container' style={{ alignItems: 'start'}}>
+                                    <Button onClick={handleOpenDialog} variant='outlined'>Ver horarios</Button>
+                                </div>
+                                {selectedTimeSpan.endTime && selectedTimeSpan.startTime ? 
+                                <p style={{ backgroundColor: "#85abf4", width: 'fit-content', padding: '5px 15px', fontSize: '1.2rem', color: 'white', borderRadius: '100px'}}><strong>Día {new Date(selectedTimeSpan.startTime).toLocaleDateString('es-CL')}</strong> de <strong>{new Date(selectedTimeSpan.startTime).toLocaleTimeString('es-CL', { hour: 'numeric', minute: 'numeric' })}</strong> a <strong>{new Date(selectedTimeSpan.endTime).toLocaleTimeString('es-CL', { hour: 'numeric', minute: 'numeric' })}</strong></p>
+                                :null}
+                            </div>
+                        </div>
+                        
+                        
                     </>
                 : null}
-                <div style={{ color: '#555555', fontSize: '.8rem'}}>
-                    <p>Cualquier pago por la solicitud del recurso debe ser coordinado con el tesorero a cargo. Cuando un integrante de la directiva de tu junta de vecinos resuelva tu solicitud, recibiarás
-                         un <strong>correo electronico</strong> con la respuesta a corde.</p>
-                </div>
+                
                 <div className='project-creation-button-container'>
-                    {/* <Button variant='contained' color='success' disabled={isSubmitDisabled} onClick={handleSubmit} endIcon={<SendRoundedIcon />}>Solicitar</Button> */}
+                    <Button variant='contained' color='success' disabled={isSubmitDisabled} onClick={handleSubmit} endIcon={<SendRoundedIcon />}>Solicitar</Button>
                 </div>
                 
                 
@@ -124,9 +187,14 @@ const CreateResourceApplication = () => {
             </div>
 
             <Dialog open={open} maxWidth={'md'} onClose={handleCloseDialog}>
-                <DialogTitle>Horarios Disponibles</DialogTitle>
+                <DialogTitle>
+                    Horarios Disponibles
+                    <p style={{ fontSize:"1rem"}}><strong>Tiempo maximo: {selectedResource?.max_time}h</strong></p>
+                    <p style={{ fontSize:"1rem"}}><strong>Tiempo mínimo: {selectedResource?.min_time}h</strong></p>
+                </DialogTitle>
                 <DialogContent>
                 {selectedResource ? 
+                <>
                     <FullCalendar 
                         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
                         initialView={'timeGridFourDay'}
@@ -158,18 +226,22 @@ const CreateResourceApplication = () => {
                                 daysOfWeek: convertirDiasANumeros(selectedResource.available_day),
                                 startTime: '8:00',
                                 endTime: '18:00',
+                                // duration: { hours: selectedResource.max_time }
                             }
                         }
                         validRange ={{
-                            start: '2023-11-16',
-                            end: '2023-11-22'
+                            start: format(today, 'yyyy-MM-dd'),
+                            end: format(maxEndDate, 'yyyy-MM-dd')
                           }}
+                        select={handleSelect}
+                        selectAllow={handleSelectAllow}
                     />
+                </>
                 :null}
                 </DialogContent>
                 <DialogActions>
                     <Button variant='outlined' onClick={handleCloseDialog}>Cancelar</Button>
-                    <Button variant='contained' startIcon={<CheckCircleRoundedIcon />}>Confirmar Selección</Button>
+                    <Button variant='contained' onClick={handleConfirmSelection} disabled={isConfirmButtonDisabled} startIcon={<CheckCircleRoundedIcon />}>Confirmar Selección</Button>
                 </DialogActions>
             </Dialog>
         </div>
