@@ -35,14 +35,10 @@ export const applications_get_by_neighbor_rut = async (neighborhood_id, neighbor
     return response;
 };
 
-export const submit_certificate_application = async (payload) => {
+export const submit_certificate_application = async (application_id, presidentId) => {
     const formData = new FormData();
-    formData.append("file", payload.pdffile);
-    delete payload.pdffile;
-    for (const key in payload) {
-        formData.append(key, payload[key]);
-    }
-    const response = await axiosClient.post('applications/', formData);
+    formData.append("sign", await fetch('/capstoneApp/src/assets/images/sign.png').then((res) => res.blob()), 'sign.png');
+    const response = await axiosClient.post(`neighborhoods/${application_id}/${presidentId}/certificate`, formData);
     return response;
 };
 

@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
-import { applications_get_by_neighborhood_id } from '../../requests/Applications';
+import { applications_get_by_neighborhood_id, submit_certificate_application } from '../../requests/Applications';
 import { formatearFecha, initCap, convertirFormatoFecha } from '../../utils/utils';
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
@@ -17,7 +17,6 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { toast } from 'react-toastify';
-import DocuPdf from '../../utils/DocuPdf'
 
 const CertificateApplication = () => {
     const { userInfo } = useContext(UserContext);
@@ -48,63 +47,18 @@ const CertificateApplication = () => {
 
         if (selectedApplication) {
 
-            const newPayload = {
-                application: {
-                    state: event.target.value
+            const updateApplicationState = async () => {
+                const response = await submit_certificate_application(selectedApplication.id, userInfo.id);
+                if (response.status === 200) {
+                    toast.success('Solicitud Resuelta', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
+                    setOpen(false);
                 }
             }
-            // const updateApplicationState = async () => {
-            //     const response = await application_update(selectedApplication.id, newPayload);
-            //     if (response.status === 200) {
-            //         toast.success('Actividad publicada correctamente', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
-            //         setOpen(false);
-            //     }
-            // }
-            // updateApplicationState();
-            // setRefresh(!refresh);
+            updateApplicationState();
+            setRefresh(!refresh);
         }
 
     }
-
-
-    const generateAndDownloadPdf = async () => {
-
-        if (selectedApplication && userInfo) {
-            const pdfPropData = {
-                first_name: userInfo.first_name,
-                last_name: userInfo.last_name,
-                last_name_2: userInfo.last_name_2,
-                rut: userInfo.rut,
-                jv_name: userInfo.neighborhood.neighborhood_name,
-                formatedAddress: `$Comuna de ${initCap(userInfo.commune.commune_name)}, Región ${initCap(userInfo.region.region_name)}`,
-                user_first_name: selectedApplication.first_name,
-                user_last_name: selectedApplication.last_name,
-                user_last_name_2: selectedApplication.last_name_2,
-                user_rut: selectedApplication.rut,
-                user_address: `${initCap(selectedApplication.street_address)} ${selectedApplication.number_address}`,
-                commune_name: `initCap(userInfo.commune.commune_name)`
-            }
-        
-            try {
-                const pdfBlob = await DocuPdf.toBlob(pdfPropData);
-                saveAs(pdfBlob, 'Certificado.pdf');
-        
-
-                const formData = new FormData();
-                formData.append('file', pdfBlob, 'Certificado.pdf');
-        
-                const response = await axios.post('URL_DE_TU_API', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    },
-                });
-        
-            console.log('Respuesta de la API:', response.data);
-            } catch (error) {
-            console.error('Error:', error);
-            }
-        }
-    };
 
     const handleOpenDialog = (application) => {
         setSelectedApplication(application);
