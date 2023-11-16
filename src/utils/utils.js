@@ -99,3 +99,30 @@ export const convertirDiasANumeros = (diasString) => {
 
     return diasMapeados;
 } 
+
+
+export const convertirDiasATexto = (diasString) => {
+    const dias = diasString.split(',').map((dia) => dia.trim());
+    const diasMapeados = dias.map((dia) => {
+        switch (dia.toLowerCase()) {
+            case 'l':
+                return 'Lun ';
+            case 'm':
+                return 'Mar ';
+            case 'x':
+                return 'Mie ';
+            case 'j':
+                return 'Jue ';
+            case 'v':
+                return 'Vie ';
+            case 's':
+                return 'Sab ';
+            case 'd':
+                return 'Dom ';
+            default:
+                return null;
+        }
+    });
+
+    return diasMapeados;
+} 
