@@ -17,6 +17,23 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { toast } from 'react-toastify';
+// import DocuPdf from '../../utils/DocuPdf'
+// import { PDFViewer } from '@react-pdf/renderer'
+
+// const information = {
+//     first_name: 'Bob',
+//     last_name: 'Pantalones',
+//     last_name_2: 'Cuadrados',
+//     rut: '12.345.678-8',
+//     jv_name: 'magallanes',
+//     formatedAddress: 'comuna de Pedro Aguirre Cerda, Región Metropolitana de Santiago',
+//     user_first_name: 'Patricio',
+//     user_last_name: 'Estrella',
+//     user_last_name_2: 'Estrella2',
+//     user_rut: '99.999.999-9',
+//     user_address: 'Av fondo de bikini 4231',
+//     commune_name: 'Pedro Aguirre Cerda'
+// };
 
 const CertificateApplication = () => {
     const { userInfo } = useContext(UserContext);
@@ -193,6 +210,9 @@ const CertificateApplication = () => {
 
                         </div> 
                         : null}
+                        {/* {selectedApplication ? 
+                        <PDFViewer style={{ width: '100%', height: '100%'}}><DocuPdf information={information} /></PDFViewer>
+                        :null} */}
                     </DialogContent>
                     <DialogActions>
                         <Button variant='contained' color='error' value='rechazada' onClick={handleResolution} startIcon={<CancelRoundedIcon />}>Rechazar</Button>

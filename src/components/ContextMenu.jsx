@@ -20,7 +20,7 @@ const ContextMenu = ({ data }) => {
             <List component="nav" aria-label="main mailbox folders">
                 {data.map((option, index) => (
                     <ListItemButton
-                        selected={selectedIndex === index}
+                        selected={selectedComponent.menu === index}
                         key={option}
                         onClick={(event) => handleListItemClick(event, index)}
                     >
