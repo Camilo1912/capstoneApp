@@ -103,7 +103,6 @@ const CreateResourceApplication = () => {
     const handleCloseDialog = () => {
         setOpen(false);
         setSelectedTimeSpan(defaultTimeSpan);
-        setEventsList([]);
     };
     
     const handleOpenDialog = () => {
@@ -165,7 +164,7 @@ const CreateResourceApplication = () => {
                 </div> */}
                 <div>
                     <label><strong>Seleccione Recurso o Implemento</strong></label>
-                    <select name="resource" id="resource" onClick={handleResourceSelection} value={selectedResource ? selectedResource.id : ''}
+                    <select name="resource" id="resource" onChange={handleResourceSelection} value={selectedResource ? selectedResource.id : ''}
                     >
                         <option value="*">-- Seleccione --</option>
                         {resourcesList?.map((resource) => (
