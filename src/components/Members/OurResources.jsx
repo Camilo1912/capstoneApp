@@ -4,7 +4,7 @@ import IconButton from '@mui/material/IconButton';
 import CategoryRoundedIcon from '@mui/icons-material/CategoryRounded';
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import { UserContext } from '../../contexts/UserContext';
-import { get_resources_by_neighborhood_id, submit_resource } from '../../requests/Resources';
+import { delete_resource, get_resources_by_neighborhood_id, submit_resource } from '../../requests/Resources';
 import { convertirDiasATexto, formatearFecha, initCap } from '../../utils/utils';
 import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel } from '@mui/material';
 import Divider from '@mui/material/Divider';
@@ -25,46 +25,52 @@ import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 
 
 const OurResources = () => {
+    const { userInfo } = useContext(UserContext);
+    const neighborhoodId = userInfo.neighborhood.neighborhood_id;
     const defaultResource = {
         name: '',
-        available_day: '',
+        available_day: [],
         description: '',
         comment: '',
-        cost: null,
+        cost: 0,
         max_time: null,
-        address: ''
+        end_time: '',
+        start_time: '',
+        address: '',
+        min_time: 0,
+        neighborhood_id: neighborhoodId,
     }
     const currentDay = new Date();
     const tomorrow = startOfTomorrow();
     const maxEndDate = addDays(tomorrow, 14); 
+
     const [open, setOpen] = useState(false);
-    const { userInfo } = useContext(UserContext);
+    
     const [refresh, setRefresh] = useState(true);
     const [resourcesList, setResourcesList] = useState([]);
     const [selectedResource, setSelectedResource] = useState(null);
+    const [eventsList, setEventsList] = useState([]);
+    const [existingApplicationsList, setExistingApplictionsList] = useState([]);
+
     const [newResource, setNewResource] = useState(defaultResource);
+
     const [diasSeleccionados, setDiasSeleccionados] = useState([]);
     const [startTime, setStartTime] = useState(null);
     const [endTime, setEndTime] = useState(null);
     const [hasCuota, setHasCuota] = useState(false);
-    const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
-    const [eventsList, setEventsList] = useState([]);
-    const [existingApplicationsList, setExistingApplictionsList] = useState([]);
- 
-
+    const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
+    
+   
+    const [creationOpen, setCreationOpen] = useState(false);
+  
     useEffect(() => {
         getNeighborhoodResources();
         setSelectedResource(null);
         setNewResource(defaultResource);
-        setStartTime(null);
-        setEndTime(null);
-        setDiasSeleccionados([]);
-        setHasCuota(false);
-
     }, [refresh]);
 
     useEffect(() => {
-        getNeighborhoodResourcesApplications(userInfo.neighborhood.neighborhood_id);
+        getNeighborhoodResourcesApplications(neighborhoodId);
         if (selectedResource) {
             const eventosFiltrados = existingApplicationsList.filter((evento) => (evento.state !== 'rechazada' && parseInt(evento.resource_id) === selectedResource.id));
             const listadoFinal = eventosFiltrados.map((evento) => ({
@@ -78,7 +84,7 @@ const OurResources = () => {
         }
     }, [selectedResource]);
 
-    const getNeighborhoodResourcesApplications = async (neighborhoodId) => {
+    const getNeighborhoodResourcesApplications = async () => {
         if (neighborhoodId) {
             const resourcesResponse = await get_resource_applications_by_neighborhood(neighborhoodId);
             const filteredResources = resourcesResponse.data.filter(item => item.application_type === 'recurso');
@@ -87,16 +93,7 @@ const OurResources = () => {
             }
         }
     };
-
-    useEffect(() => {
-        if (newResource.name  && newResource.description && newResource.comment && newResource.max_time && startTime && endTime && diasSeleccionados.length > 0 && newResource.address && startTime < endTime) {
-            setIsSubmitDisabled(false);
-        } else {
-            setIsSubmitDisabled(true);
-        }
-    }, [newResource][diasSeleccionados]);
     
-
     const getNeighborhoodResources = async() => {
         if (userInfo.neighborhood.neighborhood_id) {
             const response = await get_resources_by_neighborhood_id(userInfo.neighborhood.neighborhood_id);
@@ -105,17 +102,40 @@ const OurResources = () => {
         }
     };
 
+    const handleDeleteResource = async () => {
+        if (selectedResource.id) {
+            const deleteResponse = await delete_resource(selectedResource.id);
+            if (deleteResponse.status === 204) {
+                toast.success('El recurso se eliminó correctamente', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
+                setRefresh(!refresh)
+            }
+        }
+    };
+
     const handleCloseDialog = () => {
         setOpen(false);
         setNewResource(defaultResource);
         setDiasSeleccionados([]);
         setHasCuota(false);
+        setEndTime(null);
+        setStartTime(null);
     };
+
+    const handleCloseCreationDialog = () => {
+        setCreationOpen(false);
+        setNewResource(defaultResource);
+        setDiasSeleccionados([]);
+        setHasCuota(false);
+    }
     
     const handleOpenDialog = (item) => {
         setOpen(true);
         setSelectedResource(item)
     };
+
+    const handleOpenCreationDialog = () => {
+        setCreationOpen(true);
+    }
 
     const handleInputChange = (event) => {
         setNewResource({
@@ -132,54 +152,65 @@ const OurResources = () => {
         }
     }
 
+    useEffect(() => {
+        const stringDays = diasSeleccionados.join(',');
+        setNewResource({
+            ...newResource,
+            available_day: stringDays
+        });
+    }, [diasSeleccionados])
+
     const handleStartTimeChange = (timeSelection) => {
+        if (timeSelection > endTime) {
+            setEndTime(null);
+            setStartTime(timeSelection);
+        } 
+        const formattedStartTime = timeSelection.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', hour12: false });
         setStartTime(timeSelection);
-        setEndTime(null);
+        setNewResource({
+            ...newResource,
+            start_time: formattedStartTime
+        });
     };
 
     const handleEndTimeChange = (timeSelection) => {
         setEndTime(timeSelection);
+        const formattedEndTime = timeSelection.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', hour12: false });
+        setNewResource({
+            ...newResource,
+            end_time: formattedEndTime
+        });
     };
 
-    const handleSubmit = async () => {
+    const handleSubmit = () => {
         setIsSubmitDisabled(true);
-        if (newResource.name  && newResource.description && newResource.comment && newResource.max_time && startTime && endTime && diasSeleccionados.length > 0 && newResource.address) {
-            const formattedStartTime = startTime.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', hour12: false });
-            const formattedEndTime = endTime.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', hour12: false });
-            const intMaxTime = parseInt(newResource.max_time);
-            const intCost = parseInt(newResource.cost);
-            const stringDays = diasSeleccionados.join(',');
-            if (startTime < endTime) {
-                setNewResource({
+        if (newResource.name  && 
+            newResource.description && 
+            newResource.comment && 
+            newResource.max_time && 
+            startTime && endTime && diasSeleccionados.length > 0 && 
+            newResource.address) {
+            
+            const payload = {
+                resource: {
                     ...newResource,
-                    available_day: stringDays,
-                    start_time: formattedStartTime,
-                    end_time: formattedEndTime,
-                    max_time: intMaxTime,
-                    cost: intCost,
-                    min_time: 0,
-                    neighborhood_id: userInfo.neighborhood.neighborhood_id,
-                })
-                const payload = {
-                    'resource': {
-                        ...newResource,
-                    }
-                }
-
-                console.log(payload);
-                try {
-
-                    const submitResponse = await submit_resource(payload);
-                    if (submitResponse.status === 200) {
-                        console.log(submitResponse.data);
-                        toast.success('El recurso se creó correctamente', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
-                        setRefresh(!refresh)
-                    }
-                } catch (error) {
-                    toast.success('No se pudo crear el recurso', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
                 }
             }
+
+            console.log(payload);
+            const postResource = async () => {
+                const response = await submit_resource(payload);
+                console.log(response.data);
+                if (response.status === 200) {
+                    toast.success('Recursos creado correctamente', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
+                    handleCloseCreationDialog();
+                }
+            };
+            postResource();
+        } else {
+            toast.error('Faltan datos por completar', {autoClose: 3000, position: toast.POSITION.TOP_CENTER})
         }
+        setIsSubmitDisabled(false);
     };
 
     
@@ -188,7 +219,7 @@ const OurResources = () => {
         <>
             <div className='refresh-button-container'>
                 <IconButton  id='add-button'>
-                    <AddCircleRoundedIcon onClick={handleOpenDialog} />
+                    <AddCircleRoundedIcon onClick={handleOpenCreationDialog} />
                 </IconButton>
                 <IconButton onClick={() => setRefresh(!refresh)} id='refresh-button'>
                     <RefreshRoundedIcon />
@@ -290,12 +321,15 @@ const OurResources = () => {
                         <DialogActions>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%'}}>
 
-                            <Button variant='contained' color='error' startIcon={<DeleteForeverRoundedIcon />} >Eliminar implemento</Button>
+                            <Button variant='contained' color='error' onClick={handleDeleteResource} startIcon={<DeleteForeverRoundedIcon />} >Eliminar implemento</Button>
                             <Button variant='outlined' onClick={handleCloseDialog}>cerrar</Button>
                             </div>
                         </DialogActions>
                     </>
-                : <>
+                : null}
+            </Dialog>
+
+            <Dialog open={creationOpen} maxWidth={'md'} onClose={handleCloseCreationDialog}>
                     <DialogTitle>
                         Formulario de creación de Implemento
                     </DialogTitle>
@@ -414,13 +448,13 @@ const OurResources = () => {
                         
                     </DialogContent>
                     <DialogActions>
-                        <Button variant='outlined' onClick={handleCloseDialog}>cerrar</Button>
+                        <Button variant='outlined' onClick={handleCloseCreationDialog}>cerrar</Button>
                         <Button variant='contained' disabled={isSubmitDisabled} startIcon={<CheckCircleIcon />}color='success' onClick={handleSubmit}>Crear Recurso</Button>
                     </DialogActions>
-                </>}
-
-
+                
             </Dialog>
+
+           
         </>
     )
 }

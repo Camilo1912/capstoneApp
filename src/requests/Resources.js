@@ -10,3 +10,8 @@ export const submit_resource = async (payload) => {
     const response = await axiosClient.post(`/resources`, payload);
     return response;
 };
+
+export const delete_resource = async (resource_id) => {
+    const response = await axiosClient.delete(`/resources/${resource_id}`);
+    return response;
+};
