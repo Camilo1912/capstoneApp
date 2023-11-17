@@ -100,10 +100,38 @@ export const convertirDiasANumeros = (diasString) => {
     return diasMapeados;
 } 
 
+export const convertirNumerosADias = (numerosString) => {
+    const diasMapeados = numerosString.map((dia) => {
+        switch (diasMapeados) {
+            case 1:
+                return 'l';
+            case 2:
+                return 'm';
+            case 3:
+                return 'x';
+            case 4:
+                return 'j';
+            case 5:
+                return 'v';
+            case 6:
+                return 's';
+            case 7:
+                return 'd';
+            default:
+                return null;
+        }
+    });
+
+    return diasMapeados;
+} 
+
 
 export const convertirDiasATexto = (diasString) => {
-    const dias = diasString.split(',').map((dia) => dia.trim());
-    const diasMapeados = dias.map((dia) => {
+    if (diasString) {
+
+        const dias = diasString.split(',').map((dia) => dia.trim());
+        const diasMapeados = dias.map((dia) => {
+    
         switch (dia.toLowerCase()) {
             case 'l':
                 return 'Lun ';
@@ -121,8 +149,10 @@ export const convertirDiasATexto = (diasString) => {
                 return 'Dom ';
             default:
                 return null;
-        }
-    });
-
-    return diasMapeados;
+            }
+        });
+        return diasMapeados;
+    } else {
+        return null;
+    }
 } 

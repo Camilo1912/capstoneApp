@@ -179,10 +179,10 @@ const ActivitiesCreationForm = () => {
                             onChange={handleQuotaChange}
                             value={newActivity.quota || ''}
                             disabled={limitCupos ? false : true}
-                            style={{ width: 69 }}
+                            style={{ width: 100 }}
                             inputMode="numeric"
-                            pattern="[0-9]*"
-                            min="1"
+                            // pattern="[0-9]*"
+                            // min="1"
                         />
                     </div>
                 </div>

@@ -57,7 +57,10 @@ const CertificateApplication = () => {
                     if (response.status === 200) {
                         toast.success('Solicitud Resuelta', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
                         setOpen(false);
+                        setShowRejectMessage(false);
+                        setRefresh(!refresh);
                     }
+                    setRefresh(!refresh);
                 }
                 updateApplicationState();
                 setRejectionReason('');
@@ -104,7 +107,7 @@ const CertificateApplication = () => {
                             <p>No hay solicitudes</p>
                         ) : (
                             certApplicationList.filter(application => application.state === 'creada').map((application, index) => (
-                                <div key={index} className='application-card' onClick={() => handleOpenDialog(application)}>
+                                <div key={index} className='application-card' onClick={() => handleOpenDialog(application)} style={{ height: 'fit-content'}}>
                                     <div className='application-card-header'>Solicitante: <strong>{initCap(application.first_name)} {initCap(application.last_name)} {initCap(application.last_name_2)}</strong></div>
                                     <div className='application-card-content'>
                                         <p>Rut: {application.rut}</p>
@@ -126,7 +129,7 @@ const CertificateApplication = () => {
                             <p>No hay solicitudes</p>
                         ) : (
                             certApplicationList.filter(application => application.state !== 'creada').map((application, index) => (
-                                <div key={index} className='application-card'>
+                                <div key={index} className='application-card' style={{ height: 'fit-content'}}>
                                     <div className='application-card-header'>Solicitante: <strong>{initCap(application.first_name)} {initCap(application.last_name)} {initCap(application.last_name_2)}</strong></div>
                                     <div className='application-card-content'>
                                         <p>Rut: {application.rut}</p>

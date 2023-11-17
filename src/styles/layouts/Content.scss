@@ -3,16 +3,14 @@
 .content-layout {
   display: flex;
   background-color: $background-color-light;
+
 }
 
 .sidebar {
-  // grid-area: sidebar;
-  // height: calc(100dvh - 9rem)
   width: 300px;
 }
 
 .main-content {
-  // grid-area: main-content;
   max-height: calc(100dvh - 7rem);
   width: 100%;
 }
@@ -23,4 +21,4 @@
     background-color: $background-color-dark;
   }
 }
-  
+

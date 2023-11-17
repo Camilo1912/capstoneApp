@@ -42,12 +42,6 @@ const MembersList = ({updateCount}) => {
         setSelectedMember(null);
     };
 
-// : "7538"
-// : "973"
-// : 2
-// : "Minhiriath"
-// : "no verificado"
-
     const handleExport = () => {
         if (membersList) {
             const selectedColumns = membersList.map(({
@@ -127,7 +121,7 @@ const MembersList = ({updateCount}) => {
                         <div className='member-avatar-container'>
                             <Avatar
                                 alt={selectedMember.first_name}
-                                src={selectedMember.avatar_url}
+                                src={selectedMember.image_face}
                                 sx={{ width: 100, height: 100, bgcolor: "#85abf4"}}
                             />
                             <div>
