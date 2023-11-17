@@ -25,6 +25,7 @@ const Register = () => {
         resetRegistrationForm } = useContext(RegistrationContext);
     const [activeStep, setActiveStep] = useState(0);
     const [isNextButtonDisabled, setIsNextButtonDisabled] = useState(true);
+    const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -37,6 +38,7 @@ const Register = () => {
 
     const handleReset = () => {
         setActiveStep(0);
+        isSubmitDisabled(false);
     };
 
     useEffect(() => {
@@ -54,6 +56,7 @@ const Register = () => {
     }, [registrationForm, activeStep]);
 
     const handleSignIn = async (e) => {
+        setIsSubmitDisabled(true);
         e.preventDefault();
 
         const newUserData = {
@@ -85,10 +88,12 @@ const Register = () => {
                 navigate("/");
             } else {
                 console.log("Hubo un problema al crear el usuario. Código de estado: " + response.status);
+                setIsSubmitDisabled(false);
             }
         
         } catch (error) {
             console.log(error);
+            setIsSubmitDisabled(false);
         }
     }
   
@@ -139,19 +144,19 @@ const Register = () => {
         ))}
       </Stepper>
 
-      {activeStep === registrationSteps.length ?
-        <div className='send-register-request-container'>
-          <h2>Todos los pasos fueron completados</h2>
-          <Typography>Deberás esperar a que la directiva de tu junta apruebe tu solicitud, haz clic en <strong>envíar</strong> para finalizar. </Typography>
-          <div>
-            <Button variant="contained" color='success' onClick={handleSignIn} endIcon={<SendIcon />}>
-              Enviar Solicitud
-            </Button>
-          </div>
-        </div>
-        :
-        <></>
-      }
+        {activeStep === registrationSteps.length ?
+            <div className='send-register-request-container'>
+                <h2>Todos los pasos fueron completados</h2>
+                <Typography>Deberás esperar a que la directiva de tu junta apruebe tu solicitud, haz clic en <strong>envíar</strong> para finalizar. </Typography>
+                <div>
+                    <Button variant="contained" color='success' disabled={isSubmitDisabled} onClick={handleSignIn} endIcon={<SendIcon />}>
+                        Enviar Solicitud
+                    </Button>
+                </div>
+            </div>
+            :
+            <></>
+        }
     </div>
   );
 }

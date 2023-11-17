@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
-import { applications_get_by_neighbor_rut } from '../../requests/Applications';
+import { applications_get_by_neighbor_id } from '../../requests/Applications';
 import { formatearFecha, initCap, convertirFormatoFecha } from '../../utils/utils';
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
@@ -34,7 +34,7 @@ const CertificateApplication = () => {
 
     const getApplications = async () => {
         try {
-            const applicationsResponse = await applications_get_by_neighbor_rut(neighborhoodId, userInfo.rut);
+            const applicationsResponse = await applications_get_by_neighbor_id(userInfo.id);
             const certificateApplications = applicationsResponse.data.filter(application => {
                 return application.application_type === 'certificado';
             });

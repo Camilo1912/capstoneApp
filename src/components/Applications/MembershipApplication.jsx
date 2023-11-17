@@ -18,6 +18,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { toast } from 'react-toastify';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 
 const MembershipApplication = () => {
     const { userInfo } = useContext(UserContext);
@@ -27,6 +28,8 @@ const MembershipApplication = () => {
     const neighborhoodId = userInfo.neighborhood.neighborhood_id;
     const [memberApplicationList, setMemberAplicationList] = useState([]);
     const [selectedApplication, setSelectedApplication] = useState(null);
+    const [showRejectMessage, setShowRejectMessage] = useState(false);
+    const [rejectionReason, setRejectionReason] = useState('');
 
     useEffect(() => {
         getApplications();
@@ -39,22 +42,30 @@ const MembershipApplication = () => {
 
     const handleResolution = (event) => {
 
+        const resolution = event.target.value;
         if (selectedApplication) {
-
-            const newPayload = {
-                application: {
-                    state: event.target.value
+            if (resolution === 'aceptada' || resolution === 'rechazada') {
+                const newPayload = {
+                    application: {
+                        state: resolution,
+                        message: rejectionReason
+                    }
                 }
-            }
-            const updateApplicationState = async () => {
-                const response = await application_update(selectedApplication.id, newPayload);
-                if (response.status === 200) {
-                    toast.success('Actividad publicada correctamente', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
-                    setOpen(false);
+                console.log(newPayload);
+                const updateApplicationState = async () => {
+                    const response = await application_update(selectedApplication.id, newPayload);
+                    if (response.status === 200) {
+                        toast.success('Respuesta enviada correctamente', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
+                        setOpen(false);
+                    }
                 }
+                updateApplicationState();
+                setRefresh(!refresh);
+                setRejectionReason('');
+            } else {
+                setShowRejectMessage(true);
+                
             }
-            updateApplicationState();
-            setRefresh(!refresh);
         }
 
     }
@@ -62,6 +73,7 @@ const MembershipApplication = () => {
     const handleCloseDialog = () => {
         setRefresh(!refresh);
         setSelectedApplication(null);
+        setShowRejectMessage(false);
         setOpen(false);
     };
 
@@ -190,12 +202,35 @@ const MembershipApplication = () => {
                                 </AccordionDetails>
                             </Accordion>
 
+                            {showRejectMessage ? 
+                                <div className='reject-prompt-message-container'>
+                                    <label htmlFor="motivo-rechazo"><strong>Motivo de Rechazo</strong></label>
+                                    <p>Indique de forma clara el motivo del rechazo de la solicutud. Este mensaje será envíado via email al usuario que realizó la petición.</p>
+                                    <textarea
+                                        type="text"
+                                        id="motivo-rechazo"
+                                        value={rejectionReason}
+                                        onChange={(e) => setRejectionReason(e.target.value)}
+                                    />
+                                    <div>
+                                        <Button size='small' startIcon={<CloseRoundedIcon />} onClick={() => (setShowRejectMessage(false), setRejectionReason(''))}>Cancelar</Button>
+                                        <Button size='small' value='rechazada' variant='contained' color='error' onClick={handleResolution}>Confirmar rechazo</Button>
+                                    </div>
+                                </div>
+                            : null}
+
                         </div> 
                         : null}
                     </DialogContent>
                     <DialogActions>
-                        <Button variant='contained' color='error' value='rechazada' onClick={handleResolution} startIcon={<CancelRoundedIcon />}>Rechazar</Button>
-                        <Button variant='contained' color='success' value='aceptada' onClick={handleResolution} startIcon={<CheckCircleRoundedIcon />}>Aceptar</Button>
+                        {showRejectMessage ? 
+                            null
+                        : 
+                            <>
+                                <Button variant='contained' color='error' value='rejectMessage' onClick={handleResolution} startIcon={<CancelRoundedIcon />}>Rechazar</Button>
+                                <Button variant='contained' color='success' value='aceptada' onClick={handleResolution} startIcon={<CheckCircleRoundedIcon />}>Aceptar</Button>
+                            </>
+                        }
                         <Button onClick={handleCloseDialog}>Cerrar</Button>
                     </DialogActions>
                 </Dialog>

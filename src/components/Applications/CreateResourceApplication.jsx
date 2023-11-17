@@ -16,7 +16,7 @@ import { DialogTitle } from '@mui/material';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import { addDays, format } from 'date-fns';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
-import { application_resource_create, get_resource_applications_by_neighborhood } from '../../requests/Applications';
+import { application_resource_create, applications_get_by_neighborhood_id, get_resource_applications_by_neighborhood } from '../../requests/Applications';
 
 
 const CreateResourceApplication = () => {
@@ -71,8 +71,10 @@ const CreateResourceApplication = () => {
         if (neighborhoodId) {
             const resourcesResponse = await get_resource_applications_by_neighborhood(neighborhoodId);
             console.log('jflksjf',resourcesResponse.data);
-            if (resourcesResponse.data) {
-                setExistingApplictionsList(resourcesResponse.data);
+            const filteredResources = resourcesResponse.data.filter(item => item.application_type === 'recurso');
+            if (filteredResources) {
+                setExistingApplictionsList(filteredResources);
+                console.log(filteredResources);
             }
         }
     };
@@ -131,6 +133,8 @@ const CreateResourceApplication = () => {
                     neighborhood_id: userInfo.neighborhood.neighborhood_id
                 }
             }
+
+            console.log(payload);
 
             const response = await application_resource_create(userInfo.id, payload);
             if (response.status === 200 || response.status === 201) {
