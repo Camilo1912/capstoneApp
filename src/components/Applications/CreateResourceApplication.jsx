@@ -288,7 +288,7 @@ const CreateResourceApplication = () => {
 const renderEventContent = (eventInfo) => {
 
     const eventStyle = {
-        backgroundColor: eventInfo.event.id ? '#FF0000' : '#00FF00', // Rojo para existentes, verde para en creación
+        backgroundColor: eventInfo.event.id ? '#FF0000' : '#00FF00',
         color: '#FFFFFF', // Color del texto
         borderRadius: '3px',
         padding: '5px',
@@ -303,7 +303,6 @@ const renderEventContent = (eventInfo) => {
             </div>
         );
     } else {
-        // Evento en modo de creación, no mostrar mensaje "No disponible"
         return (
             <div>
                 <strong>{eventInfo.timeText}</strong>

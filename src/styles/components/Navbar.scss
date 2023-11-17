@@ -8,6 +8,7 @@
     flex-direction: row;
     justify-content: center;
     background-color: $background-color-light;
+    backdrop-filter: blur(15px);
 }
 
 @media (prefers-color-scheme: dark) {

@@ -34,7 +34,7 @@ const MembersContainer = () => {
                     :null}
                     {(selectedComponent.menu === 2) ? 
                         <>
-                            <h1>Nosotros / Recursos e Implementos ({membersCount})</h1>
+                            <h1>Nosotros / Recursos e Implementos</h1>
                             <OurResources />
                         </>
                     :null}
