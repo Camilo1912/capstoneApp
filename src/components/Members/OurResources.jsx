@@ -98,7 +98,6 @@ const OurResources = () => {
         if (userInfo.neighborhood.neighborhood_id) {
             const response = await get_resources_by_neighborhood_id(userInfo.neighborhood.neighborhood_id);
             setResourcesList(response.data);
-            console.log(response.data);
         }
     };
 
@@ -197,10 +196,10 @@ const OurResources = () => {
                 }
             }
 
-            console.log(payload);
+
             const postResource = async () => {
                 const response = await submit_resource(payload);
-                console.log(response.data);
+
                 if (response.status === 200) {
                     toast.success('Recursos creado correctamente', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
                     handleCloseCreationDialog();

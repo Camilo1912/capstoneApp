@@ -28,7 +28,7 @@ import GuestNeighborhoodInfo from './GuestNeighborhoodInfo';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
-import { applications_guest_create_cert } from '../../requests/Applications';
+import { application_invited_resource_create, applications_guest_create_cert } from '../../requests/Applications';
 import { DialogTitle } from '@mui/material';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import { addDays, format } from 'date-fns';
@@ -129,8 +129,27 @@ const GuestHome = () => {
     const handleResourceSubmit = () => {
         if (selectedTimeSpan.endTime && selectedTimeSpan.startTime) {
             const payload = {
-                start_time: ''
+                first_name: guestInfo.first_name,
+                second_name:  guestInfo.second_name,
+                last_name: guestInfo.last_name,
+                last_name_2: guestInfo.last_name_2,
+                email: guestInfo.email,
+                start_use: selectedTimeSpan.startTime,
+                end_use: selectedTimeSpan.endTime,
+                resource_id: selectedResource.id,
+                neighborhood_id: neighborhoodInfo.id,
+                rut: guestInfo.rut
             }
+
+            console.log(payload);
+            const submitResourceRequest = async () => {
+                const response = application_invited_resource_create(payload);
+                if (response.status === 200) {
+                    console.log('correctooooo')
+                    console.log(response.data);
+                }
+            };
+            submitResourceRequest();
         }
     };
 

@@ -11,6 +11,11 @@ export const application_create = async (newApplicationPayload) => {
     return response;
 };
 
+export const application_invited_resource_create = async (newApplicationPayload) => {
+    const response = await axiosClient.post("applications/invited_resource", newApplicationPayload);
+    return response;
+};
+
 export const application_verified_create = async (user_id) => {
     const response = await axiosClient.post(`applications/verified_certificate/${user_id}`, {application: {pay_amount: 0}});
     return response;
