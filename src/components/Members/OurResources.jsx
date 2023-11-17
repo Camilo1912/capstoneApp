@@ -16,6 +16,11 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from "@fullcalendar/interaction";
+import esLocale from '@fullcalendar/core/locales/es';
+import { convertirDiasANumeros } from '../../utils/utils';
+import { addDays, startOfTomorrow, format } from 'date-fns';
+import { get_resource_applications_by_neighborhood } from '../../requests/Applications';
+
 
 const OurResources = () => {
     const defaultResource = {
@@ -28,6 +33,8 @@ const OurResources = () => {
         address: ''
     }
     const currentDay = new Date();
+    const tomorrow = startOfTomorrow();
+    const maxEndDate = addDays(tomorrow, 14); 
     const [open, setOpen] = useState(false);
     const { userInfo } = useContext(UserContext);
     const [refresh, setRefresh] = useState(true);
@@ -39,6 +46,9 @@ const OurResources = () => {
     const [endTime, setEndTime] = useState(null);
     const [hasCuota, setHasCuota] = useState(false);
     const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
+    const [eventsList, setEventsList] = useState([]);
+    const [existingApplicationsList, setExistingApplictionsList] = useState([]);
+ 
 
     useEffect(() => {
         getNeighborhoodResources();
@@ -50,6 +60,31 @@ const OurResources = () => {
         setHasCuota(false);
 
     }, [refresh]);
+
+    useEffect(() => {
+        getNeighborhoodResourcesApplications(userInfo.neighborhood.neighborhood_id);
+        if (selectedResource) {
+            const eventosFiltrados = existingApplicationsList.filter((evento) => (evento.state !== 'rechazada' && parseInt(evento.resource_id) === selectedResource.id));
+            const listadoFinal = eventosFiltrados.map((evento) => ({
+                id: evento.id,
+                start: evento.start_use,
+                end: evento.end_use,
+            }));
+            setEventsList(listadoFinal);
+        } else {
+            setEventsList([])
+        }
+    }, [selectedResource]);
+
+    const getNeighborhoodResourcesApplications = async (neighborhoodId) => {
+        if (neighborhoodId) {
+            const resourcesResponse = await get_resource_applications_by_neighborhood(neighborhoodId);
+            const filteredResources = resourcesResponse.data.filter(item => item.application_type === 'recurso');
+            if (filteredResources) {
+                setExistingApplictionsList(filteredResources);
+            }
+        }
+    };
 
     useEffect(() => {
         if (newResource.name  && newResource.description && newResource.comment && newResource.max_time && startTime && endTime && diasSeleccionados.length > 0 && newResource.address && startTime < endTime) {
@@ -209,6 +244,46 @@ const OurResources = () => {
                                 <label><strong>Cuota Solidaria</strong></label>
                                 <p>{parseFloat(selectedResource?.cost).toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })} pesos</p>
                             </div>
+
+                            <FullCalendar 
+                                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                                initialView={'timeGridFourDay'}
+                                headerToolbar={{start: 'title', center: 'timeGridFourDay,timeGridDay', end: 'today prev,next'}}
+                                height={'auto'}
+                                locale={esLocale}
+                                nowIndicator
+                                eventDisplay={'block'}
+                                events={eventsList}
+                                // eventContent={renderEventContent}
+                                businessHours= {{
+                                    daysOfWeek: convertirDiasANumeros(selectedResource.available_day), 
+                                    startTime: selectedResource.start_time,
+                                    endTime: selectedResource.end_time,
+                                }}
+                                views={ {
+                                    timeGridFourDay: {
+                                        type: 'timeGrid',
+                                        duration: { days: 5 },
+                                        buttonText: '5 Días',
+                                    }
+                                }}
+                                // selectable= {true}
+                                selectMirror= {true}
+                                selectOverlap={false}
+                                selectConstraint={
+                                    {
+                                        daysOfWeek: convertirDiasANumeros(selectedResource.available_day),
+                                        startTime: selectedResource.start_time,
+                                        endTime: selectedResource.end_time,
+                                    }
+                                }
+                                validRange ={{
+                                    start: format(currentDay, 'yyyy-MM-dd'),
+                                    end: format(maxEndDate, 'yyyy-MM-dd')
+                                }}
+                                // select={handleSelect}
+                                // selectAllow={handleSelectAllow}
+                            />
                         </DialogContent>
                         <DialogActions>
                             <Button variant='outlined' onClick={handleCloseDialog}>cerrar</Button>
