@@ -14,9 +14,14 @@ const CreateCertificateApplication = () => {
         
         if (userInfo) {
             setIsSubmitDisabled(true);
-            const response = await application_verified_create(userInfo.id);
-            if (response.status === 200) {
-                toast.success('Solicitud enviada correctamente', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
+            try {
+
+                const response = await application_verified_create(userInfo.id);
+                if (response.status === 200) {
+                    toast.success('Solicitud enviada correctamente', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
+                }
+            } catch (error) {
+                toast.error('Error al envíar, es posible que ya tenga una solicitud en curso.', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
             }
             setIsSubmitDisabled(false);
         }

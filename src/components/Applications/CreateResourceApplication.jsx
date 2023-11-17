@@ -14,19 +14,19 @@ import Button from '@mui/material/Button';
 import { toast } from 'react-toastify';
 import { DialogTitle } from '@mui/material';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
-import { addDays, format } from 'date-fns';
+import { addDays, startOfTomorrow, format } from 'date-fns';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import { application_resource_create, applications_get_by_neighborhood_id, get_resource_applications_by_neighborhood } from '../../requests/Applications';
 
 
 const CreateResourceApplication = () => {
-    // const currentDate = new Date();
     const defaultTimeSpan = {
         startTime: '',
         endTime: '',
     }
     const today = new Date();
-    const maxEndDate = addDays(today, 14); 
+    const tomorrow = startOfTomorrow();
+    const maxEndDate = addDays(tomorrow, 14); 
     const [open, setOpen] = useState(false);
     const { userInfo } = useContext(UserContext);
     const [refeshResources, setRefreshResources] = useState(true);
@@ -36,6 +36,7 @@ const CreateResourceApplication = () => {
     const [isConfirmButtonDisabled, setIsConfirmButtonDisabled] = useState(true);
     const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
     const [existingApplicationsList, setExistingApplictionsList] = useState([]);
+    const [eventsList, setEventsList] = useState([]);
  
     useEffect(() => {
         getNeighborhoodResources(userInfo.neighborhood.neighborhood_id);
@@ -44,7 +45,15 @@ const CreateResourceApplication = () => {
 
     useEffect(() => {
         if (selectedResource) {
-            console.log(convertirDiasANumeros(selectedResource.available_day));
+            const eventosFiltrados = existingApplicationsList.filter((evento) => (evento.state !== 'rechazada' && parseInt(evento.resource_id) === selectedResource.id));
+            const listadoFinal = eventosFiltrados.map((evento) => ({
+                id: evento.id,
+                start: evento.start_use,
+                end: evento.end_use,
+            }));
+            setEventsList(listadoFinal);
+        } else {
+            setEventsList([])
         }
     }, [selectedResource]);
 
@@ -60,7 +69,6 @@ const CreateResourceApplication = () => {
     const getNeighborhoodResources = async (neighborhoodId) => {
         if (neighborhoodId) {
             const resourcesResponse = await get_resources_by_neighborhood_id(neighborhoodId);
-            console.log(resourcesResponse.data);
             if (resourcesResponse.data) {
                 setResourcesList(resourcesResponse.data);
             }
@@ -70,11 +78,9 @@ const CreateResourceApplication = () => {
     const getNeighborhoodResourcesApplications = async (neighborhoodId) => {
         if (neighborhoodId) {
             const resourcesResponse = await get_resource_applications_by_neighborhood(neighborhoodId);
-            console.log('jflksjf',resourcesResponse.data);
             const filteredResources = resourcesResponse.data.filter(item => item.application_type === 'recurso');
             if (filteredResources) {
                 setExistingApplictionsList(filteredResources);
-                console.log(filteredResources);
             }
         }
     };
@@ -97,6 +103,7 @@ const CreateResourceApplication = () => {
     const handleCloseDialog = () => {
         setOpen(false);
         setSelectedTimeSpan(defaultTimeSpan);
+        setEventsList([]);
     };
     
     const handleOpenDialog = () => {
@@ -139,6 +146,9 @@ const CreateResourceApplication = () => {
             const response = await application_resource_create(userInfo.id, payload);
             if (response.status === 200 || response.status === 201) {
                 toast.success('Solicitud enviada correctamente', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
+                setSelectedResource(null);
+                setRefreshResources(!refeshResources);
+                setSelectedTimeSpan(defaultTimeSpan);
             }
         }
     };
@@ -155,7 +165,8 @@ const CreateResourceApplication = () => {
                 </div> */}
                 <div>
                     <label><strong>Seleccione Recurso o Implemento</strong></label>
-                    <select name="resource" id="resource" onClick={handleResourceSelection}>
+                    <select name="resource" id="resource" onClick={handleResourceSelection} value={selectedResource ? selectedResource.id : ''}
+                    >
                         <option value="*">-- Seleccione --</option>
                         {resourcesList?.map((resource) => (
                             <option value={resource.id} key={resource.id}>{resource.name} - {resource.address}</option>
@@ -230,13 +241,13 @@ const CreateResourceApplication = () => {
                         locale={esLocale}
                         nowIndicator
                         eventDisplay={'block'}
-                        // events={events}
-                        // eventContent={renderEventContent}
+                        events={eventsList}
+                        eventContent={renderEventContent}
                         // dateClick={handleDateClick}
                         businessHours= {{
                             daysOfWeek: convertirDiasANumeros(selectedResource.available_day), 
-                            startTime: '8:00',
-                            endTime: '18:00',
+                            startTime: selectedResource.start_time,
+                            endTime: selectedResource.end_time,
                         }}
                         views={ {
                             timeGridFourDay: {
@@ -251,13 +262,13 @@ const CreateResourceApplication = () => {
                         selectConstraint={
                             {
                                 daysOfWeek: convertirDiasANumeros(selectedResource.available_day),
-                                startTime: '8:00',
-                                endTime: '18:00',
+                                startTime: selectedResource.start_time,
+                                endTime: selectedResource.end_time,
                                 // duration: { hours: selectedResource.max_time }
                             }
                         }
                         validRange ={{
-                            start: format(today, 'yyyy-MM-dd'),
+                            start: format(tomorrow, 'yyyy-MM-dd'),
                             end: format(maxEndDate, 'yyyy-MM-dd')
                           }}
                         select={handleSelect}
@@ -274,5 +285,32 @@ const CreateResourceApplication = () => {
         </div>
     )
 }
+
+const renderEventContent = (eventInfo) => {
+
+    const eventStyle = {
+        backgroundColor: eventInfo.event.id ? '#FF0000' : '#00FF00', // Rojo para existentes, verde para en creación
+        color: '#FFFFFF', // Color del texto
+        borderRadius: '3px',
+        padding: '5px',
+        cursor: 'pointer',
+    };
+    
+    if (eventInfo.event.id) {
+        return (
+            <div >
+                <strong>{eventInfo.timeText}</strong>
+                <p>No disponible</p>
+            </div>
+        );
+    } else {
+        // Evento en modo de creación, no mostrar mensaje "No disponible"
+        return (
+            <div>
+                <strong>{eventInfo.timeText}</strong>
+            </div>
+        );
+    }
+};
 
 export default CreateResourceApplication
