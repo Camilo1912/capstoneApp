@@ -61,6 +61,7 @@ const MembershipApplication = () => {
                 }
                 updateApplicationState();
                 setRefresh(!refresh);
+                setRejectionReason('');
             } else {
                 setShowRejectMessage(true);
                 

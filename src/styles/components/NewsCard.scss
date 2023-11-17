@@ -70,5 +70,9 @@
         border: $border-top-dark;
         color: $text-color-normal-dark;
     }
+
+    .news-card:hover {
+        box-shadow: 0px 0px 5px rgba(138, 138, 255, 0.494);
+    }
 }
 

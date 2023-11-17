@@ -41,9 +41,9 @@ const DirectiveHome = () => {
         ],
         "Solicitudes": [
             { label:'Solicitudes de Certificados', icon: <FilePresentRoundedIcon />},
-            { label:'Crear solicitud de Certificado', icon: <AddCircleRoundedIcon />},
+            { label:'Crear Solicitud de Certificado', icon: <AddCircleRoundedIcon />},
             { label:'Solicitudes de Recursos', icon: <FactCheckRoundedIcon />},
-            { label:'Crear solicitud de Recurso', icon: <AddCircleRoundedIcon />},
+            { label:'Crear Solicitud de Recurso', icon: <AddCircleRoundedIcon />},
             { label:'Solicitudes de Inscripción', icon: <AssignmentIndRoundedIcon />},
         ],
         "Nosotros": [

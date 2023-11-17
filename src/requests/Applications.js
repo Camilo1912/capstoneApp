@@ -36,8 +36,8 @@ export const application_update = async (application_id, updatePayload) => {
     return response;
 };
 
-export const applications_get_by_neighbor_rut = async (neighborhood_id, neighbor_rut) => {
-    const response = await axiosClient.get(`applications/${neighborhood_id}/${neighbor_rut}`);
+export const applications_get_by_neighbor_id = async (neighbor_id) => {
+    const response = await axiosClient.get(`applications/index_by_neighbor/${neighbor_id}`);
     return response;
 };
 
@@ -84,6 +84,6 @@ export const applications_guest_create_cert = async (userData) => {
 
 
 export const get_resource_applications_by_neighborhood = async (neighborhood_id) => {
-    const response = await axiosClient.get(`neighborhoods/${neighborhood_id}/resources`);
+    const response = await axiosClient.get(`applications/resources/${neighborhood_id}`);
     return response;
 };

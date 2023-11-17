@@ -17,23 +17,8 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { toast } from 'react-toastify';
-// import DocuPdf from '../../utils/DocuPdf'
-// import { PDFViewer } from '@react-pdf/renderer'
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 
-// const information = {
-//     first_name: 'Bob',
-//     last_name: 'Pantalones',
-//     last_name_2: 'Cuadrados',
-//     rut: '12.345.678-8',
-//     jv_name: 'magallanes',
-//     formatedAddress: 'comuna de Pedro Aguirre Cerda, Región Metropolitana de Santiago',
-//     user_first_name: 'Patricio',
-//     user_last_name: 'Estrella',
-//     user_last_name_2: 'Estrella2',
-//     user_rut: '99.999.999-9',
-//     user_address: 'Av fondo de bikini 4231',
-//     commune_name: 'Pedro Aguirre Cerda'
-// };
 
 const CertificateApplication = () => {
     const { userInfo } = useContext(UserContext);
@@ -43,6 +28,8 @@ const CertificateApplication = () => {
     const [expanded, setExpanded] = React.useState(false);
     const [certApplicationList, setCertApplicationList] = useState([]);
     const [selectedApplication, setSelectedApplication] = useState(null);
+    const [showRejectMessage, setShowRejectMessage] = useState(false);
+    const [rejectionReason, setRejectionReason] = useState('');
 
     useEffect(() => {
         getApplications();
@@ -61,18 +48,23 @@ const CertificateApplication = () => {
     }
 
     const handleResolution = (event) => {
-
+        const resolution = event.target.value;
         if (selectedApplication) {
+            if (resolution === 'aceptada' || resolution === 'rechazada') {
 
-            const updateApplicationState = async () => {
-                const response = await submit_certificate_application(selectedApplication.id, userInfo.id);
-                if (response.status === 200) {
-                    toast.success('Solicitud Resuelta', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
-                    setOpen(false);
+                const updateApplicationState = async () => {
+                    const response = await submit_certificate_application(selectedApplication.id, userInfo.id);
+                    if (response.status === 200) {
+                        toast.success('Solicitud Resuelta', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
+                        setOpen(false);
+                    }
                 }
+                updateApplicationState();
+                setRejectionReason('');
+                setRefresh(!refresh);
+            } else {
+                setShowRejectMessage(true);
             }
-            updateApplicationState();
-            setRefresh(!refresh);
         }
 
     }
@@ -86,6 +78,7 @@ const CertificateApplication = () => {
         setRefresh(!refresh);
         setSelectedApplication(null);
         setOpen(false);
+        setShowRejectMessage(false);
     };
 
     const handleAccordioChange = (panel) => (event, isExpanded) => {
@@ -106,7 +99,7 @@ const CertificateApplication = () => {
                         <PendingActionsIcon />
                         <h2>Pendientes</h2>
                     </div>
-                    <div className='polls-list-container'>
+                    <div className='polls-list-container' style={{ height: '95%', overflow: 'auto'}}>
                         {certApplicationList.filter(application => application.state === 'creada').length === 0 ? (
                             <p>No hay solicitudes</p>
                         ) : (
@@ -121,11 +114,14 @@ const CertificateApplication = () => {
                             ))
                         )}
                     </div>
+                    
+                </div>
+                <div className='polls-list'>
                     <div className='poll-state-separator'>
                         <AssignmentTurnedInIcon />
                         <h2>Resueltas</h2>
                     </div>
-                    <div className='polls-list-container'>
+                    <div className='polls-list-container' style={{ height: '95%', overflow: 'auto'}}>
                         {certApplicationList.filter(application => application.state !== 'creada').length === 0 ? (
                             <p>No hay solicitudes</p>
                         ) : (
@@ -143,13 +139,13 @@ const CertificateApplication = () => {
                         )}
                     </div>
                 </div>
-                <div className='poll-info-card'>
+                {/* <div className='poll-info-card'>
                     <h1>Sobre las solicitudes de ingreso</h1>
                     <ul>
                         <li><h2>Solicitudes PENDIENTES</h2><p> ..... votado o no.</p></li>
                         
                     </ul>
-                </div>
+                </div> */}
 
                 <Dialog open={open} onClose={handleCloseDialog}>
                     <DialogContent>
@@ -207,6 +203,22 @@ const CertificateApplication = () => {
                                     <img width={'100%'} src={selectedApplication.image_url_4} alt="" />
                                 </AccordionDetails>
                             </Accordion>
+                            {showRejectMessage ? 
+                                <div className='reject-prompt-message-container'>
+                                    <label htmlFor="motivo-rechazo"><strong>Motivo de Rechazo</strong></label>
+                                    <p>Indique de forma clara el motivo del rechazo de la solicutud. Este mensaje será envíado via email al usuario que realizó la petición.</p>
+                                    <textarea
+                                        type="text"
+                                        id="motivo-rechazo"
+                                        value={rejectionReason}
+                                        onChange={(e) => setRejectionReason(e.target.value)}
+                                    />
+                                    <div>
+                                        <Button size='small' startIcon={<CloseRoundedIcon />} onClick={() => (setShowRejectMessage(false), setRejectionReason(''))}>Cancelar</Button>
+                                        <Button size='small' value='rechazada' variant='contained' color='error' onClick={handleResolution}>Confirmar rechazo</Button>
+                                    </div>
+                                </div>
+                            : null}
 
                         </div> 
                         : null}
@@ -215,8 +227,16 @@ const CertificateApplication = () => {
                         :null} */}
                     </DialogContent>
                     <DialogActions>
-                        <Button variant='contained' color='error' value='rechazada' onClick={handleResolution} startIcon={<CancelRoundedIcon />}>Rechazar</Button>
-                        <Button variant='contained' color='success' value='aceptada' onClick={handleResolution} startIcon={<CheckCircleRoundedIcon />}>Aceptar</Button>
+                        {showRejectMessage ? 
+                            null
+                        : 
+                            <>
+                                <Button variant='contained' color='error' value='rejectMessage' onClick={handleResolution} startIcon={<CancelRoundedIcon />}>Rechazar</Button>
+                                <Button variant='contained' color='success' value='aceptada' onClick={handleResolution} startIcon={<CheckCircleRoundedIcon />}>Aceptar</Button>
+                            </>
+                        }
+                        {/* <Button variant='contained' color='error' value='rechazada' onClick={handleResolution} startIcon={<CancelRoundedIcon />}>Rechazar</Button>
+                        <Button variant='contained' color='success' value='aceptada' onClick={handleResolution} startIcon={<CheckCircleRoundedIcon />}>Aceptar</Button> */}
                         <Button onClick={handleCloseDialog}>Cerrar</Button>
                     </DialogActions>
                 </Dialog>
