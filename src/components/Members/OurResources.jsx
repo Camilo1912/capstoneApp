@@ -21,6 +21,8 @@ import { convertirDiasANumeros } from '../../utils/utils';
 import { addDays, startOfTomorrow, format } from 'date-fns';
 import { get_resource_applications_by_neighborhood } from '../../requests/Applications';
 
+import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
+
 
 const OurResources = () => {
     const defaultResource = {
@@ -286,7 +288,11 @@ const OurResources = () => {
                             />
                         </DialogContent>
                         <DialogActions>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%'}}>
+
+                            <Button variant='contained' color='error' startIcon={<DeleteForeverRoundedIcon />} >Eliminar implemento</Button>
                             <Button variant='outlined' onClick={handleCloseDialog}>cerrar</Button>
+                            </div>
                         </DialogActions>
                     </>
                 : <>

@@ -7,9 +7,13 @@ import { UserContext } from '../../contexts/UserContext';
 import { formatearFecha, initCap } from '../../utils/utils';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import { get_resources_by_neighborhood_id } from '../../requests/Resources';
+import { userRolsTypes } from '../../utils/data';
+import * as XLSX from 'xlsx/xlsx.mjs';
+import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 
 const ResourceApplication = () => {
     const { userInfo } = useContext(UserContext);
+    const currentDate = new Date();
     const neighborhoodId = userInfo.neighborhood.neighborhood_id;
     const [refresh, setRefresh] = useState(false);
     const [resourcesApplicationList, setResourcesApplicationList] = useState([]);
@@ -50,12 +54,53 @@ const ResourceApplication = () => {
         }
     };
 
+    const handleExport = () => {
+        if (resourcesApplicationList) {
+            const selectedColumns = resourcesApplicationList.map(({
+                resourceName,
+                start_use,
+                end_use,
+                rut,
+                first_name,
+                second_name,
+                last_name,
+                last_name_2,
+                email,
+                state,
+                application_type,
+            }) => ({
+                RECURSO_PEDIDO: resourceName,
+                HORA_INICIO: formatearFecha(start_use.slice(0, -1)),
+                HORA_TERMINO: formatearFecha(end_use.slice(0, -1)),
+                RUT: rut,
+                PRIMER_NOMBRE: first_name,
+                SEGUNDO_NOMBRE: second_name,
+                APELLIDO_PATERNO: last_name,
+                APELLIDO_MATERNO: last_name_2,
+                EMAIL: email,
+                ESTADO: state,
+                TIPO: application_type,
+            }));
+            const workbook = XLSX.utils.book_new();
+            const worksheet = XLSX.utils.json_to_sheet(selectedColumns);
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Hoja1");
+            XLSX.writeFile(workbook, `ListaMiembros_${currentDate}.xlsx`);
+          } else {
+            console.error('No hay datos para exportar.');
+          }
+    };
+
     return (
         <>
             <div className='refresh-button-container'>
                 <IconButton onClick={() => setRefresh(!refresh)} id='refresh-button'>
                     <RefreshRoundedIcon />
                 </IconButton>
+                {[2, 3, 4].includes(userInfo.role.role_id) ? 
+                <IconButton onClick={handleExport}>
+                    <DownloadRoundedIcon />
+                </IconButton>
+                : null }
             </div>
             <div className='polls-wrapper'>
                 <div className='polls-list'>
