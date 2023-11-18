@@ -221,7 +221,6 @@ const JvListAdmin = ({ onSeleccion }) => {
             newJv.commune_id &&
             newJv.jv_code &&
             newJv.address) {
-                console.log('Creando payload')
                 const payload = {
                     'neighborhood[name]': newJv.name,
                     'neighborhood[description]': newJv.description,
@@ -244,7 +243,6 @@ const JvListAdmin = ({ onSeleccion }) => {
                     const response = await neighborhood_create(payload);
                     if (response.status === 200) {
                         toast.success('Junta creada correctamente', { autoClose: 3000, position: toast.POSITION.TOP_CENTER });
-                        console.log(response.data);
                         setIsSubmitDisabled(false);
                     }
                 } catch (error) {

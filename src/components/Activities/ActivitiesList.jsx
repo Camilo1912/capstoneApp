@@ -59,7 +59,6 @@ const ActivitiesList = () => {
               cupo_id: isRegistered.data.id
             };
         }));
-        console.log(updatedActivitiesList);
         setActivitiesList(updatedActivitiesList.reverse());
     };
 
