@@ -94,6 +94,27 @@ export const applications_guest_create_cert = async (userData) => {
 
 
 
+export const applications_crate_change_neighborhood = async (neighbor_id, payload) => {
+    const formData = new FormData();
+    formData.append("image_url_1", payload.image_front);
+    formData.append("image_url_2", payload.image_back);
+    formData.append("image_url_3", payload.image_face);
+    formData.append("image_url_4", payload.image_invoice);
+
+    delete payload.image_front;
+    delete payload.image_back;
+    delete payload.image_invoice;
+    delete payload.image_face;
+  
+
+    for (const key in payload) {
+      formData.append(key, payload[key]);
+    }
+    const response = await axiosClient.post(`applications/switch_neighborhood/${neighbor_id}`, formData);
+    return response;
+};
+
+
 export const get_resource_applications_by_neighborhood = async (neighborhood_id) => {
     const response = await axiosClient.get(`applications/resources/${neighborhood_id}`);
     return response;

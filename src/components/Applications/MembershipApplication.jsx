@@ -37,7 +37,7 @@ const MembershipApplication = () => {
 
     const getApplications = async () => {
         const applicationsResponse = await applications_get_by_neighborhood_id(neighborhoodId);
-        setMemberAplicationList(applicationsResponse.data);
+        setMemberAplicationList(applicationsResponse.data.reverse());
     }
 
     const handleResolution = (event) => {

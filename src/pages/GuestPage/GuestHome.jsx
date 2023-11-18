@@ -916,7 +916,7 @@ const GuestHome = () => {
 
                                                     </select>
                                                 
-                                                    {selectedResource.id ? 
+                                                    {selectedResource?.id ? 
                                                         <div style={{ border:"1px solid rgb(200, 200, 200)", padding: '10px', marginTop: '15px', borderRadius: '15px'}}>
                                                             <div style={{ marginBottom: '10px' }}>
                                                                 <label><strong>Descripción</strong></label>
