@@ -136,7 +136,9 @@ const CreateResourceApplication = () => {
                     start_use: selectedTimeSpan.startTime,
                     end_use: selectedTimeSpan.endTime,
                     resource_id: selectedResource.id,
-                    neighborhood_id: userInfo.neighborhood.neighborhood_id
+                    neighborhood_id: userInfo.neighborhood.neighborhood_id,
+                    state: 'creada',
+                    application_type: 'recurso'
                 }
             }
 
@@ -188,7 +190,9 @@ const CreateResourceApplication = () => {
                         </div>
                         <div>
                             <label><strong>Cuota Solidaria</strong></label>
+                            {selectedResource.cost ? 
                             <p>{parseFloat(selectedResource?.cost).toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })} pesos</p>
+                            : <p>No posee</p>}
                         </div>
                         <div style={{ color: '#555555', fontSize: '.8rem'}}>
                             <p>Cualquier pago por la solicitud del recurso debe ser coordinado con el tesorero a cargo. Cuando un integrante de la directiva de tu junta de vecinos resuelva tu solicitud, recibiarás

@@ -15,3 +15,12 @@
     overflow: hidden;
     -webkit-line-clamp: 3;
 }
+
+
+@media (prefers-color-scheme: dark) {
+    .custom-text-area {
+
+        background-color: #222222;
+        border: 1px dashed #555555;
+    }
+}

@@ -81,6 +81,7 @@ export const convertirFormatoFecha = (fechaEnFormatoISO) => {
 
 export const convertirDiasANumeros = (diasString) => {
     const dias = diasString.split(',').map((dia) => dia.trim());
+    console.log(dias);
     const diasMapeados = dias.map((dia) => {
         switch (dia.toLowerCase()) {
             case 'l':
@@ -96,11 +97,13 @@ export const convertirDiasANumeros = (diasString) => {
             case 's':
                 return 6;
             case 'd':
-                return 7;
+                return 0;
             default:
                 return null;
         }
     });
+
+    console.log( 'dias mapeados ; ', diasMapeados);
 
     return diasMapeados;
 } 
@@ -120,7 +123,7 @@ export const convertirNumerosADias = (numerosString) => {
                 return 'v';
             case 6:
                 return 's';
-            case 7:
+            case 0:
                 return 'd';
             default:
                 return null;
