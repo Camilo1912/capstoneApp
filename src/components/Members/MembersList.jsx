@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { get_users_by_neighborhood_id } from '../../requests/User';
+import { get_users_by_neighborhood_id, remove_user_by_id } from '../../requests/User';
 import { UserContext } from '../../contexts/UserContext';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
@@ -10,6 +10,8 @@ import DialogActions from '@mui/material/DialogActions';
 import { userRolsTypes } from '../../utils/data';
 import * as XLSX from 'xlsx/xlsx.mjs';
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
+import { toast } from 'react-toastify';
+import { set } from 'date-fns';
 
 const MembersList = ({updateCount}) => {
     const { userInfo, handleUserInfo } = useContext(UserContext);
@@ -40,6 +42,20 @@ const MembersList = ({updateCount}) => {
     const handleClose = () => {
         setOpen(false);
         setSelectedMember(null);
+    };
+
+    const handleUserExpulsion = async () => {
+        try {
+            const expulsionResponse = await remove_user_by_id(selectedMember.id);
+            if (expulsionResponse.status === 200) {
+                toast.success('Usuario Expulsado', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
+                setOpen(false);
+                setSelectedMember(null);
+                setRefresh(!refresh);
+            }
+        } catch (error) {
+            toast.error('No se pudo realizar la acción', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
+        }
     };
 
     const handleExport = () => {
@@ -100,7 +116,7 @@ const MembersList = ({updateCount}) => {
                     <div key={member.id} className='user-card' onClick={() => handleClickOpen(member)}>
                         <Avatar
                             alt={member.first_name}
-                            src={member.avatar_url}
+                            src={member.face_photo_url}
                             sx={{ width: 56, height: 56, bgcolor: "#85abf4"}}
                         />
                         <div>
@@ -121,7 +137,7 @@ const MembersList = ({updateCount}) => {
                         <div className='member-avatar-container'>
                             <Avatar
                                 alt={selectedMember.first_name}
-                                src={selectedMember.image_face}
+                                src={selectedMember.face_photo_url}
                                 sx={{ width: 100, height: 100, bgcolor: "#85abf4"}}
                             />
                             <div>
@@ -154,7 +170,6 @@ const MembersList = ({updateCount}) => {
                                 <strong>{selectedMember.street_address}</strong>
                                 <p>Número</p>
                                 <strong>{selectedMember.number_address}</strong> 
-                                {/* <p>Código postal: <strong>{selectedMember.postal_code ? selectedMember.postal_code : <>-</>} </strong> </p> */}
                             </div>
                             <div>
                                 <h2>Contacto</h2>
@@ -172,7 +187,11 @@ const MembersList = ({updateCount}) => {
                 }
             
                 <DialogActions>
-                    <Button variant='outlined' onClick={handleClose}>Cerrar</Button>
+                
+                    <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                        <Button variant='contained' color='error' onClick={handleUserExpulsion}>Expulsar Miembro</Button>
+                        <Button variant='outlined' onClick={handleClose}>Cerrar</Button>
+                    </div>
                 </DialogActions>
             </Dialog>
         </>
