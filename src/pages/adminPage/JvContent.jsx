@@ -38,9 +38,12 @@ const JvContent = ({ juntaSeleccionada }) => {
                         <p>{juntaSeleccionada.description}</p>
                         <Divider></Divider>
                         <h3>Directiva</h3>
-                        {juntaSeleccionada?.president ? <p>Presidente: {juntaSeleccionada.president}</p> : <Button>Crear Presidente</Button>}
+                        <p>Presidente: {juntaSeleccionada.president}</p> 
+                        <p>Secretario: {juntaSeleccionada.secretary}</p>
+                        <p>Tesorero: {juntaSeleccionada.treasurer}</p>
+                        {/* {juntaSeleccionada?.president ? <p>Presidente: {juntaSeleccionada.president}</p> : <Button>Crear Presidente</Button>}
                         {juntaSeleccionada?.secretary ? <p>Secretario: {juntaSeleccionada.secretary}</p> : <Button>Crear Secretario</Button>}
-                        {juntaSeleccionada?.treasurer ? <p>Tesorero: {juntaSeleccionada.treasurer}</p> : <Button>Crear tesorero</Button>}
+                        {juntaSeleccionada?.treasurer ? <p>Tesorero: {juntaSeleccionada.treasurer}</p> : <Button>Crear tesorero</Button>} */}
                         <Divider></Divider>
                         <h3>Dirección de Sede</h3>
                         <p>{juntaSeleccionada.address}</p>
