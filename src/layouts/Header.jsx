@@ -288,10 +288,15 @@ const Header = () => {
                                     <p>{userInfo.phone_number}</p>
                                     )}
                             </div>
-                        <p>Para realizar el cambio de dirección se requiere envíar una solicitud de cambio de junta. Seleccione la misma junta en la que ya se encuentra.</p>
-                        {[2, 3, 4].includes(userInfo.id) ? 
+                        
+                        {[2, 3, 4].includes(userInfo.role.role_id) ? 
                             null
-                        : <Button onClick={() => (setCambioDeJunta(true))} variant='outlined' >Cambio a otra Junta</Button>}
+                        : 
+                            <>
+                            <p>Para realizar el cambio de dirección se requiere envíar una solicitud de cambio de junta. Seleccione la misma junta en la que ya se encuentra.</p>
+                            <Button onClick={() => (setCambioDeJunta(true))} variant='outlined' >Cambio a otra Junta</Button>
+                            </>
+                            }
 
                     </div>
                     : 
@@ -410,9 +415,9 @@ const Header = () => {
                     </>
                     :
                     <>
-                        {!editMode && (
+                        {/* {!editMode && (
                             <Button onClick={handleEditClick}>Editar</Button>
-                        )}
+                        )} */}
                         <Button onClick={handleClose}>Cerrar</Button>
                         {editMode && (
                             <Button onClick={handleSaveClick}>Guardar</Button>
