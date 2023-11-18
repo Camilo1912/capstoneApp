@@ -53,9 +53,14 @@ export const formatTextBr = (text) => {
 } 
 
 export const initCap = (str) => {
-    return str.toLowerCase().replace(/(?:^|\s)\w/g, function(match) {
-        return match.toUpperCase();
-    });
+    if (str) {
+
+        return str.toLowerCase().replace(/(?:^|\s)\w/g, function(match) {
+            return match.toUpperCase();
+        });
+    } else {
+        return 'Sin dato.'
+    }
 }
 
 export const convertirFormatoFecha = (fechaEnFormatoISO) => {

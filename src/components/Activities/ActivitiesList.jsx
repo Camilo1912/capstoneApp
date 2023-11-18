@@ -144,35 +144,35 @@ const ActivitiesList = () => {
             <div className='polls-wrapper'>
                 <div className='polls-list'>
                     <div className='poll-state-separator'>
-                        {/* <AssignmentTurnedInIcon /> */}
                         <h2>Proximas</h2>
                     </div>
-                    <div className='polls-list-container'>
+                    <div className='polls-list-container' style={{ maxheight: '95%', overflow: 'auto'}}>
                                 {activitiesList?.filter(activity => new Date(activity.start_date.slice(0, -1)) > currentDate).map((activity) => (
-                                    <div key={activity.id} className='application-card' onClick={() => handleOpenDialog(activity)}>
+                                    <div key={activity.id} className='application-card' onClick={() => handleOpenDialog(activity)}  style={{ height: 'fit-content'}}>
                                         <ActivityCard activity={activity} userInfo={userInfo}/>
                                     </div>
                                 ))}
                     </div>
+                </div>
+                <div className='polls-list'>
                     <div className='poll-state-separator'>
-                        {/* <AssignmentTurnedInIcon /> */}
                         <h2>Pasadas</h2>
                     </div>
-                    <div className='polls-list-container'>
+                    <div className='polls-list-container' style={{ height: '95%', overflow: 'auto'}}>
                                 {activitiesList?.filter(activity => new Date(activity.start_date.slice(0, -1)) < currentDate).map((activity) => (
-                                    <div key={activity.id} className='application-card' onClick={() => handleOpenDialog(activity)}>
+                                    <div key={activity.id} className='application-card'  onClick={() => handleOpenDialog(activity)}>
                                         <ActivityCard activity={activity} userInfo={userInfo}/>
                                     </div>
                                 ))}
                     </div>
                 </div>
                     
-                <div className='poll-info-card'>
+                {/* <div className='poll-info-card'>
                     <h1>Sobre las solicitudes de ingreso</h1>
                     <ul>
                         <li><h2>Solicitudes PENDIENTES</h2><p> ..... votado o no.</p></li>
                     </ul>
-                </div>
+                </div> */}
             </div>
 
             <Dialog open={open} maxWidth={'md'} onClose={handleCloseDialog}>

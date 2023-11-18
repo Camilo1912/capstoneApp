@@ -102,11 +102,11 @@ const CertificateApplication = () => {
                         <PendingActionsIcon />
                         <h2>Pendientes</h2>
                     </div>
-                    <div className='polls-list-container' style={{ height: '95%', overflow: 'auto'}}>
+                    <div className='polls-list-container' style={{ maxHeight: '95%', overflow: 'auto'}}>
                         {certApplicationList.filter(application => application.state === 'creada').length === 0 ? (
                             <p>No hay solicitudes</p>
                         ) : (
-                            certApplicationList.filter(application => application.state === 'creada').map((application, index) => (
+                            certApplicationList?.filter(application => application.state === 'creada').map((application, index) => (
                                 <div key={index} className='application-card' onClick={() => handleOpenDialog(application)} style={{ height: 'fit-content'}}>
                                     <div className='application-card-header'>Solicitante: <strong>{initCap(application.first_name)} {initCap(application.last_name)} {initCap(application.last_name_2)}</strong></div>
                                     <div className='application-card-content'>
@@ -128,7 +128,7 @@ const CertificateApplication = () => {
                         {certApplicationList.filter(application => application.state !== 'creada').length === 0 ? (
                             <p>No hay solicitudes</p>
                         ) : (
-                            certApplicationList.filter(application => application.state !== 'creada').map((application, index) => (
+                            certApplicationList?.filter(application => application.state !== 'creada').map((application, index) => (
                                 <div key={index} className='application-card' style={{ height: 'fit-content'}}>
                                     <div className='application-card-header'>Solicitante: <strong>{initCap(application.first_name)} {initCap(application.last_name)} {initCap(application.last_name_2)}</strong></div>
                                     <div className='application-card-content'>
