@@ -3,7 +3,6 @@ import { useEffect, useState, useContext } from 'react';
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
 import { Button, IconButton, Input } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import LoginIcon from '@mui/icons-material/Login';
 import { GuestContext } from '../../contexts/GuestContext';
 import { get_communes_by_region, get_regions } from '../../requests/Address';
 import { get_neighborhood_by_commune_id } from '../../requests/Neighborhood';
@@ -19,19 +18,17 @@ import CampaignIcon from '@mui/icons-material/Campaign';
 import LocalActivityIcon from '@mui/icons-material/LocalActivity';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import { activityTypes } from '../../utils/data';
-import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
 import { validateRut } from '@fdograph/rut-utilities';
 import { toast } from 'react-toastify';
 import { RefreshRounded } from '@mui/icons-material';
-import FeedRoundedIcon from '@mui/icons-material/FeedRounded';
 import GuestNeighborhoodInfo from './GuestNeighborhoodInfo';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
-import { application_invited_resource_create, applications_guest_create_cert } from '../../requests/Applications';
+import { application_invited_resource_create, applications_guest_create_cert, get_resource_applications_by_neighborhood } from '../../requests/Applications';
 import { DialogTitle } from '@mui/material';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
-import { addDays, format } from 'date-fns';
+import { addDays, format, startOfTomorrow } from 'date-fns';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -65,7 +62,8 @@ const GuestHome = () => {
         endTime: '',
     }
     const today = new Date();
-    const maxEndDate = addDays(today, 14); 
+    const tomorrow = startOfTomorrow();
+    const maxEndDate = addDays(tomorrow, 14);
     const { guestForm, handleGuestForm, resetGuestForm } = useContext(GuestContext);
     const [value, setValue] = React.useState(0);
     const [open, setOpen] = useState(false);
@@ -94,6 +92,34 @@ const GuestHome = () => {
     const [resourcesList, setResourcesList] = useState([]);
     const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
 
+    const [existingApplicationsList, setExistingApplictionsList] = useState([]);
+    const [eventsList, setEventsList] = useState([]);
+
+    useEffect(() => {
+        if (selectedResource) {
+            const eventosFiltrados = existingApplicationsList.filter((evento) => (evento.state !== 'rechazada' && parseInt(evento.resource_id) === selectedResource.id));
+            const listadoFinal = eventosFiltrados.map((evento) => ({
+                id: evento.id,
+                start: evento.start_use,
+                end: evento.end_use,
+            }));
+            setEventsList(listadoFinal);
+        } else {
+            setEventsList([])
+        }
+    }, [selectedResource]);
+
+    const getNeighborhoodResourcesApplications = async (neighborhoodId) => {
+        if (neighborhoodId) {
+            const resourcesResponse = await get_resource_applications_by_neighborhood(neighborhoodId);
+            const filteredResources = resourcesResponse.data.filter(item => item.application_type === 'recurso');
+            if (filteredResources) {
+                setExistingApplictionsList(filteredResources);
+            }
+        }
+    };
+
+
     useEffect(() => {
         const getRegions = async () => {
             const responseData = await get_regions();
@@ -105,6 +131,7 @@ const GuestHome = () => {
     useEffect(() => {
         if (selectedContent === 3 && neighborhoodInfo.id) {
             getNeighborhoodResources(neighborhoodInfo.id);
+            getNeighborhoodResourcesApplications(neighborhoodInfo.id);
         }
     }, [selectedContent]);
 
@@ -127,30 +154,43 @@ const GuestHome = () => {
     };
 
     const handleResourceSubmit = () => {
+        setIsSubmitDisabled(true);
         if (selectedTimeSpan.endTime && selectedTimeSpan.startTime) {
             const payload = {
-                first_name: guestInfo.first_name,
-                second_name:  guestInfo.second_name,
-                last_name: guestInfo.last_name,
-                last_name_2: guestInfo.last_name_2,
-                email: guestInfo.email,
-                start_use: selectedTimeSpan.startTime,
-                end_use: selectedTimeSpan.endTime,
-                resource_id: selectedResource.id,
-                neighborhood_id: neighborhoodInfo.id,
-                rut: guestInfo.rut
+                application:{
+                    first_name: guestInfo.first_name,
+                    second_name:  guestInfo.second_name,
+                    last_name: guestInfo.last_name,
+                    last_name_2: guestInfo.last_name_2,
+                    email: guestInfo.email,
+                    start_use: selectedTimeSpan.startTime,
+                    end_use: selectedTimeSpan.endTime,
+                    resource_id: selectedResource.id,
+                    neighborhood_id: neighborhoodInfo.id,
+                    rut: guestInfo.rut,
+                    state: 'creada',
+                    application_type: 'recurso'
+                }   
             }
+            try {
 
-            console.log(payload);
-            const submitResourceRequest = async () => {
-                const response = application_invited_resource_create(payload);
-                if (response.status === 200) {
-                    console.log('correctooooo')
-                    console.log(response.data);
-                }
-            };
-            submitResourceRequest();
+                const submitResourceRequest = async () => {
+                    const response = await application_invited_resource_create(payload);
+                    if (response.status === 200) {
+                        toast.success('Respuesta enviada correctamente', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
+                        setGuestInfo(defaultGuestInfo);
+                        setSelectedResource(null);
+                        setNewEmail('');
+                        setNewRut('');
+                        setSelectedTimeSpan(defaultTimeSpan);
+                    }
+                };
+                submitResourceRequest();
+            } catch (error) {
+                toast.error('Error al envíar', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
+            }
         }
+        setIsSubmitDisabled(false);
     };
 
     const handleResourceSelection = (e) => {
@@ -869,14 +909,14 @@ const GuestHome = () => {
                                                 <div style={{ display: 'flex', flexDirection: 'column', width: '100%'}}>
                                                     <label><strong>Seleccione Recurso o Implemento</strong></label>
                                                     <select name="resource" id="resource" onClick={handleResourceSelection}>
-                                                        <option value="">-- Seleccione --</option>
+                                                        <option value={selectedResource ? selectedResource.id : ''}>-- Seleccione --</option>
                                                         {resourcesList?.map((resource) => (
                                                             <option value={resource.id} key={resource.id}>{resource.name} - {resource.address}</option>
-                                                            ))}
+                                                        ))}
 
                                                     </select>
                                                 
-                                                    {selectedResource ? 
+                                                    {selectedResource.id ? 
                                                         <div style={{ border:"1px solid rgb(200, 200, 200)", padding: '10px', marginTop: '15px', borderRadius: '15px'}}>
                                                             <div style={{ marginBottom: '10px' }}>
                                                                 <label><strong>Descripción</strong></label>
@@ -888,7 +928,9 @@ const GuestHome = () => {
                                                             </div>
                                                             <div style={{ marginBottom: '10px' }}>
                                                                 <label><strong>Cuota Solidaria</strong></label>
-                                                                <p>{parseFloat(selectedResource?.cost).toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })} pesos</p>
+                                                                {selectedResource.cuota ? 
+                                                                <p>{parseFloat(selectedResource.cuota).toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })} pesos</p>
+                                                                : <p>No tiene</p>}
                                                             </div>
                                                             <div style={{ fontSize: '.8rem'}}>
                                                                 <p>Cualquier pago por la solicitud del recurso debe ser coordinado con el tesorero a cargo. Cuando un integrante de la directiva de tu junta de vecinos resuelva tu solicitud, recibiarás
@@ -951,13 +993,13 @@ const GuestHome = () => {
                         locale={esLocale}
                         nowIndicator
                         eventDisplay={'block'}
-                        // events={events}
-                        // eventContent={renderEventContent}
+                        events={eventsList}
+                        eventContent={renderEventContent}
                         // dateClick={handleDateClick}
                         businessHours= {{
                             daysOfWeek: convertirDiasANumeros(selectedResource.available_day), 
-                            startTime: '8:00',
-                            endTime: '18:00',
+                            startTime: selectedResource.start_time,
+                            endTime: selectedResource.end_time,
                         }}
                         views={ {
                             timeGridFourDay: {
@@ -972,13 +1014,13 @@ const GuestHome = () => {
                         selectConstraint={
                             {
                                 daysOfWeek: convertirDiasANumeros(selectedResource.available_day),
-                                startTime: '8:00',
-                                endTime: '18:00',
+                                startTime: selectedResource.start_time,
+                                endTime: selectedResource.end_time,
                                 // duration: { hours: selectedResource.max_time }
                             }
                         }
                         validRange ={{
-                            start: format(today, 'yyyy-MM-dd'),
+                            start: format(tomorrow, 'yyyy-MM-dd'),
                             end: format(maxEndDate, 'yyyy-MM-dd')
                           }}
                         select={handleSelect}
@@ -997,5 +1039,31 @@ const GuestHome = () => {
         </div>
     )
 }
+
+const renderEventContent = (eventInfo) => {
+
+    const eventStyle = {
+        backgroundColor: eventInfo.event.id ? '#FF0000' : '#00FF00',
+        color: '#FFFFFF', // Color del texto
+        borderRadius: '3px',
+        padding: '5px',
+        cursor: 'pointer',
+    };
+    
+    if (eventInfo.event.id) {
+        return (
+            <div >
+                <strong>{eventInfo.timeText}</strong>
+                <p>No disponible</p>
+            </div>
+        );
+    } else {
+        return (
+            <div>
+                <strong>{eventInfo.timeText}</strong>
+            </div>
+        );
+    }
+};
 
 export default GuestHome
