@@ -136,7 +136,9 @@ const CreateResourceApplication = () => {
                     start_use: selectedTimeSpan.startTime,
                     end_use: selectedTimeSpan.endTime,
                     resource_id: selectedResource.id,
-                    neighborhood_id: userInfo.neighborhood.neighborhood_id
+                    neighborhood_id: userInfo.neighborhood.neighborhood_id,
+                    state: 'creada',
+                    application_type: 'recurso'
                 }
             }
 
@@ -188,7 +190,9 @@ const CreateResourceApplication = () => {
                         </div>
                         <div>
                             <label><strong>Cuota Solidaria</strong></label>
+                            {selectedResource.cost ? 
                             <p>{parseFloat(selectedResource?.cost).toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })} pesos</p>
+                            : <p>No posee</p>}
                         </div>
                         <div style={{ color: '#555555', fontSize: '.8rem'}}>
                             <p>Cualquier pago por la solicitud del recurso debe ser coordinado con el tesorero a cargo. Cuando un integrante de la directiva de tu junta de vecinos resuelva tu solicitud, recibiarás
@@ -228,6 +232,8 @@ const CreateResourceApplication = () => {
                     Horarios Disponibles
                     <p style={{ fontSize:"1rem"}}><strong>Tiempo maximo: {selectedResource?.max_time}h</strong></p>
                     <p style={{ fontSize:"1rem"}}><strong>Tiempo mínimo: {selectedResource?.min_time}h</strong></p>
+
+                    <p style={{ color: '#555555', fontSize: '.8rem'}}>Para seleccionar busque un horario disponible y haga clic izquierdo en la hora de que desea como inicio y arrastre hasta la hora de termino. Si el recuadro desaparece significa que exedió el tiempo maximo que puede durar el uso del recurso.</p>
                 </DialogTitle>
                 <DialogContent>
                 {selectedResource ? 

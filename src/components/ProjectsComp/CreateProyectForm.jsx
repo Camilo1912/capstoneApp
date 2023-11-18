@@ -116,9 +116,9 @@ const CreateProyectForm = () => {
         <h1>Sobre la postulación de proyectos</h1>
         <ul>
           <li><h2>Nuevo proyecto</h2><p>Crear un nuevo proyecto hará que este sea visible para todos los integrantes de la junta de vecinos. Luego este será revisado por la directiva y esta podrá iniciar una votación.</p></li>
-          <li><h2>Votaciones</h2><p>Las votaciones tendrán fecha y hora tanto de inicio como de termino y todos los integrantes de la junta podrán votar. El procentaje de votos a favor para  la aprovación será definido por la directiva de la junta.</p></li>
-          <li><h2>Aprobación</h2><p>Una vez que la votación del proyecto termine, este será evaluado mas detenidamente por la directiva. Finalmente, si la directiva está de acuerdo con la ejecución del proyecto será marcado como <strong>APROBADO</strong>.</p></li>
-          <li><h2>Puesta en marcha</h2><p>Luego de la aprobación, se tomarán las medidas necesarias para comenzar el proyecto. Cuando estas estén en orden el proyecto pasará a estár <strong>EN EJECUCIÓN.</strong></p></li>
+          <li><h2>Aprobación de la directiva</h2><p>El proyecto será evaluado detenidamente por la directiva. Finalmente, si la directiva está de acuerdo con el proyecto este será marcado como <strong>APROBADO</strong> y se habilitará la creación de una votación.</p></li>
+          <li><h2>Votaciones</h2><p>Las votaciones son creadas por la directiva, tendrán fecha y hora tanto de inicio como de termino y todos los integrantes de la junta podrán votar. Una vez terminada la votación la directiva el estado cambiará a <strong>APROBADO</strong> o <strong>RECHAZADO</strong> dependiendo del resultado.</p></li>
+          <li><h2>En ejecución</h2><p>Luego de la aprobación por votación, tu directiva podrá pasar el estado a ejeucción o reevaluar su viabilidad. Se tomarán las medidas necesarias para comenzar el proyecto.</p></li>
           <li><h2>Finalización</h2><p>Una vez que el proyecto se haya implementado completamente, este pasará a su estado final como <strong>FINALIZADO.</strong></p></li>
         </ul>
       </div>

@@ -18,6 +18,7 @@ import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
 import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
 import FilePresentRoundedIcon from '@mui/icons-material/FilePresentRounded';
 import CategoryRoundedIcon from '@mui/icons-material/CategoryRounded';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
 const DirectiveHome = () => {
     const { selectedComponent } = useSelectedComponent();
@@ -41,10 +42,10 @@ const DirectiveHome = () => {
         ],
         "Solicitudes": [
             { label:'Solicitudes de Certificados', icon: <FilePresentRoundedIcon />},
+            { label:'Solicitudes de Recursos', icon: <CategoryRoundedIcon />},
+            { label:'Solicitudes de Inscripción', icon: <PersonAddIcon />},
             { label:'Crear Solicitud de Certificado', icon: <AddCircleRoundedIcon />},
-            { label:'Solicitudes de Recursos', icon: <FactCheckRoundedIcon />},
             { label:'Crear Solicitud de Recurso', icon: <AddCircleRoundedIcon />},
-            { label:'Solicitudes de Inscripción', icon: <AssignmentIndRoundedIcon />},
         ],
         "Nosotros": [
             { label:'Información', icon: <InfoRoundedIcon />},

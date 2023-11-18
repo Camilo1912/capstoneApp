@@ -60,8 +60,13 @@ export const submit_certificate_application = async (application_id, presidentId
     const response1 = await axios.get(filepath, {responseType: 'blob'});
 
     const formData = new FormData();
-    formData.append("sign", await fetch('/capstoneApp/src/assets/images/sign.png').then((res) => res.blob()), 'sign.png');
+    // formData.append("sign", await fetch('/capstoneApp/src/assets/images/sign.png').then((res) => res.blob()), 'sign.png');
     const response = await axiosClient.post(`neighborhoods/${application_id}/${presidentId}/certificate`, formData);
+    return response;
+};
+
+export const resolve_rsource_application = async (application_id, payload) => {
+    const response = await axiosClient.put(`applications/${application_id}`, payload);
     return response;
 };
 

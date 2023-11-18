@@ -231,8 +231,13 @@ const ActivitiesCreationForm = () => {
             <div className='project-creation-info-card'>
                 <h1>Sobre la creacón de actividades</h1>
                 <ul>
-                <li><h2>Tipo de Actividad</h2><p>El tipo de anuncio indica si se mostrará solo una imágen (tipo afiche) o </p></li>
-            </ul>
+                    <li><h2>Tipo de Actividad</h2><p>Indica la naturaleza de la actividad</p></li>
+                    <li><h2>Lugar de la Actividad</h2><p>El lugar donde se desarrollará la actividad, asegurate de ser lo mas preciso posible</p></li>
+                    <li><h2>Limitar Cupos</h2><p>Cuando está seleccionada esta opción se te permitirá agregar un limite de personas que se podrán inscribir en la actividad. El mínimo es de 1 persona.</p></li>
+                    <li><h2>Fecha y Hora de Inicio y Termino</h2><p>Tu actividad puede partir un día y terminar en otro, para esto seleccione la fecha y hora de inicio y luego la fecha y hora de termino. La fecha y hora de termino no podrá ser menor a la fecha de inicio.</p></li>
+                    <li><h2>Visibilidad</h2><p>Cuando hayas creado la actividad, esta aparecerá en el calendarios y será visible para todos, incluyendo los usuarios invitados</p></li>
+
+                </ul>
             </div>
         </div>
     )
