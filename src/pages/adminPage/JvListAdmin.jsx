@@ -26,7 +26,7 @@ const JvListAdmin = ({ onSeleccion }) => {
         state: 'inactive',
         logo_url: null,
         membership: 0,
-        quota: null,
+        quota: 0,
         bank_name: '',
         bank_acc_number: '',
         bank_acc_type: '',

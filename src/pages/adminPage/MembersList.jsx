@@ -53,21 +53,24 @@ const MembersList = ({ handleSelection, junta}) => {
         setSelectedMember(null);
     };
 
-    const handleChangeRole = async (event) => {
-        setSelectedRole(event.target.value);
-    
+    const handleChangeRole = async () => {
         try {
-          const setRoleResponse = await set_user_rol(selectedMember.id, event.target.value);
-          if (setRoleResponse === 200) {
-            toast.success('Usuario actualizado', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
-          }
-          setRefresh(!refresh);
-          handleClose();
+            const setRoleResponse = await set_user_rol(selectedMember.id, selectedRole);
+            if (setRoleResponse.status === 200) {
+                toast.success('Usuario actualizado', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
+            }
+            setRefresh(!refresh);
+            handleClose();
         } catch (error) {
-          console.error('Error al cambiar el rol del usuario', error);
+            console.error('Error al cambiar el rol del usuario', error);
         }
-      };
+    };
 
+    const handleRolSelection = (e) => {
+        e.preventDefault();
+        console.log(e.target.value);
+        setSelectedRole(e.target.value);
+    };
 
 
     const handleUserExpulsion = async () => {
@@ -97,7 +100,7 @@ const MembersList = ({ handleSelection, junta}) => {
     return (
         <>
         
-            <div style={{ maxHeight: 'calc(100dvh - 6rem)', display: 'flex', flexDirection: 'column', minWidth: 'fit-content', borderLeft: '1px dashed #999999', gap: '15px', padding: '15px'}}>
+            <div style={{ maxHeight: 'calc(100dvh - 6rem)', display: 'flex', flexDirection: 'column', minWidth: 'fit-content', borderLeft: '1px dashed #999999', gap: '5px', padding: '15px'}}>
                 
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
                 <h1>Directiva</h1>
@@ -106,7 +109,7 @@ const MembersList = ({ handleSelection, junta}) => {
                     </IconButton>
                 </div>
                 {membersList.filter(member => [2, 3, 4].includes(member.role_id)).map((member) => (
-                    <div key={member.id} className='user-card' onClick={() => handleClickOpen(member)}>
+                    <div key={member.id} className='user-card' onClick={() => handleClickOpen(member)} style={{ margin: '0px'}}>
                         <Avatar
                             alt={member.first_name}
                             src={member.face_photo_url}
@@ -124,7 +127,7 @@ const MembersList = ({ handleSelection, junta}) => {
                 <div style={{ overflow: 'auto', width: '100%'}}>
                     
                     {membersList.filter(member => [1].includes(member.role_id)).map((member) => (
-                        <div key={member.id} className='user-card' onClick={() => handleClickOpen(member)} style={{ marginBottom: '10px'}}>
+                        <div key={member.id} className='user-card' onClick={() => handleClickOpen(member)} style={{ marginBottom: '5px', margin: '5px'}}>
                             <Avatar
                                 alt={member.first_name}
                                 src={member.face_photo_url}
@@ -199,7 +202,8 @@ const MembersList = ({ handleSelection, junta}) => {
                                 <Divider></Divider>
                                 <strong>SELECCIONE NUEVO ROL</strong>
                                 <br />
-                                <select value={selectedRole} onChange={(e) => (setSelectedRole(e.target.value))} >
+                                <select value={selectedRole} onChange={handleRolSelection} >
+                                    <option value="">-- seleccione --</option>
                                     {availableRoles.map((role) => (
                                         <option key={role.value} value={role.value}>
                                         {role.label}
