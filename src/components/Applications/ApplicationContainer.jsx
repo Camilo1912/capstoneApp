@@ -25,29 +25,29 @@ const ApplicationContainer = () => {
 
                     {selectedComponent.menu === 1 ? 
                         <>
-                            <h1>Solicitudes / Nueva solicitud de Certificado</h1>
-                            <CreateCertificateApplication />
-                        </>
-                    :null}
-
-                    {selectedComponent.menu === 2 ? 
-                        <>
                             <h1>Solicitudes / Recurso</h1>
                             <ResourceApplication />
                         </>
                     :null}
 
+                    {selectedComponent.menu === 2 ? 
+                        <>
+                            <h1>Solicitudes / Inscripción</h1>
+                            <MembershipApplication />
+                        </>
+                    :null}
+
                     {selectedComponent.menu === 3 ? 
                         <>
-                            <h1>Solicitudes / Nueva solicitud de Recurso</h1>
-                            <CreateResourceApplication />
+                            <h1>Solicitudes / Nueva solicitud de Certificado</h1>
+                            <CreateCertificateApplication />
                         </>
                     :null}
 
                     {selectedComponent.menu === 4 ? 
                         <>
-                            <h1>Solicitudes / Inscripción</h1>
-                            <MembershipApplication />
+                            <h1>Solicitudes / Nueva solicitud de Recurso</h1>
+                            <CreateResourceApplication />
                         </>
                     :null}
                 </>

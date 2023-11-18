@@ -161,7 +161,11 @@ const NewsCreationForm = () => {
             <div className='project-creation-info-card'>
                 <h1>Sobre la publicación de anuncios</h1>
                 <ul>
-                <li><h2>Tipo de Anuncio</h2><p>El tipo de anuncio indica si se mostrará solo una imágen (tipo afiche) o </p></li>
+                <li><h2>Tipo de Anuncio</h2><p>El tipo de anuncio indica si se mostrará <strong>solo una imágen</strong> (tipo afiche) o si se mostrará un <strong>titulo y una descripción</strong> (con una imágen opcional).</p></li>
+                <li><h2>Imagen Adjunta</h2><p>La imagen adjunta puede ser de tipo .jpg, .jpeg o .png</p></li>
+                <li><h2>Enviar por Email</h2><p>Cuando la casilla <strong>Enviar email</strong> está seleccionada, el anuncio se mandará a través de email a todos los integrantes de la junta de vecinos.</p></li>
+                <li><h2>Visibilidad</h2><p>Los anuncios realizados por este medio son publicos y serán visibles en la pagina de invitados de la plataforma.</p></li>
+
             </ul>
             </div>
         </div>

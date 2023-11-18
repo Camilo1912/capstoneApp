@@ -232,6 +232,8 @@ const CreateResourceApplication = () => {
                     Horarios Disponibles
                     <p style={{ fontSize:"1rem"}}><strong>Tiempo maximo: {selectedResource?.max_time}h</strong></p>
                     <p style={{ fontSize:"1rem"}}><strong>Tiempo mínimo: {selectedResource?.min_time}h</strong></p>
+
+                    <p style={{ color: '#555555', fontSize: '.8rem'}}>Para seleccionar busque un horario disponible y haga clic izquierdo en la hora de que desea como inicio y arrastre hasta la hora de termino. Si el recuadro desaparece significa que exedió el tiempo maximo que puede durar el uso del recurso.</p>
                 </DialogTitle>
                 <DialogContent>
                 {selectedResource ? 
