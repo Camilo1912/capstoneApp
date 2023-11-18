@@ -3,7 +3,7 @@ import { get_communes_by_region, get_regions } from '../../requests/Address';
 import { get_neighborhood_by_commune_id } from '../../requests/Neighborhood';
 import PeopleAltRoundedIcon from '@mui/icons-material/PeopleAltRounded';
 
-const JvListAdmin = () => {
+const JvListAdmin = ({ onSeleccion }) => {
     
     const [regionsList, setRegionsList] = useState([]);
     const [selectedRegion, setSelectedRegion] = useState(0);
@@ -66,8 +66,8 @@ const JvListAdmin = () => {
         } 
     };
 
-    const handleJvSelection = (e) => {
-        console.log("hole", e.target.value);
+    const handleJvSelection = (junta) => {
+        onSeleccion(junta);
     };
 
     return (
@@ -108,7 +108,7 @@ const JvListAdmin = () => {
             }
             <div className='jv-list-wrapper'>
                 {neighborhoodsList.length !== 0 && communesList ? neighborhoodsList.map((neighborhood) => (
-                    <div className='neighborhood-list-info-card' key={neighborhood.id}>
+                    <div className='neighborhood-list-info-card' key={neighborhood.id} onClick={() => handleJvSelection(neighborhood)}>
                         <div className='neighborhood-info-card-title-wrapper'>
                             <h1>ID:{neighborhood.id} | Junta de Vecinos {neighborhood.name} </h1>
                             <div>
