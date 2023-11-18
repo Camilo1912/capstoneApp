@@ -23,9 +23,17 @@ const JvContent = ({ juntaSeleccionada }) => {
                     <h1>Junta de Vecinos {juntaSeleccionada.name}</h1>
                     <br />
                     <div className='admin-neigh-info'>
-                        <h3>Código Oficial</h3>
-                        <p>{juntaSeleccionada.jv_code}</p>
-                        <Divider></Divider>
+                        <div className='neighborhood-info-header-container'>
+                            <img src={juntaSeleccionada.logo_url} alt="logo-jv" height={150} width={150} style={{ borderRadius: '10px'}}/>
+                            <div>
+                                <h3>Código Oficial</h3>
+                                <p>{juntaSeleccionada.jv_code}</p>
+                                <Divider></Divider>
+                                <h3>Creación y Actualización</h3>
+                                <p>Creación: {formatearFecha(juntaSeleccionada.created_at)}</p>
+                                <p>Última Actualización: {formatearFecha(juntaSeleccionada.updated_at)}</p>
+                            </div>
+                        </div>
                         <h3>Descripción</h3>
                         <p>{juntaSeleccionada.description}</p>
                         <Divider></Divider>
@@ -47,9 +55,7 @@ const JvContent = ({ juntaSeleccionada }) => {
                         <h3>Contacto</h3>
                         <p>Email: {juntaSeleccionada.bank_acc_email}</p>
                         <Divider></Divider>
-                        <h3>Creación y Actualización</h3>
-                        <p>Creación: {formatearFecha(juntaSeleccionada.created_at)}</p>
-                        <p>Última Actualización: {formatearFecha(juntaSeleccionada.updated_at)}</p>
+                        
                     </div>
                 </div>
 
