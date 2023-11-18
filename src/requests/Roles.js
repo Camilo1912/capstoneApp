@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { axiosClient } from './AxiosClient';
 
 export const allRoles = async () => {
     try {
@@ -30,4 +31,15 @@ export const get_roles_by_id = async (id) => {
         }
         throw error;
     }
+};
+
+export const set_user_rol = async (user_id, new_rol) => {
+    const payload = {
+        neighbor: {
+
+            role_id: new_rol,
+        }
+    }
+    const response = await axiosClient.put(`neighbors/${user_id}`, payload);
+    return response;
 };

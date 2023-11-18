@@ -108,14 +108,9 @@ const CertificateApplication = () => {
                             ))
                         )}
                     </div>
+                    
                 </div>
-                {/* <div className='poll-info-card'>
-                    <h1>Sobre las solicitudes de ingreso</h1>
-                    <ul>
-                        <li><h2>Solicitudes PENDIENTES</h2><p> ..... votado o no.</p></li>
-                        
-                    </ul>
-                </div> */}
+                
 
                 <Dialog open={open} onClose={handleCloseDialog}>
                     <DialogContent>

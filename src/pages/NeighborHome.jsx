@@ -31,7 +31,7 @@ const NeighborHome = () => {
             { label:'Votaciones', icon: <HowToVoteRoundedIcon />},
         ],
         "Calendario": [
-            { label:'Todo', icon: <CalendarMonthRoundedIcon />},
+            { label:'Calendario', icon: <CalendarMonthRoundedIcon />},
         ],
         "Actividades": [
             { label:'Todas', icon: <LocalActivityRoundedIcon />},
