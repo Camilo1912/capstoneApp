@@ -205,7 +205,7 @@ const JvListAdmin = ({ onSeleccion }) => {
     };
 
     const handleJvCreation = async () => {
-        isSubmitDisabled(true);
+        setIsSubmitDisabled(true);
         if (
             newJv.name &&
             newJv.description &&
@@ -245,15 +245,15 @@ const JvListAdmin = ({ onSeleccion }) => {
                     if (response.status === 200) {
                         toast.success('Junta creada correctamente', { autoClose: 3000, position: toast.POSITION.TOP_CENTER });
                         console.log(response.data);
-                        isSubmitDisabled(false);
+                        setIsSubmitDisabled(false);
                     }
                 } catch (error) {
                     console.log(error);
                     toast.error('No se pudo crear la junta', { autoClose: 3000, position: toast.POSITION.TOP_CENTER });
-                    isSubmitDisabled(false);
+                    setIsSubmitDisabled(false);
                 }
             }
-            isSubmitDisabled(false);
+            setIsSubmitDisabled(false);
     }
 
     return (
@@ -405,7 +405,7 @@ const JvListAdmin = ({ onSeleccion }) => {
                             : <></>
                         }
 
-                        <label htmlFor="image-back">Foto carnet parte posterior *</label>
+                        <label htmlFor="image-back">Logo de la Junta *</label>
                         <div>
                             <Button component="label" variant="contained" disableElevation color={ newJv.logo_url ? 'success' : 'primary' } size='small' startIcon={newJv.logo_url ? <CheckCircleIcon /> : <CloudUploadIcon />}>
                                 {newJv.logo_url ? 'Cargado' : 'Cargar imagen'}
