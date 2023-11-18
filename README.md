@@ -14,6 +14,10 @@ Esta aplicación web en React está diseñada para ayudar a las juntas de vecino
 - Gestión de espacios comunes y recursos: Permite solicitar reserva de espacios comunes administrados por una junta de vecinos.
 - Anuncios y Noticias: Permite publicar anuncios publicos para informar tanto a los integrantes de la junta como al publico general
 
+## Estado
+
+El proyecto se encuentra desplegado en su versión de prueba 1.0 en la dirección https://camilo1912.github.io/capstoneApp
+
 ## Requisitos
 
 Node.js instalado en el equipo.
