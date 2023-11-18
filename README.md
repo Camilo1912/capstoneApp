@@ -11,7 +11,13 @@ Esta aplicación web en React está diseñada para ayudar a las juntas de vecino
 - Calendario de Eventos: Planifica y realiza un seguimiento de las reuniones y eventos.
 - Comunicación: Facilita la comunicación entre la junta y los miembros mediante avisos y notificaciones.
 - Toma de Decisiones: Realiza votaciones para tomar decisiones colectivas.
-- Gestión de espacios comunes: Permite solicitar reserva de espacios comunes.
+- Gestión de espacios comunes y recursos: Permite solicitar reserva de espacios comunes administrados por una junta de vecinos.
+- Anuncios y Noticias: Permite publicar anuncios publicos para informar tanto a los integrantes de la junta como al publico general
+
+## Requisitos
+
+Node.js instalado en el equipo.
+Equipo con sistema operativo Windows, Linux o MacOS
 
 ## Instalación
 
