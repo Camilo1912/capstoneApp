@@ -116,8 +116,9 @@ const ActivitiesList = () => {
     const handleOptOut = async () => {
         if (selectedActivity) {
             const responseOptOut = await activity_opt_out(selectedActivity.cupo_id);
-            if (responseOptOut === 204) {
+            if (responseOptOut.status === 204) {
                 toast.success('Se desinscribió correctamente', { autoClose: 3000, position: toast.POSITION.TOP_CENTER });
+                setOpen(false);
             }
         }
     };
