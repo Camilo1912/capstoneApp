@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
-import { applications_get_by_neighborhood_id, submit_certificate_application } from '../../requests/Applications';
+import { application_update, applications_get_by_neighborhood_id, submit_certificate_application } from '../../requests/Applications';
 import { formatearFecha, initCap, convertirFormatoFecha } from '../../utils/utils';
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
@@ -29,7 +29,7 @@ const CertificateApplication = () => {
     const [certApplicationList, setCertApplicationList] = useState([]);
     const [selectedApplication, setSelectedApplication] = useState(null);
     const [showRejectMessage, setShowRejectMessage] = useState(false);
-    const [rejectionReason, setRejectionReason] = useState('');
+    const [rejectionReason, setRejectionReason] = useState('No Especifica');
 
     useEffect(() => {
         getApplications();
@@ -51,9 +51,15 @@ const CertificateApplication = () => {
         const resolution = event.target.value;
         if (selectedApplication) {
             if (resolution === 'aceptada' || resolution === 'rechazada') {
-
+                
+                const newPayload = {
+                    application: {
+                        state: resolution,
+                        message: rejectionReason
+                    }
+                }
                 const updateApplicationState = async () => {
-                    const response = await submit_certificate_application(selectedApplication.id, userInfo.id);
+                    const response = await application_update(selectedApplication.id, newPayload);
                     if (response.status === 200) {
                         toast.success('Solicitud Resuelta', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
                         setOpen(false);

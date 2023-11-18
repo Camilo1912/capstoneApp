@@ -26,8 +26,9 @@ export const get_neighborhood_by_commune_id = async(commune_id) => {
 
 
 export const neighborhood_create = async (neighborhood_data) => {
+    console.log(neighborhood_data);
     const formData = new FormData();
-    formData.append("logo_url", neighborhood_data.logo_url);
+    formData.append("image_1", neighborhood_data.logo_url);
 
 
     delete neighborhood_data.logo_url;

@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import NavBar from '../../layouts/Navbar';
 import Divider from '@mui/material/Divider';
 import Chip from '@mui/material/Chip';
 import { formatearFecha } from '../../utils/utils';
 import MembersList from './MembersList';
+import Button from '@mui/material/Button';
 
 const JvContent = ({ juntaSeleccionada }) => {
     const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
@@ -29,9 +30,9 @@ const JvContent = ({ juntaSeleccionada }) => {
                         <p>{juntaSeleccionada.description}</p>
                         <Divider></Divider>
                         <h3>Directiva</h3>
-                        {juntaSeleccionada.president ? <p>Presidente: {juntaSeleccionada.president}</p> : <Button>Crear Presidente</Button>}
-                        {juntaSeleccionada.secretary ? <p>Secretario: {juntaSeleccionada.secretary}</p> : <Button>Crear Secretario</Button>}
-                        {juntaSeleccionada.treasurer ? <p>Tesorero: {juntaSeleccionada.treasurer}</p> : <Button>Crear tesorero</Button>}
+                        {juntaSeleccionada?.president ? <p>Presidente: {juntaSeleccionada.president}</p> : <Button>Crear Presidente</Button>}
+                        {juntaSeleccionada?.secretary ? <p>Secretario: {juntaSeleccionada.secretary}</p> : <Button>Crear Secretario</Button>}
+                        {juntaSeleccionada?.treasurer ? <p>Tesorero: {juntaSeleccionada.treasurer}</p> : <Button>Crear tesorero</Button>}
                         <Divider></Divider>
                         <h3>Dirección de Sede</h3>
                         <p>{juntaSeleccionada.address}</p>

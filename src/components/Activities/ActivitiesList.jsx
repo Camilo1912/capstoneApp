@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import RefreshRoundedIcon from '@mui/icons-material/RefreshRounded';
 import IconButton from '@mui/material/IconButton';
-import { activities_get_by_neighborhood_id, activity_delete, activity_join, get_attendants_by_activity_id, get_is_user_registered_in_activity_id } from '../../requests/Activities';
+import { activities_get_by_neighborhood_id, activity_delete, activity_join, activity_opt_out, get_attendants_by_activity_id, get_is_user_registered_in_activity_id } from '../../requests/Activities';
 import { UserContext } from '../../contexts/UserContext';
 import { formatearFecha, initCap } from '../../utils/utils';
 import { activityTypes } from '../../utils/data';
@@ -56,8 +56,10 @@ const ActivitiesList = () => {
             return {
               ...activity,
               isRegistered: isRegistered.data.has_enrollment_lists,
+              cupo_id: isRegistered.data.id
             };
         }));
+        console.log(updatedActivitiesList);
         setActivitiesList(updatedActivitiesList.reverse());
     };
 
@@ -112,11 +114,14 @@ const ActivitiesList = () => {
         deleteActivity();
     };
 
-    // const handleOptOut = async () => {
-    //     if (selectedActivity) {
-    //         const optOutResponse = await 
-    //     }
-    // };
+    const handleOptOut = async () => {
+        if (selectedActivity) {
+            const responseOptOut = await activity_opt_out(selectedActivity.cupo_id);
+            if (responseOptOut === 204) {
+                toast.success('Se desinscribió correctamente', { autoClose: 3000, position: toast.POSITION.TOP_CENTER });
+            }
+        }
+    };
 
     const handleExport = () => {
         if (Array.isArray(attendantList) && attendantList.length > 0) {
@@ -181,7 +186,7 @@ const ActivitiesList = () => {
                 </div> */}
             </div>
 
-            <Dialog open={open} maxWidth={'md'} onClose={handleCloseDialog}>
+            <Dialog open={open} maxWidth={'lg'} onClose={handleCloseDialog}>
                 {selectedActivity ?
                     <>
                         <DialogContent>

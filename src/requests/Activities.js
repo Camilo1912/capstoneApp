@@ -46,4 +46,7 @@ export const get_is_user_registered_in_activity_id = async (activity_id, rut) =>
 };
 
 
-// export const activity_opt_out = async ()
+export const activity_opt_out = async ( cupo_id) => {
+    const response = await axiosClient.delete(`enrollment_lists/${cupo_id}`);
+    return response;
+};

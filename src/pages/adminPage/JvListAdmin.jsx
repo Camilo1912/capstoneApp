@@ -13,6 +13,8 @@ import { validateRut } from '@fdograph/rut-utilities';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { toast } from 'react-toastify';
+import RefreshRoundedIcon from '@mui/icons-material/RefreshRounded';
+import IconButton from '@mui/material/IconButton';
 
 
 const JvListAdmin = ({ onSeleccion }) => {
@@ -23,7 +25,7 @@ const JvListAdmin = ({ onSeleccion }) => {
         secretary: '',
         treasurer: '',
         address: '',
-        state: 'inactive',
+        state: 'activado',
         logo_url: null,
         membership: 0,
         quota: 0,
@@ -47,7 +49,9 @@ const JvListAdmin = ({ onSeleccion }) => {
     const [newRut, setNewRut] = useState('');
     const [creationOpen, setCreationOpen] = useState(false);
     const [newEmail, setNewEmail] = useState('');
+    const [refresh, setRefresh] = useState(false);
 
+    const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
     const [newJv, setNewJv] = useState(defaultJv);
 
     useEffect(() => {
@@ -57,6 +61,16 @@ const JvListAdmin = ({ onSeleccion }) => {
         };
         getRegions();
     },[]);
+
+    useEffect(() => {
+        setSelectedCommune('');
+        setSelectedRegion('');
+        setSelectedNeighborhood('');
+        setNewJv(defaultJv);
+        setNewEmail('');
+        setNewRut('');
+        onSeleccion(null);
+    }, [refresh]);
 
     useEffect(() => {
         if (selectedRegion) {
@@ -113,6 +127,7 @@ const JvListAdmin = ({ onSeleccion }) => {
     };
 
     const handleCloseCreate = () => {
+        setRefresh(!refresh);
         setCreationOpen(false);
     };
 
@@ -190,7 +205,7 @@ const JvListAdmin = ({ onSeleccion }) => {
     };
 
     const handleJvCreation = async () => {
-        console.log('creando ....')
+        isSubmitDisabled(true);
         if (
             newJv.name &&
             newJv.description &&
@@ -212,7 +227,7 @@ const JvListAdmin = ({ onSeleccion }) => {
                     'neighborhood[description]': newJv.description,
                     'neighborhood[address]': newJv.address,
                     'neighborhood[state]': newJv.state,
-                    'logo_url': newJv.logo_url,
+                    'image_1': newJv.logo_url,
                     'neighborhood[bank_acc_name]': newJv.bank_acc_name,
                     'neighborhood[bank_name]': newJv.bank_name,
                     'neighborhood[bank_acc_number]': newJv.bank_acc_number,
@@ -222,23 +237,34 @@ const JvListAdmin = ({ onSeleccion }) => {
                     'neighborhood[commune_id]': newJv.commune_id,
                     'neighborhood[jv_code]': newJv.jv_code,
                     'neighborhood[quota]': newJv.quota,
+                    'neighborhood[neighborhood_state_id]': newJv.neighborhood_state_id,
                 }
 
                 try {
                     const response = await neighborhood_create(payload);
                     if (response.status === 200) {
+                        toast.success('Junta creada correctamente', { autoClose: 3000, position: toast.POSITION.TOP_CENTER });
                         console.log(response.data);
+                        isSubmitDisabled(false);
                     }
                 } catch (error) {
                     console.log(error);
+                    toast.error('No se pudo crear la junta', { autoClose: 3000, position: toast.POSITION.TOP_CENTER });
+                    isSubmitDisabled(false);
                 }
             }
+            isSubmitDisabled(false);
     }
 
     return (
         <div className='admin-jv-selection-container'>
             <div>
-                <Button onClick={handleOpenCreate} startIcon={<AddCircleRoundedIcon />}>Crear Junta</Button>
+                <div style={{ display: 'felx', alignItems: 'center', justifyContent: 'space-between'}}>
+                    <Button onClick={handleOpenCreate} startIcon={<AddCircleRoundedIcon />}>Crear Junta</Button>
+                    <IconButton onClick={() => setRefresh(!refresh)} id='refresh-button'>
+                        <RefreshRoundedIcon />
+                    </IconButton>
+                </div>
                 <h1>Buscar Junta de Vecino</h1>
                 
             </div>
