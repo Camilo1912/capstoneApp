@@ -220,12 +220,12 @@ const CreateResourceApplication = () => {
                 
                 
             </div>
-            <div className='project-creation-info-card'>
+            {/* <div className='project-creation-info-card'>
                 <h1>Sobre la creacón de actividades</h1>
                 <ul>
                     <li><h2>Tipo de Actividad</h2><p>El tipo de anuncio indica si se mostrará solo una imágen (tipo afiche) o </p></li>
                 </ul>
-            </div>
+            </div> */}
 
             <Dialog open={open} maxWidth={'md'} onClose={handleCloseDialog}>
                 <DialogTitle>

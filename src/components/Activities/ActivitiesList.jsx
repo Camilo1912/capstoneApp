@@ -110,7 +110,13 @@ const ActivitiesList = () => {
 
     const handleDeleteActivity = () => {
         deleteActivity();
-    }
+    };
+
+    // const handleOptOut = async () => {
+    //     if (selectedActivity) {
+    //         const optOutResponse = await 
+    //     }
+    // };
 
     const handleExport = () => {
         if (Array.isArray(attendantList) && attendantList.length > 0) {
@@ -214,7 +220,7 @@ const ActivitiesList = () => {
                             : null}
                             {(new Date(selectedActivity.start_date.slice(0, -1)) > currentDate) ? 
                                 <>
-                                    {selectedActivity?.isRegistered ? <Button size='small' variant='contained' color='error'>Desinscribirse</Button> 
+                                    {selectedActivity?.isRegistered ? <Button size='small' onClick={handleOptOut} variant='contained' color='error'>Desinscribirse</Button> 
                                     : 
                                     <>
                                     {selectedActivity?.quota ? 

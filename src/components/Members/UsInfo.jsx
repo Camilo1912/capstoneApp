@@ -43,6 +43,10 @@ const UsInfo = () => {
                         <p>Tesorero: <strong>{neighborhoodData.treasurer}</strong></p>
                     </div>
                     <div>
+                        <h2>Contacto</h2>
+                        <p>Correo electrónico: <strong>{neighborhoodData.bank_acc_email}</strong></p>
+                    </div>
+                    <div>
                         <h2>Dirección</h2>
                         <p>{neighborhoodData.address} /Comuna {userInfo.commune.commune_name} / Región {userInfo.region.region_name}</p>
                     </div>
@@ -50,6 +54,7 @@ const UsInfo = () => {
                         <h2>Datos Bancarios</h2>
                         <strong>{neighborhoodData.quota}</strong>
                         <p>Nombre: {neighborhoodData.bank_acc_name}</p>
+                        <p>Rut: {neighborhoodData.bank_acc_rut}</p>
                         <p>Banco: {neighborhoodData.bank_name}</p>
                         <p>Tipo de cuenta: {neighborhoodData.bank_acc_type}</p>
                         <p>Numero de cuenta: {neighborhoodData.bank_acc_number}</p>

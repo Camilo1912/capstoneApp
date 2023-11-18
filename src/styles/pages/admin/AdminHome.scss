@@ -87,4 +87,30 @@
     }
 }
 
+.admin-neigh-info-detail {
+    height: calc(100dvh - 5rem);
+    padding: 15px;
+    width: 100%;
+    overflow: auto;
+}
+
+.admin-neigh-info {
+    background-color: $accent-color-light-n1;
+    padding: 15px;
+    border-radius: 15px;
+}
+
+@media (prefers-color-scheme: dark) {
+    .neighborhood-list-info-card {
+        background-color: $accent-color-dark-n1;
+    }
+    .neighborhood-info-card-title-wrapper {
+        background-color: $background-color-dark;
+    }
+
+    .admin-neigh-info {
+        background-color: $accent-color-dark-n1;
+    }
+}
+
 

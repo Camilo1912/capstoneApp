@@ -1,10 +1,42 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { get_communes_by_region, get_regions } from '../../requests/Address';
-import { get_neighborhood_by_commune_id } from '../../requests/Neighborhood';
+import { get_neighborhood_by_commune_id, neighborhood_create } from '../../requests/Neighborhood';
 import PeopleAltRoundedIcon from '@mui/icons-material/PeopleAltRounded';
+import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
+import { Button, DialogTitle } from '@mui/material';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import Dialog from '@mui/material/Dialog';
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import Divider from '@mui/material/Divider';
+import { validateRut } from '@fdograph/rut-utilities';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { toast } from 'react-toastify';
+
 
 const JvListAdmin = ({ onSeleccion }) => {
-    
+    const defaultJv = {
+        name: '',
+        description: '',
+        president: '',
+        secretary: '',
+        treasurer: '',
+        address: '',
+        state: 'inactive',
+        logo_url: null,
+        membership: 0,
+        quota: null,
+        bank_name: '',
+        bank_acc_number: '',
+        bank_acc_type: '',
+        bank_acc_name: '',
+        bank_acc_rut: '',
+        bank_acc_email: '',
+        neighborhood_state_id: 1,
+        commune_id: null,
+        jv_code: '',
+    }
     const [regionsList, setRegionsList] = useState([]);
     const [selectedRegion, setSelectedRegion] = useState(0);
     const [communesList, setCommunesList] = useState([]);
@@ -12,6 +44,11 @@ const JvListAdmin = ({ onSeleccion }) => {
     const [neighborhoodsList, setNeighborhoodsList] = useState([]);
     const [selectedNeighborhood, setSelectedNeighborhood] = useState('');
     const [neighborhoodInfo, setNeighborhoodInfo] = useState({});
+    const [newRut, setNewRut] = useState('');
+    const [creationOpen, setCreationOpen] = useState(false);
+    const [newEmail, setNewEmail] = useState('');
+
+    const [newJv, setNewJv] = useState(defaultJv);
 
     useEffect(() => {
         const getRegions = async () => {
@@ -43,12 +80,13 @@ const JvListAdmin = ({ onSeleccion }) => {
         } else {
             setNeighborhoodsList([]);
         }
+        if (creationOpen) {
+            setNewJv({
+                ...newJv,
+                commune_id: selectedCommune
+            })
+        }
     }, [selectedCommune]);
-
-    // useEffect(() => {
-    //     const updatedNeighborhoodList = JSON.stringify(neighborhoodsList);
-    //     setNeighborhoodsList(updatedNeighborhoodList);
-    // }, [neighborhoodsList]);
 
     const handleSelectedNeighborhood = (e) => {
         const selectedNeighborhood = JSON.parse(e.target.value);
@@ -70,9 +108,140 @@ const JvListAdmin = ({ onSeleccion }) => {
         onSeleccion(junta);
     };
 
+    const handleOpenCreate = () => {
+        setCreationOpen(true);
+    };
+
+    const handleCloseCreate = () => {
+        setCreationOpen(false);
+    };
+
+    const handleInputChange = (event) => {
+        setNewJv({
+            ...newJv,
+            [event.target.name]: event.target.value,
+        });
+    };
+
+    const handleBankAccSelection = (e) => {
+        e.preventDefault();
+        setNewJv({
+            ...newJv,
+            bank_acc_type: e.target.value,
+        });
+    };
+
+    const handleRutChange = (event) => {
+        let rutValue = event.target.value;
+        rutValue = rutValue.replace(/[^0-9kK-]/g, '');
+        setNewRut(rutValue);
+    };
+
+    useEffect(() => {
+        if (validateRut(newRut)) {
+            setNewJv({
+                ...newJv,
+                bank_acc_rut: newRut
+            });
+        } else {
+            setNewJv({
+                ...newJv,
+                bank_acc_rut: ''
+            });
+        }
+    }, [newRut]);
+
+    const handleEmailChange = (event) => {
+        let emailValue = event.target.value;
+        setNewEmail(emailValue);
+    };
+
+    useEffect(() => {
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if(emailPattern.test(newEmail)) {
+            setNewJv({
+                ...newJv,
+                bank_acc_email: newEmail
+            });
+        } else {
+            setNewJv({
+                ...newJv,
+                bank_acc_email: ''
+            });
+        }
+    }, [newEmail]);
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+
+        if (isFileValid(file)) {
+            setNewJv({
+                ...newJv,
+                logo_url: file,
+            });
+        } else {
+            toast.error('El tamaño del archivo excede el límite de 5 MB', { autoClose: 3000, position: toast.POSITION.TOP_CENTER });
+            console.error('El tamaño del archivo excede el límite de 5 MB');
+        }
+    };
+
+    const isFileValid = (file) => {
+        return file && file.size <= 5 * 1024 * 1024;
+    };
+
+    const handleJvCreation = async () => {
+        console.log('creando ....')
+        if (
+            newJv.name &&
+            newJv.description &&
+            newJv.address &&
+            newJv.state &&
+            newJv.logo_url &&
+            newJv.bank_acc_name &&
+            newJv.bank_name &&
+            newJv.bank_acc_number &&
+            newJv.bank_acc_type &&
+            newJv.bank_acc_rut &&
+            newJv.bank_acc_email &&
+            newJv.commune_id &&
+            newJv.jv_code &&
+            newJv.address) {
+                console.log('Creando payload')
+                const payload = {
+                    'neighborhood[name]': newJv.name,
+                    'neighborhood[description]': newJv.description,
+                    'neighborhood[address]': newJv.address,
+                    'neighborhood[state]': newJv.state,
+                    'logo_url': newJv.logo_url,
+                    'neighborhood[bank_acc_name]': newJv.bank_acc_name,
+                    'neighborhood[bank_name]': newJv.bank_name,
+                    'neighborhood[bank_acc_number]': newJv.bank_acc_number,
+                    'neighborhood[bank_acc_type]': newJv.bank_acc_type,
+                    'neighborhood[bank_acc_rut]': newJv.bank_acc_rut,
+                    'neighborhood[bank_acc_email]': newJv.bank_acc_email,
+                    'neighborhood[commune_id]': newJv.commune_id,
+                    'neighborhood[jv_code]': newJv.jv_code,
+                    'neighborhood[quota]': newJv.quota,
+                }
+
+                try {
+                    const response = await neighborhood_create(payload);
+                    if (response.status === 200) {
+                        console.log(response.data);
+                    }
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+    }
+
     return (
         <div className='admin-jv-selection-container'>
-            <h1>Buscar Junta de Vecino</h1>
+            <div>
+                <Button onClick={handleOpenCreate} startIcon={<AddCircleRoundedIcon />}>Crear Junta</Button>
+                <h1>Buscar Junta de Vecino</h1>
+                
+            </div>
             <div className='jv-search-combobox-container'>
                 <label htmlFor="region">Seleccione región:</label>
                 <select 
@@ -88,7 +257,7 @@ const JvListAdmin = ({ onSeleccion }) => {
                 }
                 </select>
             </div>
-            { selectedRegion ? 
+            { selectedRegion && !creationOpen ? 
                 <div className='jv-search-combobox-container'>
                     <label htmlFor="commune">Seleccione comuna:</label>
                     <select 
@@ -106,9 +275,10 @@ const JvListAdmin = ({ onSeleccion }) => {
                 </div>
                 : <></>
             }
+            { !creationOpen ?
             <div className='jv-list-wrapper'>
                 {neighborhoodsList.length !== 0 && communesList ? neighborhoodsList.map((neighborhood) => (
-                    <div className='neighborhood-list-info-card' key={neighborhood.id} onClick={() => handleJvSelection(neighborhood)}>
+                    <div className='neighborhood-list-info-card' key={neighborhood.id} onClick={() => handleJvSelection(neighborhood)} style={{ cursor: 'pointer'}}>
                         <div className='neighborhood-info-card-title-wrapper'>
                             <h1>ID:{neighborhood.id} | Junta de Vecinos {neighborhood.name} </h1>
                             <div>
@@ -132,6 +302,100 @@ const JvListAdmin = ({ onSeleccion }) => {
                     </div>
                 )): <p className='list-feedback'>Listado vacío</p>}
             </div>
+            :null }
+
+            <Dialog open={creationOpen} maxWidth={'md'} onClose={handleCloseCreate}>
+                <DialogTitle>
+                    Fromulario de creación de Junta de Vecinos
+                </DialogTitle>
+
+                <DialogContent>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px'}}>
+                        <strong>Nombre:</strong>
+                        <input type="text" name='name' value={newJv.name} onChange={handleInputChange}/>
+                        <strong>Código:</strong>
+                        <input type="text" name='jv_code' value={newJv.jv_code} onChange={handleInputChange}/>
+                        <strong>Descripción:</strong>
+                        <input type="text" name='description' value={newJv.description} onChange={handleInputChange}/>
+                        <strong>Dirección:</strong>
+                        <input type="text" name='address' value={newJv.address} onChange={handleInputChange}/>
+                        <strong>Cuota:</strong>
+                        <p>
+                        $<input type="number" name='quota' value={newJv.quota} onChange={handleInputChange} onKeyDown={(e) => {if (!/[0-9]/.test(e.key) && !['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                                        e.preventDefault();}}}/>Pesos Chilenos</p>
+                        <Divider></Divider>
+                        <strong>DATOS BANCARIOS</strong>
+                        <strong>Nombre de la cuenta:</strong>
+                        <input type="text" name='bank_acc_name' value={newJv.bank_acc_name} onChange={handleInputChange}/>
+                        <strong>Banco:</strong>
+                        <input type="text" name='bank_name' value={newJv.bank_name} onChange={handleInputChange}/>
+                        <strong>Número:</strong>
+                        <input type="text" name='bank_acc_number' value={newJv.bank_acc_number} onChange={handleInputChange} onKeyDown={(e) => {if (!/[0-9]/.test(e.key) && !['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                                        e.preventDefault();}}}/>
+                        <strong>Tipo de cuenta</strong>
+                        <select name="bank_acc_type" onChange={handleBankAccSelection} id="acctype">
+                            <option value="">-- seleccione --</option>
+                            <option value="corriente">Corriente</option>
+                            <option value="vista">Vista</option>
+                            <option value="ahorro">Ahorro</option>
+                        </select>
+                        <p><strong>Rut * </strong>(Sin puntos y con guión, ej: 12345678-9)</p>
+                        <input type="text" value={newRut} onChange={handleRutChange} />
+                        <Divider></Divider>
+                        <strong>CONTACTO</strong>
+                        <strong>Email *</strong>
+                        <input type="email" value={newEmail} onChange={handleEmailChange}/>
+                        <div className='jv-search-combobox-container'>
+                            <label htmlFor="region">Seleccione región:</label>
+                            <select 
+                            name="regionId" 
+                            id="region" 
+                            value={selectedRegion} 
+                            onChange={handleSelectionChange}>
+                            <option value="">-- Seleccione región --</option>
+                            {regionsList.map((region, index) => (
+                                <option key={index} value={region.id}>
+                                    {region.region_name}
+                                </option>))
+                            }
+                            </select>
+                        </div>
+                        { selectedRegion ? 
+                            <div className='jv-search-combobox-container'>
+                                <label htmlFor="commune">Seleccione comuna:</label>
+                                <select 
+                                name="communeId" 
+                                id="commune" 
+                                value={selectedCommune} 
+                                onChange={handleSelectionChange}>
+                                <option value="">-- Seleccione comuna --</option>
+                                {communesList.map((commune, index) => (
+                                    <option key={index} value={commune.id}>
+                                        {commune.commune_name}
+                                    </option>))
+                                }
+                                </select>
+                            </div>
+                            : <></>
+                        }
+
+                        <label htmlFor="image-back">Foto carnet parte posterior *</label>
+                        <div>
+                            <Button component="label" variant="contained" disableElevation color={ newJv.logo_url ? 'success' : 'primary' } size='small' startIcon={newJv.logo_url ? <CheckCircleIcon /> : <CloudUploadIcon />}>
+                                {newJv.logo_url ? 'Cargado' : 'Cargar imagen'}
+                                <input type="file" accept=".png, .jpg, .jpeg" style={{ display: 'none' }} onChange={(e) => handleFileChange(e)} />
+                            </Button>
+                        </div>
+
+                        
+                    </div>
+                </DialogContent>
+
+                <DialogActions>
+                <Button variant='contained' color='success' onClick={handleJvCreation} startIcon={<CheckCircleRoundedIcon />}>Crear</Button>
+                    <Button variant='outlined' onClick={handleCloseCreate}>Cancelar</Button>
+                </DialogActions>
+            </Dialog>
         </div>
     )
 }

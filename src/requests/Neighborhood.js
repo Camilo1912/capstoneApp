@@ -23,3 +23,18 @@ export const get_neighborhood_by_commune_id = async(commune_id) => {
         throw error;
     }
 };
+
+
+export const neighborhood_create = async (neighborhood_data) => {
+    const formData = new FormData();
+    formData.append("logo_url", neighborhood_data.logo_url);
+
+
+    delete neighborhood_data.logo_url;
+
+    for (const key in neighborhood_data) {
+      formData.append(key, neighborhood_data[key]);
+    }
+    const response = await axiosClient.post("neighborhoods", formData);
+    return response;
+};
