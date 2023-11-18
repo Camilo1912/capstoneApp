@@ -49,7 +49,6 @@ const ResourceApplication = () => {
     const getNeighborhoodResourcesApplications = async (neighborhoodId) => {
         if (neighborhoodId) {
             const resourcesResponse = await get_resource_applications_by_neighborhood(neighborhoodId);
-            console.log(resourcesResponse.data);
             const filteredResources = resourcesResponse.data.filter(item => item.application_type === 'recurso');
             if (filteredResources) {
                 const updatedResourcesApplications = filteredResources.map(application => {
@@ -62,7 +61,6 @@ const ResourceApplication = () => {
                         resourceDesc
                     };
                 });
-                console.log(updatedResourcesApplications);
                 setResourcesApplicationList(updatedResourcesApplications.reverse());
             }
         }

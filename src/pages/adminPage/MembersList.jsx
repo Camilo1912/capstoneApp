@@ -68,7 +68,6 @@ const MembersList = ({ handleSelection, junta}) => {
 
     const handleRolSelection = (e) => {
         e.preventDefault();
-        console.log(e.target.value);
         setSelectedRole(e.target.value);
     };
 

@@ -51,7 +51,6 @@ const MembershipApplication = () => {
                         message: rejectionReason
                     }
                 }
-                console.log(newPayload);
                 const updateApplicationState = async () => {
                     const response = await application_update(selectedApplication.id, newPayload);
                     if (response.status === 200) {

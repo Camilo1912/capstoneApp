@@ -141,9 +141,6 @@ const CreateResourceApplication = () => {
                     application_type: 'recurso'
                 }
             }
-
-            console.log(payload);
-
             const response = await application_resource_create(userInfo.id, payload);
             if (response.status === 200 || response.status === 201) {
                 toast.success('Solicitud enviada correctamente', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});

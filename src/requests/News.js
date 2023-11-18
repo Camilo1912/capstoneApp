@@ -13,7 +13,6 @@ export const get_announcements = async () => {
 
 export const submit_new_announcement = async (announcement) => {
     const formData = new FormData();
-    console.log(announcement);
     formData.append("image_1", announcement.image_1);
     delete announcement.image_1;
     for (const key in announcement) {

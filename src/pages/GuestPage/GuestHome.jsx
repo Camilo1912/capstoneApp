@@ -146,7 +146,6 @@ const GuestHome = () => {
     const getNeighborhoodResources = async (neighborhoodId) => {
         if (neighborhoodId) {
             const resourcesResponse = await get_resources_by_neighborhood_id(neighborhoodId);
-            console.log(resourcesResponse.data);
             if (resourcesResponse.data) {
                 setResourcesList(resourcesResponse.data);
             }
@@ -449,7 +448,6 @@ const GuestHome = () => {
             && addressForm.number_address && addressForm.numero_dpto && addressForm.street_address && guestForm.neighborhoodId && 
             guestForm.communeId) {
 
-            console.log(guestInfo);
             const payload = {
                 'application[rut]': guestInfo['rut'],
                 'application[first_name]': guestInfo.first_name,
@@ -721,7 +719,7 @@ const GuestHome = () => {
                                     {guestForm.neighborhoodId ? 
                                         <>
                                             <Button variant='outlined' onClick={() => (setSelectedContent(2))}>Certificado de residencia</Button>
-                                            <Button variant='outlined' onClick={() => (setSelectedContent(3))}>Implemento publico</Button>
+                                            <Button variant='outlined' onClick={() => (setSelectedContent(3))}>Solicitar Recurso o Implemento</Button>
                                         </>
                                     :<p className='guest-helper-text'>Las solicitudes disponibles de la junta que selecciones aparecerán aquí.</p>}
                                 </div>
