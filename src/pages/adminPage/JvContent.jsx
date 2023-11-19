@@ -7,9 +7,15 @@ import MembersList from './MembersList';
 import Button from '@mui/material/Button';
 import { neighborhood_delete } from '../../requests/Neighborhood';
 import { toast } from 'react-toastify';
+import { application_update, applications_get_by_neighbor_id, applications_get_by_neighborhood_id } from '../../requests/Applications';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import { DialogContent } from '@mui/material';
 
 const JvContent = ({ juntaSeleccionada, onSeleccion }) => {
     const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
+    const [applicationsList, setApplicationList] = useState([]);
+    const [open, setOpen] = useState(false);
 
     const handleMemberSeleccion = (usuario) => {
         setUsuarioSeleccionado(usuario);
@@ -29,6 +35,50 @@ const JvContent = ({ juntaSeleccionada, onSeleccion }) => {
             toast.error('No se pudo eliminar la junta de vecinos.', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
         }
     };
+
+
+    useEffect(() => {
+        if (juntaSeleccionada?.id) {
+            const getApplications = async () => {
+                const response = await applications_get_by_neighborhood_id(juntaSeleccionada.id);
+                if (response.data) {
+                    setApplicationList(response.data);
+                    console.log(response.data);
+                } 
+            }
+            getApplications();
+        }
+    },[juntaSeleccionada])
+
+    const handleOpenDialog = () => {
+        
+        setOpen(true);
+    };
+
+    const handleCloseDialog = () => {
+        setOpen(false);
+    };
+
+    
+    const handleResolution = (event) => {
+
+                const newPayload = {
+                    application: {
+                        state: 'aceptada',
+                        message: ''
+                    }
+                }
+                const updateApplicationState = async () => {
+                    const response = await application_update(event.target.value, newPayload);
+                    if (response.status === 200) {
+                        toast.success('Respuesta enviada correctamente', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
+                        setOpen(false);
+                    }
+
+                }
+                updateApplicationState();
+
+    }
     
     return (
         <div style={{ display: 'flex', flexDirection: 'column', width: '100%', }}>
@@ -75,8 +125,10 @@ const JvContent = ({ juntaSeleccionada, onSeleccion }) => {
                         <h3>Contacto</h3>
                         <p>Email: {juntaSeleccionada.bank_acc_email}</p>
                         <Divider></Divider>
-                        
+                    
                     <Button variant='contained' onClick={handleNeighborhoodDelete} color='error' style={{ marginTop: '30px'}}>Eliminar Junta de Vecinos</Button>
+                        
+                    <Button variant='contained' onClick={handleOpenDialog}  style={{ marginTop: '30px'}}>Ver Solicitudes</Button>
                     </div>
                 </div>
 
@@ -84,6 +136,18 @@ const JvContent = ({ juntaSeleccionada, onSeleccion }) => {
             </div>
             : 
             <div style={{ height: '100%', padding: '15px', textAlign: 'center', marginTop: '50px', fontSize: '2rem', color: '#555555'}}>No se ha seleccionado ninguna Junta de Vecinos</div>}
+        
+            <Dialog open={open} maxWidth={'lg'} onClose={handleCloseDialog}>
+                <DialogContent>
+
+                {applicationsList?.map((application) => (
+                    <div key={application.id} value={application.id}>
+                    {application.id}
+                        <Button value={application.id} onClick={handleResolution}>Aceptar solicitud</Button>
+                    </div>
+                ))}
+                </DialogContent>
+            </Dialog>
         </div > 
     )
 }
