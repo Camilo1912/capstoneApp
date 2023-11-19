@@ -103,9 +103,9 @@ const MembersList = ({ handleSelection, junta}) => {
                 
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
                 <h1>Directiva</h1>
-                    <IconButton >
+                    {/* <IconButton >
                         <AddCircleRoundedIcon />
-                    </IconButton>
+                    </IconButton> */}
                 </div>
                 {membersList.filter(member => [2, 3, 4].includes(member.role_id)).map((member) => (
                     <div key={member.id} className='user-card' onClick={() => handleClickOpen(member)} style={{ margin: '0px'}}>
