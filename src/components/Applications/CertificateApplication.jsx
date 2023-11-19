@@ -60,6 +60,7 @@ const CertificateApplication = () => {
                 }
                 const updateApplicationState = async () => {
                     const response = await application_update(selectedApplication.id, newPayload);
+                    console.log(response);
                     if (response.status === 200) {
                         toast.success('Solicitud Resuelta', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
                         setOpen(false);

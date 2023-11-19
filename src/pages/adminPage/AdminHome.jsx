@@ -12,7 +12,7 @@ const AdminHome = () => {
     return (
         <div className='admin-home-container'>
         <JvListAdmin onSeleccion={handleSeleccion} />
-        <JvContent juntaSeleccionada={juntaSeleccionada} />
+        <JvContent juntaSeleccionada={juntaSeleccionada} onSeleccion={handleSeleccion} />
         </div>
     )
 }

@@ -38,3 +38,9 @@ export const neighborhood_create = async (neighborhood_data) => {
     const response = await axiosClient.post("neighborhoods", formData);
     return response;
 };
+
+
+export const neighborhood_delete = async (neighborhood_id) => {
+    const response = await axiosClient.delete(`/neighborhoods/${neighborhood_id}`);
+    return response
+};

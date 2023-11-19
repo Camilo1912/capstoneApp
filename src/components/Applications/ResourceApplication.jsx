@@ -79,6 +79,7 @@ const ResourceApplication = () => {
                             message: rejectionReason
                         }
                     }
+                    console.log(payload);
                     const response = await resolve_rsource_application(selectedApplication.id, payload);
                     if (response.status === 200) {
                         toast.success('Solicitud Resuelta', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
@@ -165,7 +166,7 @@ const ResourceApplication = () => {
                         <PendingActionsIcon />
                         <h2>Pendientes</h2>
                     </div>
-                    <div className='polls-list-container' style={{ height: '95%', overflow: 'auto', marginRight: '5px'}}>
+                    <div className='polls-list-container' style={{ maxHeight: '95%', overflow: 'auto', marginRight: '5px'}}>
                         {resourcesApplicationList.filter(application => application.state === 'creada').length === 0 ? (
                             <p>No hay solicitudes</p>
                         ) : (

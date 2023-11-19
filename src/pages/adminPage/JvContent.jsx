@@ -5,12 +5,29 @@ import Chip from '@mui/material/Chip';
 import { formatearFecha } from '../../utils/utils';
 import MembersList from './MembersList';
 import Button from '@mui/material/Button';
+import { neighborhood_delete } from '../../requests/Neighborhood';
+import { toast } from 'react-toastify';
 
-const JvContent = ({ juntaSeleccionada }) => {
+const JvContent = ({ juntaSeleccionada, onSeleccion }) => {
     const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
 
     const handleMemberSeleccion = (usuario) => {
         setUsuarioSeleccionado(usuario);
+    };
+
+    const handleNeighborhoodDelete = async () => {
+        try {
+
+            if (juntaSeleccionada.id) {
+                const deleteResponse = await neighborhood_delete(juntaSeleccionada.id);
+                if (deleteResponse.status === 204) {
+                    toast.success('Junta de Vecinos eliminada correctamente.', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
+                    onSeleccion(null);
+                }
+            }
+        } catch (error) {
+            toast.error('No se pudo eliminar la junta de vecinos.', {autoClose: 3000, position: toast.POSITION.TOP_CENTER});
+        }
     };
     
     return (
@@ -59,6 +76,7 @@ const JvContent = ({ juntaSeleccionada }) => {
                         <p>Email: {juntaSeleccionada.bank_acc_email}</p>
                         <Divider></Divider>
                         
+                    <Button variant='contained' onClick={handleNeighborhoodDelete} color='error' style={{ marginTop: '30px'}}>Eliminar Junta de Vecinos</Button>
                     </div>
                 </div>
 
